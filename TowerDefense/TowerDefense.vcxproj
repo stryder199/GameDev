@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug(x64)|Win32">
+      <Configuration>Debug(x64)</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release(x64)|Win32">
+      <Configuration>Release(x64)</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <ProjectGuid>{7128CE4E-D326-34C8-AEEC-6C464DA742F5}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug(x64)|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release(x64)|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug(x64)|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release(x64)|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\SDL-1.2.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SDL-1.2.14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug(x64)|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\SDL-1.2.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SDL-1.2.14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\SDL-1.2.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SDL-1.2.14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release(x64)|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\SDL-1.2.14\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\SDL-1.2.14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_ttf.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(MSBuildProjectDirectory)\*.dll $(TargetDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug(x64)|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_ttf.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(MSBuildStartupDirectory)\*.dll $(TargetDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_ttf.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy /Y $(MSBuildProjectDirectory)\*.dll $(TargetDir)
+		xcopy $(MSBuildProjectDirectory)\Data $(TargetDir)\Data\ /E /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="code\Camera.cpp" />
+    <ClCompile Include="code\Enemy.cpp" />
+    <ClCompile Include="code\GameData.cpp" />
+    <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\MiniMap.cpp" />
+    <ClCompile Include="code\myButton.cpp" />
+    <ClCompile Include="code\Resources.cpp" />
+    <ClCompile Include="code\Timer.cpp" />
+    <ClCompile Include="code\Tower.cpp" />
+    <ClCompile Include="code\UI.cpp" />
+    <ClCompile Include="code\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="code\Camera.h" />
+    <ClInclude Include="code\Enemy.h" />
+    <ClInclude Include="code\GameData.h" />
+    <ClInclude Include="code\MiniMap.h" />
+    <ClInclude Include="code\myButton.h" />
+    <ClInclude Include="code\Resources.h" />
+    <ClInclude Include="code\Timer.h" />
+    <ClInclude Include="code\Tower.h" />
+    <ClInclude Include="code\UI.h" />
+    <ClInclude Include="code\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Fonts\ABEAKRG.TTF" />
+    <None Include="Data\Fonts\ABEAKRG_2.TTF" />
+    <None Include="Data\Fonts\Conviction.ttf" />
+    <None Include="Data\Fonts\Conviction_2.ttf" />
+    <None Include="Data\Fonts\criticized.ttf" />
+    <None Include="Data\Fonts\ROBOM___.TTF" />
+    <None Include="Data\Images\ArtilleryShot.bmp" />
+    <None Include="Data\Images\BestShipAni.bmp" />
+    <None Include="Data\Images\CannonTower.bmp" />
+    <None Include="Data\Images\CanTow-40x40.bmp" />
+    <None Include="Data\Images\CanTow50x50.bmp" />
+    <None Include="Data\Images\enemy2.bmp" />
+    <None Include="Data\Images\enemy3.bmp" />
+    <None Include="Data\Images\enemy4.bmp" />
+    <None Include="Data\Images\gas.jpeg" />
+    <None Include="Data\Images\gas32.jpeg" />
+    <None Include="Data\Images\gas64.jpeg" />
+    <None Include="Data\Images\Grass.jpg" />
+    <None Include="Data\Images\GreenMonster.bmp" />
+    <None Include="Data\Images\IceTower-40x40.bmp" />
+    <None Include="Data\Images\icetower.bmp" />
+    <None Include="Data\Images\LaserTow-40x40.bmp" />
+    <None Include="Data\Images\LaserTow50x50.bmp" />
+    <None Include="Data\Images\LaserTower.bmp" />
+    <None Include="Data\Images\mins.jpeg" />
+    <None Include="Data\Images\mins32.jpeg" />
+    <None Include="Data\Images\mins64.jpeg" />
+    <None Include="Data\Images\Monster-40x40.bmp" />
+    <None Include="Data\Images\NukeTow-40x40.bmp" />
+    <None Include="Data\Images\NukeTow50x50.bmp" />
+    <None Include="Data\Images\NukeTower.bmp" />
+    <None Include="Data\Images\ShipCorrectAni.bmp" />
+    <None Include="Data\Images\ShipExpload.bmp" />
+    <None Include="Data\Images\ShipIcon.bmp" />
+    <None Include="Data\Images\ShitShip.bmp" />
+    <None Include="Data\Images\ShitShip2.bmp" />
+    <None Include="Data\Images\spacebackground.jpg" />
+    <None Include="Data\Images\TankTow-40x40.bmp" />
+    <None Include="Data\Images\TankTow50x50.bmp" />
+    <None Include="Data\Images\TankTower.bmp" />
+    <None Include="Data\Sound\HelterBounce.mp3" />
+    <None Include="Data\Sound\HelterBounce.wav" />
+    <None Include="Data\Sound\Laser1.wav" />
+    <None Include="Data\Sound\Laser2.wav" />
+    <None Include="Data\Sound\Laser3.wav" />
+    <None Include="Data\Sound\laser_fix.wav" />
+    <None Include="Data\Sound\strange.wav" />
+    <None Include="Data\Sound\Thorivo.mp3" />
+    <None Include="Data\Sound\upgrade.wav" />
+    <None Include="Data\Sound\upgradefix.wav" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

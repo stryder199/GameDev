@@ -1,0 +1,40 @@
+*.pydevproject
+.project
+.metadata
+Debug
+Release
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+*.class
+*.o
+*.d
+*.mk
+debug.txt
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+ipch
+.cproject
+.project
+*.opensdf
+*.sdf
+_UpgradeReport_Files
+*.XML
+*.suo
+
+# PDT-specific
+.buildpath

@@ -1,0 +1,21 @@
+LOW
+-enemy drift when slowed
+-fix x64
+-add a bunch of asserts to logical places
+
+MID
+-doesn't show laser if insta death
+-scale font size with screen size for a more safe and secure society
+
+HIGH
+
+
+FEATURE
+-more enemies
+-instructions
+-options???
+-deselct focus
+-clean up UI
+-highscore
+-bug reports
+-more paths

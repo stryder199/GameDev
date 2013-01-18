@@ -1,0 +1,11 @@
+OKay, each world, view and projection matrix is related to each individual unit on the screen. But the "mesh" is being reused. The vertex shader is rendering each unit using
+a preset mesh. All I have to do is figure out where that mesh is stored, make a model class?? to load in mesh's from maya .obj files and then create a "box" model or a 
+sphere model???
+
+Is texturing model dependent or unit dependent??
+
+Also how the fuck do I change the colors?
+
+The color should be set by the unit and not by the mesh, mutiple color's per mesh
+
+Add each constant buffer to the array

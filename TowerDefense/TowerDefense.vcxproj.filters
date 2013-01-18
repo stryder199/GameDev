@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="code\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\GameData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\MiniMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\myButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Tower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="code\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\GameData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\MiniMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\myButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Tower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Fonts\ABEAKRG.TTF">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Fonts\ABEAKRG_2.TTF">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Fonts\Conviction.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Fonts\Conviction_2.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Fonts\criticized.ttf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Fonts\ROBOM___.TTF">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ArtilleryShot.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\BestShipAni.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\CannonTower.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\CanTow-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\CanTow50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\enemy2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\enemy3.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\enemy4.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\gas.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\gas32.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\gas64.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\Grass.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\GreenMonster.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\icetower.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\IceTower-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\LaserTow-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\LaserTow50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\LaserTower.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\mins.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\mins32.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\mins64.jpeg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\NukeTow-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\NukeTow50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\NukeTower.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ShipCorrectAni.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ShipExpload.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ShipIcon.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ShitShip.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\ShitShip2.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\spacebackground.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\TankTow-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\TankTow50x50.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\TankTower.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\HelterBounce.mp3">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\HelterBounce.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\laser_fix.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\Laser1.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\Laser2.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\Laser3.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\strange.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\Thorivo.mp3">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\upgrade.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Sound\upgradefix.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Data\Images\Monster-40x40.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
