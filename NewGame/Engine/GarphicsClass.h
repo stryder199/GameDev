@@ -8,7 +8,7 @@
 class WindowClass;
 class D3DClass;
 class CameraClass;
-class ShaderClass;
+class ShaderControllerClass;
 class ModelClass;
 class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
@@ -34,12 +34,10 @@ private:
 	WindowClass* m_Window;
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	ShaderClass* m_Shader;
+	ShaderControllerClass* m_Shader;
 	ModelClass* m_Model;
 	TwoDGraphicsClass* m_2DGraphics;
 	ThreeDGraphicsClass* m_3DGraphics;
-
-
 };
 
 #endif /* GraphicsClass_H_ */

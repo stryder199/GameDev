@@ -7,7 +7,7 @@
 // forward declared dependencies
 class PlayerClass;
 class MeshClass;
-class ShaderClass;
+class ShaderControllerClass;
 class D3DClass;
 class CameraClass;
 class LightClass;
@@ -25,7 +25,7 @@ public:
 	~ActorsClass();
 
 	bool Initialize(ID3D11Device* device);
-	bool RenderAll(D3DClass* D3D, ShaderClass* shader, CameraClass* camera, LightClass* lightSource);
+	bool RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	
 private:
 	//std::vector<PlayerClass>* allPlayers;

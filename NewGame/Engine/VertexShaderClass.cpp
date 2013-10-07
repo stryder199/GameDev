@@ -24,7 +24,7 @@ bool VertexShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFil
 	bool result;
 
 	//Initialize the vertex and pixel shaders
-	result = InitializeShader(device, hwnd, vsFilename);
+	result = InitializeShader(device, hwnd, vsFilename, polygonLayout, layoutCount);
 	if(!result)
 		return false;
 
@@ -39,7 +39,7 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, 
+bool VertexShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
 						 ID3D11ShaderResourceView* texture)
 {
 	bool result;
@@ -147,7 +147,7 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND 
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
-	ofstream fout;
+	std::ofstream fout;
 
 
 	// Get a pointer to the error message text buffer.
@@ -178,8 +178,8 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND 
 	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, 
-									  D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture)
+bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix,
+												ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -187,9 +187,9 @@ bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 	unsigned int bufferNumber;
 
 	//Transpose the matrices to prepare them for the shader
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	XMMATRIX transposedWorldMatrix = XMMatrixTranspose(worldMatrix);
+	XMMATRIX transposedViewMatrix = XMMatrixTranspose(viewMatrix);
+	XMMATRIX transposedProjectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 	//Lock the constant buffer so it can be written to
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -200,9 +200,9 @@ bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	//Copy the matrices into the constant buffer
-	dataPtr->world = worldMatrix;
-	dataPtr->view = viewMatrix;
-	dataPtr->projection = projectionMatrix;
+	dataPtr->world = transposedWorldMatrix;
+	dataPtr->view = transposedViewMatrix;
+	dataPtr->projection = transposedProjectionMatrix;
 
 	//Unlock the constant buffer
 	deviceContext->Unmap(m_matrixBuffer, 0);

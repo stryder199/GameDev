@@ -3,7 +3,7 @@
 #include "CameraClass.h"
 #include "D3DClass.h"
 #include "LightClass.h"
-#include "ShaderClass.h"
+#include "ShaderControllerClass.h"
 #include "TextureClass.h"
 
 PlayerClass::PlayerClass(){
@@ -29,7 +29,7 @@ bool PlayerClass::Initialize( MeshClass* objMesh, TextureClass* objTex, ID3D11De
 	m_mesh = objMesh;
 	m_texture = objTex;
 
-	m_worldMatrix = new D3DXMATRIX();
+	m_worldMatrix = &XMMatrixIdentity();
 
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.
 	result = InitializeBuffers(device);
@@ -66,7 +66,7 @@ void PlayerClass::ShutdownBuffers()
 	return;
 }
 
-bool PlayerClass::Render(D3DClass* D3D, ShaderClass* shader, CameraClass* camera, LightClass* lightSource)
+bool PlayerClass::Render(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
 {
 	bool result;
 
@@ -104,8 +104,8 @@ bool PlayerClass::InitializeBuffers(ID3D11Device* device)
 	// Load the vertex array and index array with data.
 	for(i=0; i<m_mesh->getVertexCount(); i++)
 	{
-		vertices[i].position = D3DXVECTOR3(m_mesh->getMesh()[i].x, m_mesh->getMesh()[i].y, m_mesh->getMesh()[i].z);
-		vertices[i].texture = D3DXVECTOR2(m_mesh->getMesh()[i].tu, m_mesh->getMesh()[i].tv);
+		vertices[i].position = XMFLOAT3(m_mesh->getMesh()[i].x, m_mesh->getMesh()[i].y, m_mesh->getMesh()[i].z);
+		vertices[i].texture = XMFLOAT2(m_mesh->getMesh()[i].tu, m_mesh->getMesh()[i].tv);
 
 		indices[i] = i;
 	}
@@ -168,23 +168,26 @@ bool PlayerClass::PreProcessing()
 	pos_y += vel_y;
 	pos_z += vel_z;
 
-	D3DXMatrixIdentity(m_worldMatrix);
+	*m_worldMatrix = XMMatrixIdentity();
 
 	// Move the model to the location it should be rendered at.
-	D3DXMatrixTranslation(m_worldMatrix, pos_x, pos_y, pos_z); 
+	XMMATRIX translationMatrix = XMMatrixTranslation(pos_x, pos_y, pos_z);
 
-	D3DXMatrixScaling(m_worldMatrix, 0.25f, 0.25f, 0.25f);
+	XMMATRIX scalingMatrix = XMMatrixScaling(0.25f, 0.25f, 0.25f);
+
+	*m_worldMatrix *= translationMatrix;
+	*m_worldMatrix *= scalingMatrix;
 
 
 	return true;
 }
 
-bool PlayerClass::RenderBuffers(D3DClass* D3D, ShaderClass* shader, CameraClass* camera, LightClass* lightSource)
+bool PlayerClass::RenderBuffers(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
 {
 	unsigned int stride;
 	unsigned int offset;
 	bool result;
-	D3DXMATRIX projMatrix;
+	XMMATRIX projMatrix;
 
 	//Set vertex buffer stride and offset.
 	stride = sizeof(VertexType);
@@ -207,7 +210,7 @@ bool PlayerClass::RenderBuffers(D3DClass* D3D, ShaderClass* shader, CameraClass*
 
 	//Render the model using the shader
 	result = shader->Render(D3D->GetDeviceContext(), m_mesh->getIndexCount(), *m_worldMatrix, *camera->GetViewMatrix(), projMatrix,
-		m_texture->GetTexture(),lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
+		m_texture->GetTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
 	if(!result)
 		return false;
 

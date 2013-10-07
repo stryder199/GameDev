@@ -4,7 +4,7 @@
 #include "D3DClass.h"
 #include "CameraClass.h"
 #include "LightClass.h"
-#include "ShaderClass.h"
+#include "ShaderControllerClass.h"
 #include "TextureClass.h"
 
 ActorsClass::ActorsClass(){
@@ -45,7 +45,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 	return true;
 }
 
-bool ActorsClass::RenderAll(D3DClass* D3D, ShaderClass* shader, CameraClass* camera, LightClass* lightSource){
+bool ActorsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource){
 	bool result;
 
 	result = player->Render(D3D, shader, camera, lightSource);

@@ -3,7 +3,7 @@
 #include "ActorsClass.h"
 #include "D3DClass.h"
 #include "CameraClass.h"
-#include "ShaderClass.h"
+#include "ShaderControllerClass.h"
 #include "LightClass.h"
 
 ThreeDGraphicsClass::ThreeDGraphicsClass()
@@ -47,7 +47,7 @@ bool ThreeDGraphicsClass::Initialize(ID3D11Device* device)
 	return true;
 }
 
-bool ThreeDGraphicsClass::RenderAll(D3DClass* D3D, ShaderClass* shader, CameraClass* camera)
+bool ThreeDGraphicsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera)
 {
 	bool result;
 

@@ -2,7 +2,7 @@
 #include "WindowClass.h"
 #include "D3DClass.h"
 #include "CameraClass.h"
-#include "ShaderClass.h"
+#include "ShaderControllerClass.h"
 #include "MeshClass.h"
 #include "ThreeDGraphicsClassh.h"
 #include "TwoDGraphicsClass.h"
@@ -29,8 +29,8 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
-	D3D11_INPUT_ELEMENT_DESC* polygonLayout;
-	int layoutCount;
+	D3D11_INPUT_ELEMENT_DESC *threeDPolygonLayout, *twoDPolygonLayout;
+	int threeDLayoutCount, twoDLayoutCount;
 
 	//Window Init
 	m_Window = new WindowClass();
@@ -60,37 +60,57 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 		return false;
 
 	//Shader Init
-	m_Shader = new ShaderClass();
+	m_Shader = new ShaderControllerClass();
 	if(!m_Shader)
 		return false;
 
+	threeDLayoutCount = 3;
+	threeDPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[threeDLayoutCount];
 	//Now setup the layout of the data that goes into the shader
 	//This setup needs to match the VertexType structure in the MeshClass and in the shader
-	polygonLayout[0].SemanticName = "POSITION";
-	polygonLayout[0].SemanticIndex = 0;
-	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[0].InputSlot = 0;
-	polygonLayout[0].AlignedByteOffset= 0;
-	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[0].InstanceDataStepRate = 0;
+	threeDPolygonLayout[0].SemanticName = "POSITION";
+	threeDPolygonLayout[0].SemanticIndex = 0;
+	threeDPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	threeDPolygonLayout[0].InputSlot = 0;
+	threeDPolygonLayout[0].AlignedByteOffset= 0;
+	threeDPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	threeDPolygonLayout[0].InstanceDataStepRate = 0;
 
-	polygonLayout[1].SemanticName = "TEXCOORD";
-	polygonLayout[1].SemanticIndex = 0;
-	polygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	polygonLayout[1].InputSlot = 0;
-	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[1].InstanceDataStepRate = 0;
+	threeDPolygonLayout[1].SemanticName = "TEXCOORD";
+	threeDPolygonLayout[1].SemanticIndex = 0;
+	threeDPolygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	threeDPolygonLayout[1].InputSlot = 0;
+	threeDPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	threeDPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	threeDPolygonLayout[1].InstanceDataStepRate = 0;
 
-	polygonLayout[2].SemanticName = "NORMAL";
-	polygonLayout[2].SemanticIndex = 0;
-	polygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	polygonLayout[2].InputSlot = 0;
-	polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	polygonLayout[2].InstanceDataStepRate = 0;
+	threeDPolygonLayout[2].SemanticName = "NORMAL";
+	threeDPolygonLayout[2].SemanticIndex = 0;
+	threeDPolygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	threeDPolygonLayout[2].InputSlot = 0;
+	threeDPolygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	threeDPolygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	threeDPolygonLayout[2].InstanceDataStepRate = 0;
 
-	result = m_Shader->Initialize(m_D3D->GetDevice(), m_Window->gethWnd());
+	twoDLayoutCount = 2;
+	twoDPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[twoDLayoutCount];
+	twoDPolygonLayout[0].SemanticName = "POSITION";
+	twoDPolygonLayout[0].SemanticIndex = 0;
+	twoDPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	twoDPolygonLayout[0].InputSlot = 0;
+	twoDPolygonLayout[0].AlignedByteOffset = 0;
+	twoDPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	twoDPolygonLayout[0].InstanceDataStepRate = 0;
+
+	twoDPolygonLayout[1].SemanticName = "TEXCOORD";
+	twoDPolygonLayout[1].SemanticIndex = 0;
+	twoDPolygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	twoDPolygonLayout[1].InputSlot = 0;
+	twoDPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	twoDPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	twoDPolygonLayout[1].InstanceDataStepRate = 0;
+
+	result = m_Shader->Initialize(m_D3D->GetDevice(), m_Window->gethWnd(), threeDPolygonLayout, threeDLayoutCount, twoDPolygonLayout, twoDLayoutCount);
 	if(!result)
 		return false;
 
@@ -99,7 +119,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!m_2DGraphics)
 		return false;
 
-	result = m_2DGraphics->Initialize();
+	result = m_2DGraphics->Initialize(m_D3D->GetDevice(), m_Window->getScreenWidth(), m_Window->getScreenHeight());
 	if(!result)
 		return false;
 
@@ -131,7 +151,9 @@ bool GraphicsClass::Render()
 	m_Camera->Render();
 
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
-	m_3DGraphics->RenderAll(m_D3D, m_Shader, m_Camera);
+	result = m_3DGraphics->RenderAll(m_D3D, m_Shader, m_Camera);
+	if (!result)
+		return false;
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();

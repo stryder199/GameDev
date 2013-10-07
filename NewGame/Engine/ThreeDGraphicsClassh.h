@@ -7,7 +7,7 @@
 // forward declared dependencies
 class ActorsClass;
 class EnvironmentArtClass;
-class ShaderClass;
+class ShaderControllerClass;
 class D3DClass;
 class LightClass;
 class CameraClass;
@@ -26,7 +26,7 @@ public:
 
 	bool Initialize(ID3D11Device* device);
 
-	bool RenderAll(D3DClass* D3D, ShaderClass* shader, CameraClass* camera);
+	bool RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera);
 
 private:
 	EnvironmentArtClass* envArt;
