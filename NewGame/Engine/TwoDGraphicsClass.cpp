@@ -33,6 +33,8 @@ bool TwoDGraphicsClass::Initialize(ID3D11Device* device, int screenWidth, int sc
 		return false;
 	}
 
+	m_DefaultLightSource = new LightClass();
+
 	m_DefaultLightSource->SetAmbientColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDirection(0.0, 0.0, -1.0);
@@ -44,6 +46,8 @@ bool TwoDGraphicsClass::RenderAll(D3DClass* D3D, CameraClass* camera, ShaderCont
 {
 	bool result;
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+
+	shader->Set2DShaders();
 
 	// Get the world, view, projection, and ortho matrices from the camera and d3d objects.
 	viewMatrix = *camera->GetViewMatrix();

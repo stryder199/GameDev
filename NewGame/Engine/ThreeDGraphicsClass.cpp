@@ -51,6 +51,8 @@ bool ThreeDGraphicsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader
 {
 	bool result;
 
+	shader->Set3DShaders();
+
 	result = envArt->RenderAll();
 	if(!result)
 		return false;
