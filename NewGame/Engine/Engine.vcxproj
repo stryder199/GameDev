@@ -83,7 +83,8 @@
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
     <PostBuildEvent>
-      <Command>xcopy /E /Q /Y $(ProjectDir)shaders $(TargetDir)shaders\</Command>
+      <Command>xcopy /E /Q /Y $(ProjectDir)shaders $(TargetDir)shaders\
+xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -149,10 +150,6 @@
     <ClInclude Include="StarClass.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="WindowClass.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="pixelShader.hlsl" />
-    <None Include="vertexShader.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

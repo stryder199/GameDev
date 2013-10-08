@@ -69,8 +69,8 @@ bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
 	else
 	{
 		// If windowed then set it to 800x600 resolution.
-		WINDOW_WIDTH  = 800;
-		WINDOW_HEIGHT = 600;
+		WINDOW_WIDTH  = 1280;
+		WINDOW_HEIGHT = 720;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH)  / 2;

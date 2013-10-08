@@ -9,7 +9,6 @@ class WindowClass;
 class D3DClass;
 class CameraClass;
 class ShaderControllerClass;
-class ModelClass;
 class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
 
@@ -35,7 +34,6 @@ private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	ShaderControllerClass* m_Shader;
-	ModelClass* m_Model;
 	TwoDGraphicsClass* m_2DGraphics;
 	ThreeDGraphicsClass* m_3DGraphics;
 };

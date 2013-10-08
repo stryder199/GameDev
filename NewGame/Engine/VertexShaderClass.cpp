@@ -39,7 +39,7 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, 
+bool VertexShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix, 
 						 ID3D11ShaderResourceView* texture)
 {
 	bool result;
@@ -60,7 +60,7 @@ bool VertexShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR*
 	HRESULT result;
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
-	D3D11_BUFFER_DESC matrixBufferDesc, lightBufferDesc;
+	D3D11_BUFFER_DESC matrixBufferDesc;
 
 
 	// Initialize the pointers this function will use to null.
@@ -178,18 +178,24 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND 
 	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix,
+bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 												ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
+	XMFLOAT4X4 transposedWorldFloatMatrix, transposedViewFloatMatrix, transposedProjectionFloatMatrix;
+	XMMATRIX transposedWorldMatrix, transposedViewMatrix, transposedProjectionMatrix;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
 	//Transpose the matrices to prepare them for the shader
-	XMMATRIX transposedWorldMatrix = XMMatrixTranspose(worldMatrix);
-	XMMATRIX transposedViewMatrix = XMMatrixTranspose(viewMatrix);
-	XMMATRIX transposedProjectionMatrix = XMMatrixTranspose(projectionMatrix);
+	transposedWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix));
+	transposedViewMatrix = XMMatrixTranspose(XMLoadFloat4x4(&viewMatrix));
+	transposedProjectionMatrix = XMMatrixTranspose(XMLoadFloat4x4(&projectionMatrix));
+
+	XMStoreFloat4x4(&transposedWorldFloatMatrix, transposedWorldMatrix);
+	XMStoreFloat4x4(&transposedViewFloatMatrix, transposedViewMatrix);
+	XMStoreFloat4x4(&transposedProjectionFloatMatrix, transposedProjectionMatrix);
 
 	//Lock the constant buffer so it can be written to
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -200,9 +206,9 @@ bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	//Copy the matrices into the constant buffer
-	dataPtr->world = transposedWorldMatrix;
-	dataPtr->view = transposedViewMatrix;
-	dataPtr->projection = transposedProjectionMatrix;
+	dataPtr->world = transposedWorldFloatMatrix;
+	dataPtr->view = transposedViewFloatMatrix;
+	dataPtr->projection = transposedProjectionFloatMatrix;
 
 	//Unlock the constant buffer
 	deviceContext->Unmap(m_matrixBuffer, 0);

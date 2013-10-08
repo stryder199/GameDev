@@ -5,7 +5,6 @@
 
 //=================================
 // forward declared dependencies
-class PlayerClass;
 class MeshClass;
 class ShaderControllerClass;
 class D3DClass;
@@ -17,6 +16,7 @@ class TextureClass;
 // included dependencies
 #include <vector>
 #include <D3D11.h>
+#include "PlayerClass.h"
 
 class ActorsClass{
 
@@ -29,7 +29,7 @@ public:
 	
 private:
 	//std::vector<PlayerClass>* allPlayers;
-	PlayerClass* player;
+	PlayerClass player;
 	MeshClass* playerMesh;
 	TextureClass* playerTex;
 

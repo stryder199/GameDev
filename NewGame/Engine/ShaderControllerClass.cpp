@@ -19,30 +19,26 @@ bool ShaderControllerClass::Initialize(ID3D11Device* device, HWND hwnd, D3D11_IN
 	WCHAR* ThreeDVSFilename = L"shaders\\threeDVertexShader.hlsl";
 	WCHAR* TwoDVSFilename = L"shaders\\twoDVertexShader.hlsl";
 
-	m_threeDPixelShader = new PixelShaderClass();
-	result = m_threeDPixelShader->Initialize(device, hwnd, ThreeDPSFilename);
+	result = m_threeDPixelShader.Initialize(device, hwnd, ThreeDPSFilename);
 	if (!result)
 		return false;
 
-	m_threeDVertexShader = new VertexShaderClass();
-	result = m_threeDVertexShader->Initialize(device, hwnd, ThreeDVSFilename, threeDPolygonLayout, threeDLayoutCount);
+	result = m_threeDVertexShader.Initialize(device, hwnd, ThreeDVSFilename, threeDPolygonLayout, threeDLayoutCount);
 	if (!result)
 		return false;
 
-	m_twoDPixelShader = new PixelShaderClass();
-	result = m_twoDPixelShader->Initialize(device, hwnd, TwoDPSFilename);
+	result = m_twoDPixelShader.Initialize(device, hwnd, TwoDPSFilename);
 	if (!result)
 		return false;
 
-	m_twoDVertexShader = new VertexShaderClass();
-	result = m_twoDVertexShader->Initialize(device, hwnd, TwoDVSFilename, twoDPolygonLayout, twoDLayoutCount);
+	result = m_twoDVertexShader.Initialize(device, hwnd, TwoDVSFilename, twoDPolygonLayout, twoDLayoutCount);
 	if (!result)
 		return false;
 
 	return true;
 }
 
-bool ShaderControllerClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix,
+bool ShaderControllerClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 									ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
@@ -55,17 +51,19 @@ bool ShaderControllerClass::Render(ID3D11DeviceContext* deviceContext, int index
 	if (!result)
 		return false;
 
+	deviceContext->DrawIndexed(indexCount, 0, 0);
+
 	return result;
 }
 
 void ShaderControllerClass::Set2DShaders()
 {
-	m_vertexFocus = m_twoDVertexShader;
-	m_pixelFocus = m_twoDPixelShader;
+	m_vertexFocus = &m_twoDVertexShader;
+	m_pixelFocus = &m_twoDPixelShader;
 }
 
 void ShaderControllerClass::Set3DShaders()
 {
-	m_vertexFocus = m_threeDVertexShader;
-	m_pixelFocus = m_threeDPixelShader;
+	m_vertexFocus = &m_threeDVertexShader;
+	m_pixelFocus = &m_threeDPixelShader;
 }

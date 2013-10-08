@@ -12,7 +12,9 @@ bool StarClass::Initialize()
 {
 	bool result;
 	mesh = new MeshClass();
-	//mesh->Initialize();
+	result = mesh->Initialize("");
+	if (!result)
+		return false;
 
 	return true;
 }

@@ -8,7 +8,6 @@
 #include "TextureClass.h"
 
 ActorsClass::ActorsClass(){
-	player = 0;
 	playerMesh = 0;
 	playerTex = 0;
 }
@@ -21,7 +20,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 	bool result;
 
 	playerMesh = new MeshClass();
-	result = playerMesh->Initialize("../Engine/data/ship1.txt");
+	result = playerMesh->Initialize("data/cube.txt");
 	if(!result)
 		return false;
 
@@ -29,7 +28,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 	playerTex = new TextureClass;
 
 	// Initialize the texture object.
-	result = playerTex->Initialize(device, L"../Engine/data/shiptex.dds");
+	result = playerTex->Initialize(device, L"data/shiptex.dds");
 	if(!result)
 	{
 		return false;
@@ -37,8 +36,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 
 	//allPlayers = new std::vector<PlayerClass>;
 
-	player = new PlayerClass();
-	result = player->Initialize(playerMesh, playerTex, device);
+	result = player.Initialize(playerMesh, playerTex, device);
 	if(!result)
 		return false;
 
@@ -48,7 +46,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 bool ActorsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource){
 	bool result;
 
-	result = player->Render(D3D, shader, camera, lightSource);
+	result = player.Render(D3D, shader, camera, lightSource);
 	if(!result)
 		return false;
 

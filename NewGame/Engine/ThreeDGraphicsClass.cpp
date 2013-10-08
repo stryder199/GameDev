@@ -42,7 +42,7 @@ bool ThreeDGraphicsClass::Initialize(ID3D11Device* device)
 	// Initialize the light object.
 	m_LightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_LightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_LightSource->SetDirection(1.0f, 0.0f, 0.0f);
+	m_LightSource->SetDirection(0.0f, 0.0f, 1.0f);
 
 	return true;
 }

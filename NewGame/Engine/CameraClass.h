@@ -28,7 +28,7 @@ public:
 
 	void Render();
 	bool Initialize();
-	XMMATRIX* GetViewMatrix();
+	XMFLOAT4X4* GetViewMatrix();
 
 	void setVelX(float);
 	void setVelY(float);
@@ -43,7 +43,7 @@ private:
 	float m_rotationX, m_rotationY, m_rotationZ;
 	float m_velX, m_velY, m_velZ;
 	float m_velRotX, m_velRotY, m_velRotZ;
-	XMMATRIX* m_viewMatrix;
+	XMFLOAT4X4 *m_viewMatrix;
 
 };
 

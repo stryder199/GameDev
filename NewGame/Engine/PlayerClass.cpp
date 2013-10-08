@@ -10,7 +10,6 @@ PlayerClass::PlayerClass(){
 	m_mesh = 0;
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
-	m_worldMatrix = 0;
 	pos_x = 0.0f;
 	pos_y = 0.0f;
 	pos_z = 0.0f;
@@ -28,8 +27,6 @@ bool PlayerClass::Initialize( MeshClass* objMesh, TextureClass* objTex, ID3D11De
 
 	m_mesh = objMesh;
 	m_texture = objTex;
-
-	m_worldMatrix = &XMMatrixIdentity();
 
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.
 	result = InitializeBuffers(device);
@@ -106,6 +103,7 @@ bool PlayerClass::InitializeBuffers(ID3D11Device* device)
 	{
 		vertices[i].position = XMFLOAT3(m_mesh->getMesh()[i].x, m_mesh->getMesh()[i].y, m_mesh->getMesh()[i].z);
 		vertices[i].texture = XMFLOAT2(m_mesh->getMesh()[i].tu, m_mesh->getMesh()[i].tv);
+		vertices[i].normals = XMFLOAT3(m_mesh->getMesh()[i].nx, m_mesh->getMesh()[i].ny, m_mesh->getMesh()[i].nz);
 
 		indices[i] = i;
 	}
@@ -168,17 +166,17 @@ bool PlayerClass::PreProcessing()
 	pos_y += vel_y;
 	pos_z += vel_z;
 
-	*m_worldMatrix = XMMatrixIdentity();
+	XMMATRIX worldMatrix = XMMatrixIdentity();
 
 	// Move the model to the location it should be rendered at.
 	XMMATRIX translationMatrix = XMMatrixTranslation(pos_x, pos_y, pos_z);
 
 	XMMATRIX scalingMatrix = XMMatrixScaling(0.25f, 0.25f, 0.25f);
 
-	*m_worldMatrix *= translationMatrix;
-	*m_worldMatrix *= scalingMatrix;
+	worldMatrix *= translationMatrix;
+	worldMatrix *= scalingMatrix;
 
-
+	XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
 	return true;
 }
 
@@ -187,7 +185,7 @@ bool PlayerClass::RenderBuffers(D3DClass* D3D, ShaderControllerClass* shader, Ca
 	unsigned int stride;
 	unsigned int offset;
 	bool result;
-	XMMATRIX projMatrix;
+	XMFLOAT4X4 projMatrix;
 
 	//Set vertex buffer stride and offset.
 	stride = sizeof(VertexType);
@@ -209,7 +207,7 @@ bool PlayerClass::RenderBuffers(D3DClass* D3D, ShaderControllerClass* shader, Ca
 	D3D->GetProjectionMatrix(projMatrix);
 
 	//Render the model using the shader
-	result = shader->Render(D3D->GetDeviceContext(), m_mesh->getIndexCount(), *m_worldMatrix, *camera->GetViewMatrix(), projMatrix,
+	result = shader->Render(D3D->GetDeviceContext(), m_mesh->getIndexCount(), m_worldMatrix, *camera->GetViewMatrix(), projMatrix,
 		m_texture->GetTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
 	if(!result)
 		return false;

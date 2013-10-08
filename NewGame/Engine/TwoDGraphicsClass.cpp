@@ -45,7 +45,7 @@ bool TwoDGraphicsClass::Initialize(ID3D11Device* device, int screenWidth, int sc
 bool TwoDGraphicsClass::RenderAll(D3DClass* D3D, CameraClass* camera, ShaderControllerClass* shader)
 {
 	bool result;
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+	XMFLOAT4X4 worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
 
 	shader->Set2DShaders();
 

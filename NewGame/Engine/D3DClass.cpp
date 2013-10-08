@@ -43,6 +43,7 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	float fieldOfView, screenAspect;
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	D3D11_BLEND_DESC blendStateDescription;
+	XMMATRIX orthoMatrix, projMatrix, worldMatrix;
 
 
 	// Store the vsync setting.
@@ -317,13 +318,13 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	screenAspect = (float)screenWidth / (float)screenHeight;
 
 	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+	projMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
 
     // Initialize the world matrix to the identity matrix.
-	m_worldMatrix = XMMatrixIdentity();
+	worldMatrix = XMMatrixIdentity();
 
 	// Create an orthographic projection matrix for 2D rendering.
-	m_orthoMatrix = XMMatrixOrthographicLH((float) screenWidth, (float) screenHeight, screenNear, screenDepth);
+	orthoMatrix = XMMatrixOrthographicLH((float) screenWidth, (float) screenHeight, screenNear, screenDepth);
 
 	// Clear the second depth stencil state before setting the parameters.
 	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
@@ -382,6 +383,10 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 		return false;
 	}
 
+	XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
+	XMStoreFloat4x4(&m_projectionMatrix, projMatrix);
+	XMStoreFloat4x4(&m_orthoMatrix, orthoMatrix);
+
     return true;
 }
 
@@ -435,21 +440,21 @@ ID3D11DeviceContext* D3DClass::GetDeviceContext()
 }
 
 
-void D3DClass::GetProjectionMatrix(XMMATRIX& projectionMatrix)
+void D3DClass::GetProjectionMatrix(XMFLOAT4X4& projectionMatrix)
 {
 	projectionMatrix = m_projectionMatrix;
 	return;
 }
 
 
-void D3DClass::GetWorldMatrix(XMMATRIX& worldMatrix)
+void D3DClass::GetWorldMatrix(XMFLOAT4X4& worldMatrix)
 {
 	worldMatrix = m_worldMatrix;
 	return;
 }
 
 
-void D3DClass::GetOrthoMatrix(XMMATRIX& orthoMatrix)
+void D3DClass::GetOrthoMatrix(XMFLOAT4X4& orthoMatrix)
 {
 	orthoMatrix = m_orthoMatrix;
 	return;

@@ -51,7 +51,7 @@ bool ProgramRootClass::Go()
 			result = Render();
 			if(!result)
 			{
-				//MessageBox(m_hwnd, L"Frame Processing Failed", L"Error", MB_OK);
+				MessageBox(m_Graphics->getWindowObj()->gethWnd(), L"Frame Processing Failed", L"Error", MB_OK);
 				done = true;
 			}
 		}

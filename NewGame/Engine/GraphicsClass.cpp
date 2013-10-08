@@ -13,7 +13,6 @@ GraphicsClass::GraphicsClass()
 	m_D3D = 0;
 	m_Camera = 0;
 	m_Shader = 0;
-	m_Model = 0;
 	m_2DGraphics = 0;
 	m_3DGraphics = 0;
 }
@@ -29,6 +28,7 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
+
 	D3D11_INPUT_ELEMENT_DESC *threeDPolygonLayout, *twoDPolygonLayout;
 	int threeDLayoutCount, twoDLayoutCount;
 
@@ -84,7 +84,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	threeDPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	threeDPolygonLayout[1].InstanceDataStepRate = 0;
 
-	threeDPolygonLayout[2].SemanticName = "NORMAL";
+	threeDPolygonLayout[2].SemanticName = "Normal";
 	threeDPolygonLayout[2].SemanticIndex = 0;
 	threeDPolygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	threeDPolygonLayout[2].InputSlot = 0;

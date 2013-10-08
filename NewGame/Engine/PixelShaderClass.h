@@ -22,9 +22,9 @@ class PixelShaderClass
 private:
 	struct MatrixBufferType
 	{
-		XMMATRIX world;
-		XMMATRIX view;
-		XMMATRIX projection;
+		XMFLOAT4X4 world;
+		XMFLOAT4X4 view;
+		XMFLOAT4X4 projection;
 	};
 
 	struct LightBufferType
@@ -42,19 +42,18 @@ public:
 
 	bool Initialize(ID3D11Device* device, HWND hwnd,WCHAR* psFilename);
 	void Shutdown();
-	bool Render(ID3D11DeviceContext*, int, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	bool Render(ID3D11DeviceContext*, int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 
 private:
 	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* psFilename);
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);
 
-	bool SetShaderParameters(ID3D11DeviceContext*, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	bool SetShaderParameters(ID3D11DeviceContext*, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 	void RenderShader(ID3D11DeviceContext*, int);
 
 private:
 	ID3D11PixelShader* m_pixelShader;
-	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_lightBuffer;
 	ID3D11SamplerState* m_sampleState;
 };

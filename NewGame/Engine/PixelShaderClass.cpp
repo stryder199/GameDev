@@ -6,7 +6,6 @@
 PixelShaderClass::PixelShaderClass()
 {
 	m_pixelShader = 0;
-	m_layout = 0;
 	m_lightBuffer = 0;
 	m_sampleState = 0;
 }
@@ -40,7 +39,7 @@ void PixelShaderClass::Shutdown()
 	return;
 }
 
-bool PixelShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix,
+bool PixelShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 						 ID3D11ShaderResourceView* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
@@ -151,13 +150,6 @@ void PixelShaderClass::ShutdownShader()
 		m_lightBuffer = 0;
 	}
 
-	// Release the layout.
-	if(m_layout)
-	{
-		m_layout->Release();
-		m_layout = 0;
-	}
-
 	// Release the pixel shader.
 	if(m_pixelShader)
 	{
@@ -203,7 +195,7 @@ void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND h
 	return;
 }
 
-bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix,
+bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 											ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	HRESULT result;

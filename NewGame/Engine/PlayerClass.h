@@ -25,6 +25,7 @@ private:
 	{
 		XMFLOAT3 position;
 		XMFLOAT2 texture;
+		XMFLOAT3 normals;
 	};
 
 public:
@@ -46,7 +47,7 @@ private:
 
 	MeshClass* m_mesh;
 	TextureClass* m_texture;
-	XMMATRIX* m_worldMatrix;
+	XMFLOAT4X4 m_worldMatrix;
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
 	float pos_x, pos_y, pos_z;
 	float vel_x, vel_y, vel_z;

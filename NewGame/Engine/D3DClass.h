@@ -28,9 +28,9 @@ public:
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
 
-	void GetProjectionMatrix(XMMATRIX&);
-	void GetWorldMatrix(XMMATRIX&);
-	void GetOrthoMatrix(XMMATRIX&);
+	void GetProjectionMatrix(XMFLOAT4X4&);
+	void GetWorldMatrix(XMFLOAT4X4&);
+	void GetOrthoMatrix(XMFLOAT4X4&);
 
 	void BeginScene(float red, float green, float blue, float alpha);
 	void EndScene();
@@ -53,9 +53,9 @@ private:
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
 
-	XMMATRIX m_projectionMatrix;
-	XMMATRIX m_worldMatrix;
-	XMMATRIX m_orthoMatrix;
+	XMFLOAT4X4 m_projectionMatrix;
+	XMFLOAT4X4 m_worldMatrix;
+	XMFLOAT4X4 m_orthoMatrix;
 
 	ID3D11DepthStencilState* m_depthDisabledStencilState;
 	ID3D11BlendState* m_alphaEnableBlendingState;

@@ -2,6 +2,8 @@
 
 CameraClass::CameraClass()
 {
+	m_viewMatrix = 0;
+
 	m_positionX = 0.0f;
 	m_positionY = 0.0f;
 	m_positionZ = 0.0f;
@@ -31,11 +33,11 @@ bool CameraClass::Initialize()
 {
 	bool result;
 
-	m_viewMatrix = new XMMATRIX();
+	m_viewMatrix = new XMFLOAT4X4();
 
 	//Set the initial position of the camera
-	SetPosition(0.0f, -200.0f, 0.0f);
-	SetRotation(-90.0f, 0.0f, 0.0f);
+	SetPosition(0.0f, 0.0f, -10.0f);
+	SetRotation(0.0f, 0.0f, 0.0f);
 
 	return true;
 }
@@ -136,12 +138,10 @@ void CameraClass::Render()
 	lookAt = position + lookAt;
 
 	//Finally create the view matrix from the three updates vectors
-	*m_viewMatrix = XMMatrixLookAtLH(position, lookAt, up);
-
-	return;
+	XMStoreFloat4x4(m_viewMatrix, XMMatrixLookAtLH(position, lookAt, up));
 }
 
-XMMATRIX* CameraClass::GetViewMatrix()
+XMFLOAT4X4* CameraClass::GetViewMatrix()
 {
 	return m_viewMatrix;
 }
