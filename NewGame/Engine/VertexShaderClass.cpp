@@ -19,9 +19,11 @@ VertexShaderClass::~VertexShaderClass()
 {
 }
 
-bool VertexShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount)
+bool VertexShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, VertexShaderClass::ShaderType type)
 {
 	bool result;
+
+	m_type = type;
 
 	//Initialize the vertex and pixel shaders
 	result = InitializeShader(device, hwnd, vsFilename, polygonLayout, layoutCount);

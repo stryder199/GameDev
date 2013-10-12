@@ -29,9 +29,6 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
 
-	D3D11_INPUT_ELEMENT_DESC *threeDPolygonLayout, *twoDPolygonLayout;
-	int threeDLayoutCount, twoDLayoutCount;
-
 	//Window Init
 	m_Window = new WindowClass();
 	if(!m_Window)
@@ -64,53 +61,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!m_Shader)
 		return false;
 
-	threeDLayoutCount = 3;
-	threeDPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[threeDLayoutCount];
-	//Now setup the layout of the data that goes into the shader
-	//This setup needs to match the VertexType structure in the MeshClass and in the shader
-	threeDPolygonLayout[0].SemanticName = "POSITION";
-	threeDPolygonLayout[0].SemanticIndex = 0;
-	threeDPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	threeDPolygonLayout[0].InputSlot = 0;
-	threeDPolygonLayout[0].AlignedByteOffset= 0;
-	threeDPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	threeDPolygonLayout[0].InstanceDataStepRate = 0;
-
-	threeDPolygonLayout[1].SemanticName = "TEXCOORD";
-	threeDPolygonLayout[1].SemanticIndex = 0;
-	threeDPolygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	threeDPolygonLayout[1].InputSlot = 0;
-	threeDPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	threeDPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	threeDPolygonLayout[1].InstanceDataStepRate = 0;
-
-	threeDPolygonLayout[2].SemanticName = "Normal";
-	threeDPolygonLayout[2].SemanticIndex = 0;
-	threeDPolygonLayout[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	threeDPolygonLayout[2].InputSlot = 0;
-	threeDPolygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	threeDPolygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	threeDPolygonLayout[2].InstanceDataStepRate = 0;
-
-	twoDLayoutCount = 2;
-	twoDPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[twoDLayoutCount];
-	twoDPolygonLayout[0].SemanticName = "POSITION";
-	twoDPolygonLayout[0].SemanticIndex = 0;
-	twoDPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	twoDPolygonLayout[0].InputSlot = 0;
-	twoDPolygonLayout[0].AlignedByteOffset = 0;
-	twoDPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	twoDPolygonLayout[0].InstanceDataStepRate = 0;
-
-	twoDPolygonLayout[1].SemanticName = "TEXCOORD";
-	twoDPolygonLayout[1].SemanticIndex = 0;
-	twoDPolygonLayout[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	twoDPolygonLayout[1].InputSlot = 0;
-	twoDPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	twoDPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	twoDPolygonLayout[1].InstanceDataStepRate = 0;
-
-	result = m_Shader->Initialize(m_D3D->GetDevice(), m_Window->gethWnd(), threeDPolygonLayout, threeDLayoutCount, twoDPolygonLayout, twoDLayoutCount);
+	result = m_Shader->Initialize(m_D3D->GetDevice(), m_Window->gethWnd());
 	if(!result)
 		return false;
 

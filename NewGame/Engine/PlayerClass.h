@@ -16,41 +16,25 @@ class LightClass;
 // included dependencies
 #include <D3D11.h>
 #include <DirectXMath.h>
+#include "ModelClass.h"
 
 using namespace DirectX;
 
-class PlayerClass{
-private:
-	struct VertexType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-		XMFLOAT3 normals;
-	};
-
+class PlayerClass : public ModelClass{
 public:
 	PlayerClass();
 	~PlayerClass();
-	
-	bool Initialize(MeshClass*, TextureClass*, ID3D11Device*);
+
+	bool Initialize(MeshClass* mesh, TextureClass* texture, ID3D11Device* device);
 	bool Render(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
-	
 	void Shutdown();
 
-
 private:
-	bool InitializeBuffers(ID3D11Device* device);
 	bool RenderBuffers(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	bool PreProcessing();
-	void ShutdownBuffers();
 
-
-	MeshClass* m_mesh;
-	TextureClass* m_texture;
-	XMFLOAT4X4 m_worldMatrix;
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	float pos_x, pos_y, pos_z;
 	float vel_x, vel_y, vel_z;
+	XMFLOAT4X4 m_worldMatrix;
 
 };
 

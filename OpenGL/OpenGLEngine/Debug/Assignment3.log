@@ -1,0 +1,134 @@
+﻿Build started 07/04/2013 2:51:56 AM.
+     1>Project "D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\Assignment3.vcxproj" on node 2 (Build target(s)).
+     1>PreBuildEvent:
+         xcopy /Y /S /I  D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\* D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\plugins
+         :VCEnd
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgif4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgif4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgif4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgifd4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgifd4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgifd4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgifd4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qgifd4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qico4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qico4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qico4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qicod4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qicod4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qicod4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qicod4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qicod4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpeg4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpeg4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpeg4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpegd4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpegd4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpegd4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpegd4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qjpegd4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmng4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmng4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmng4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmngd4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmngd4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmngd4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmngd4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qmngd4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvg4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvg4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvg4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvgd4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvgd4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvgd4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvgd4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qsvgd4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtga4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtga4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtga4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtgad4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtgad4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtgad4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtgad4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtgad4.pdb
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiff4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiff4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiff4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiffd4.dll
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiffd4.exp
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiffd4.ilk
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiffd4.lib
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\plugins\imageformats\qtiffd4.pdb
+         56 File(s) copied
+       ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I.\GeneratedFiles /I. /I"C:\glew-1.9.0\include" /IC:\QTVS2012\include /IC:\QTVS2012\include\QTCore /IC:\QTVS2012\include\QTGui /IC:\QTVS2012\include\QTOpenGL /I.\GeneratedFiles\Debug /Zi /nologo /W1 /WX- /Od /Oy- /D UNICODE /D WIN32 /D QT_LARGEFILE_SUPPORT /D QT_DLL /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t- /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt src\GraphicsClass.cpp src\ModelClass.cpp src\RayTracer.cpp src\ThreeDGraphicsClass.cpp src\basicopenglview.cpp src\mainwindow.cpp
+         GraphicsClass.cpp
+         ModelClass.cpp
+     1>C:\glew-1.9.0\include\GL/glew.h(1650): warning C4005: 'GL_STATIC_DRAW' : macro redefinition
+                 C:\glew-1.9.0\include\GL/glew.h(1647) : see previous definition of 'GL_STATIC_DRAW'
+         RayTracer.cpp
+         ThreeDGraphicsClass.cpp
+         basicopenglview.cpp
+     1>C:\glew-1.9.0\include\GL/glew.h(1650): warning C4005: 'GL_STATIC_DRAW' : macro redefinition
+                 C:\glew-1.9.0\include\GL/glew.h(1647) : see previous definition of 'GL_STATIC_DRAW'
+         mainwindow.cpp
+     1>C:\glew-1.9.0\include\GL/glew.h(1650): warning C4005: 'GL_STATIC_DRAW' : macro redefinition
+                 C:\glew-1.9.0\include\GL/glew.h(1647) : see previous definition of 'GL_STATIC_DRAW'
+         Generating Code...
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\\Assignment3.exe" /NOLOGO /LIBPATH:"C:\glew-1.9.0\lib" /LIBPATH:C:\QTVS2012\lib /LIBPATH:C:\QTVS2012\plugins\imageformats opengl32.lib gdi32.lib user32.lib glew32s.lib qtmaind.lib QtCored4.lib QtGuid4.lib QtOpenGLd4.lib qtgad4.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\Assignment3.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\Assignment3.lib" /MACHINE:X86 /SAFESEH Debug\moc_basicopenglview.obj
+         Debug\moc_mainwindow.obj
+         Debug\moc_raydialog.obj
+         Debug\qrc_assignment3.obj
+         Debug\basicopenglview.obj
+         Debug\BumpMapClass.obj
+         Debug\CameraClass.obj
+         Debug\GraphicsClass.obj
+         Debug\LightClass.obj
+         Debug\main.obj
+         Debug\mainwindow.obj
+         Debug\MatrixClass.obj
+         Debug\MeshClass.obj
+         Debug\ModelClass.obj
+         Debug\openglerror.obj
+         Debug\Ray.obj
+         Debug\raydialog.obj
+         Debug\RayTracer.obj
+         Debug\ShaderClass.obj
+         Debug\ShaderProgram.obj
+         Debug\TextureClass.obj
+         Debug\ThreeDGraphicsClass.obj
+         Debug\VectorClass.obj
+         Assignment3.vcxproj -> D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\Assignment3.exe
+       PostBuildEvent:
+         xcopy /Y /S /I  D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\* D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\data
+         xcopy /Y /S /I  D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\shaders\* D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Win32\Debug\shaders
+         :VCEnd
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\cube.max
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\cube.mtl
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\cube.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\normal.tga
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\red.tga
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smallcube.mtl
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smallcube.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smallsquare.max
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smallsquare.mtl
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smallsquare.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smalltriangle.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\smile.jpg
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\sphere.max
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\sphere.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\square.mtl
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\square.obj
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\stone.tga
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\stoneNormal.tga
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\data\test.tga
+         19 File(s) copied
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\shaders\FragmentShader.glsl
+         D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\shaders\VertexShader.glsl
+         2 File(s) copied
+     1>Done Building Project "D:\Users\Stryder\Desktop\SchoolStuff\CSC305\Assignment3\Assignment3\Assignment3.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.62

@@ -98,11 +98,11 @@ bool ProgramRootClass::Go()
 			m_Graphics->getCamera()->setVelZ(0.0f);
 		}
 
-		if(m_Events->IsDPressed() == true)
+		if(m_Events->IsSPressed() == true)
 		{
 			m_Graphics->getCamera()->setVelRotX(1.0f);
 		}
-		else if(m_Events->IsAPressed() == true)
+		else if(m_Events->IsWPressed() == true)
 		{
 			m_Graphics->getCamera()->setVelRotX(-1.0f);
 		}
@@ -110,11 +110,11 @@ bool ProgramRootClass::Go()
 			m_Graphics->getCamera()->setVelRotX(0.0f);
 		}
 
-		if(m_Events->IsWPressed() == true)
+		if(m_Events->IsAPressed() == true)
 		{
 			m_Graphics->getCamera()->setVelRotY(1.0f);
 		}
-		else if(m_Events->IsSPressed() == true)
+		else if(m_Events->IsDPressed() == true)
 		{
 			m_Graphics->getCamera()->setVelRotY(-1.0f);
 		}

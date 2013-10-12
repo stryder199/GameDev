@@ -28,8 +28,8 @@ public:
 	bool RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	
 private:
-	//std::vector<PlayerClass>* allPlayers;
-	PlayerClass player;
+	std::vector<ModelClass*>* allModels;
+	PlayerClass* player;
 	MeshClass* playerMesh;
 	TextureClass* playerTex;
 

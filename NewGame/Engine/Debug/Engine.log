@@ -1,0 +1,44 @@
+﻿Build started 10/11/2013 9:08:14 PM.
+     1>Project "D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\Engine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IDXUT\Core /IDXUT\Optional /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D DEBUG /D PROFILE /D _WINDOWS /D D3DXFX_LARGEADDRESS_HANDLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /openmp- /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt ActorsClass.cpp
+         ActorsClass.cpp
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\Engine.exe" /INCREMENTAL /NOLOGO d3d11.lib dxgi.lib d3dx11.lib dxerr.lib dxguid.lib dinput8.lib d3dcompiler.lib winmm.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\Engine.pdb" /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\Engine.lib" /MACHINE:X86 /SAFESEH Debug\main.obj
+         Debug\ProgramRootClass.obj
+         Debug\ActorsClass.obj
+         Debug\BitmapClass.obj
+         Debug\CameraClass.obj
+         Debug\D3DClass.obj
+         Debug\EnvironmentArtClass.obj
+         Debug\EventClass.obj
+         Debug\GraphicsClass.obj
+         Debug\LightClass.obj
+         Debug\MaterialClass.obj
+         Debug\MeshClass.obj
+         Debug\ModelClass.obj
+         Debug\PixelShaderClass.obj
+         Debug\PlayerClass.obj
+         Debug\ShaderControllerClass.obj
+         Debug\ShipClass.obj
+         Debug\VertexShaderClass.obj
+         Debug\SoundClass.obj
+         Debug\StarClass.obj
+         Debug\TextureClass.obj
+         Debug\ThreeDGraphicsClass.obj
+         Debug\TwoDGraphicsClass.obj
+         Debug\WindowClass.obj
+         Engine.vcxproj -> D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\Engine.exe
+       BscMake:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\Engine.bsc" /n Debug\main.sbr Debug\ProgramRootClass.sbr Debug\ActorsClass.sbr Debug\BitmapClass.sbr Debug\CameraClass.sbr Debug\D3DClass.sbr Debug\EnvironmentArtClass.sbr Debug\EventClass.sbr Debug\GraphicsClass.sbr Debug\LightClass.sbr Debug\MaterialClass.sbr Debug\MeshClass.sbr Debug\ModelClass.sbr Debug\PixelShaderClass.sbr Debug\PlayerClass.sbr Debug\ShaderControllerClass.sbr Debug\ShipClass.sbr Debug\VertexShaderClass.sbr Debug\SoundClass.sbr Debug\StarClass.sbr Debug\TextureClass.sbr Debug\ThreeDGraphicsClass.sbr Debug\TwoDGraphicsClass.sbr Debug\WindowClass.sbr
+       PostBuildEvent:
+         xcopy /E /Q /Y D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\shaders D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\shaders\
+         xcopy /E /Q /Y D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\data D:\Users\Mark\Desktop\GameDevHell\NewGame\Debug\data\
+         :VCEnd
+         6 File(s) copied
+         10 File(s) copied
+     1>Done Building Project "D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\Engine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.08

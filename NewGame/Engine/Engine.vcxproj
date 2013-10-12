@@ -54,7 +54,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x86</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,6 +73,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
       <OpenMPSupport>false</OpenMPSupport>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -86,17 +90,26 @@
       <Command>xcopy /E /Q /Y $(ProjectDir)shaders $(TargetDir)shaders\
 xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     </PostBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>DXUT\Core;DXUT\Optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -104,7 +117,14 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dx11.lib;dxerr.lib;dxguid.lib;dinput8.lib;d3dcompiler.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /E /Q /Y $(ProjectDir)shaders $(TargetDir)shaders\ 
+xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include=".\main.cpp" />
@@ -117,10 +137,13 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="EventClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="LightClass.cpp" />
+    <ClCompile Include="MaterialClass.cpp" />
     <ClCompile Include="MeshClass.cpp" />
+    <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="PixelShaderClass.cpp" />
     <ClCompile Include="PlayerClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
+    <ClCompile Include="ShipClass.cpp" />
     <ClCompile Include="VertexShaderClass.cpp" />
     <ClCompile Include="SoundClass.cpp" />
     <ClCompile Include="StarClass.cpp" />
@@ -141,10 +164,13 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="EventClass.h" />
     <ClInclude Include="GarphicsClass.h" />
     <ClInclude Include="LightClass.h" />
+    <ClInclude Include="MaterialClass.h" />
     <ClInclude Include="MeshClass.h" />
+    <ClInclude Include="ModelClass.h" />
     <ClInclude Include="PixelShaderClass.h" />
     <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />
+    <ClInclude Include="ShipClass.h" />
     <ClInclude Include="VertexShaderClass.h" />
     <ClInclude Include="SoundClass.h" />
     <ClInclude Include="StarClass.h" />

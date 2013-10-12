@@ -19,6 +19,14 @@ using namespace DirectX;
 ////////////////////////////////////////////////////////////////////////////////
 class PixelShaderClass
 {
+public:
+	enum ShaderType
+	{
+		TWOD = 0,
+		THREEDMATERIAL = 1,
+		THREEDTEXTURE = 2
+	};
+
 private:
 	struct MatrixBufferType
 	{
@@ -40,10 +48,11 @@ public:
 	PixelShaderClass(const PixelShaderClass&);
 	~PixelShaderClass();
 
-	bool Initialize(ID3D11Device* device, HWND hwnd,WCHAR* psFilename);
+	bool Initialize(ID3D11Device* device, HWND hwnd, WCHAR* psFilename, ShaderType type);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 
+	ShaderType getShaderType();
 private:
 	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* psFilename);
 	void ShutdownShader();
@@ -56,6 +65,7 @@ private:
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11Buffer* m_lightBuffer;
 	ID3D11SamplerState* m_sampleState;
+	ShaderType m_type;
 };
 
 #endif

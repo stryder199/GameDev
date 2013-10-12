@@ -19,6 +19,14 @@ using namespace DirectX;
 ////////////////////////////////////////////////////////////////////////////////
 class VertexShaderClass
 {
+public:
+	enum ShaderType
+	{
+		TWOD = 0,
+		THREEDMATERIAL = 1,
+		THREEDTEXTURE = 2
+	};
+
 private:
 	struct MatrixBufferType
 	{
@@ -40,10 +48,11 @@ public:
 	VertexShaderClass(const VertexShaderClass&);
 	~VertexShaderClass();
 
-	bool Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
+	bool Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
 
+	ShaderType getShaderType();
 private:
 	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
 	void ShutdownShader();
@@ -56,6 +65,7 @@ private:
 	ID3D11VertexShader* m_vertexShader;
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
+	ShaderType m_type;
 };
 
 #endif

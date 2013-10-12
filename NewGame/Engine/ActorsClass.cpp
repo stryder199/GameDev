@@ -20,7 +20,7 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 	bool result;
 
 	playerMesh = new MeshClass();
-	result = playerMesh->Initialize("data/cube.txt");
+	result = playerMesh->Initialize("data/ship1a.3dmodel", MeshClass::MeshColorType::MATERIAL);
 	if(!result)
 		return false;
 
@@ -34,21 +34,27 @@ bool ActorsClass::Initialize(ID3D11Device* device)
 		return false;
 	}
 
-	//allPlayers = new std::vector<PlayerClass>;
+	allModels = new std::vector<ModelClass*>;
 
-	result = player.Initialize(playerMesh, playerTex, device);
+	player = new PlayerClass();
+	result = player->Initialize(playerMesh, playerTex, device);
 	if(!result)
 		return false;
+	allModels->push_back(player);
 
 	return true;
 }
 
 bool ActorsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource){
 	bool result;
-
-	result = player.Render(D3D, shader, camera, lightSource);
-	if(!result)
-		return false;
+	std::vector<ModelClass*>::iterator it;
+	
+	for (it = allModels->begin(); it != allModels->end(); ++it)
+	{
+		result = (*it)->Render(D3D, shader, camera, lightSource);
+		if(!result)
+			return false;
+	}
 
 	return true;
 }

@@ -2,6 +2,7 @@
 // Filename: MeshClass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "MeshClass.h"
+#include "MaterialClass.h"
 
 MeshClass::MeshClass()
 {
@@ -14,15 +15,23 @@ MeshClass::MeshClass(const MeshClass& other)
 
 MeshClass::~MeshClass()
 {
+	m_material = 0;
 }
 
-bool MeshClass::Initialize(char* meshFilename)
+bool MeshClass::Initialize(char* meshFilename, MeshColorType type)
 {
 	bool result;
 
+	m_type = type;
+
+	if (m_type == MATERIAL)
+	{
+		m_material = new MaterialClass();
+	}
+
 	// Load in the model data,
 	result = LoadModel(meshFilename);
-	if(!result)
+	if (!result)
 	{
 		return false;
 	}
@@ -52,9 +61,22 @@ MeshClass::MeshType* MeshClass::getMesh()
 	return m_mesh;
 }
 
+MeshClass::MeshColorType MeshClass::getMeshColorType()
+{
+	return m_type;
+}
+
+MaterialClass* MeshClass::getMaterial()
+{
+	return m_material;
+}
+
 bool MeshClass::LoadModel(char* filename)
 {
 	std::ifstream fin;
+	std::string sinput;
+	MaterialClass::MaterialInfo colorInfo;
+	bool result;
 	char input;
 	int i;
 
@@ -79,6 +101,13 @@ bool MeshClass::LoadModel(char* filename)
 	// Set the number of indices to be the same as the vertex count.
 	m_indexCount = m_vertexCount;
 
+	if (m_type == MATERIAL)
+	{
+		result = m_material->Initialize(m_indexCount);
+		if (!result)
+			return false;
+	}
+
 	// Create the model using the vertex count that was read in.
 	m_mesh = new MeshType[m_vertexCount];
 	if(!m_mesh)
@@ -98,9 +127,32 @@ bool MeshClass::LoadModel(char* filename)
 	// Read in the vertex data.
 	for(i=0; i<m_vertexCount; i++)
 	{
-		fin >> m_mesh[i].x >> m_mesh[i].y >> m_mesh[i].z;
-		fin >> m_mesh[i].tu >> m_mesh[i].tv;
-		fin >> m_mesh[i].nx >> m_mesh[i].ny >> m_mesh[i].nz;
+		fin >> sinput;
+
+		if (sinput.compare("mtl") == 0)
+		{
+			fin >> colorInfo.Ns >> colorInfo.Ka_r >> colorInfo.Ka_g >> colorInfo.Ka_b >> colorInfo.Kd_r >>
+				colorInfo.Kd_g >> colorInfo.Kd_b >> colorInfo.Ks_r >> colorInfo.Ks_g >> colorInfo.Ks_b >>
+				colorInfo.Ni >> colorInfo.d >> colorInfo.illum;
+			i--;
+		}
+		else if (sinput.compare("vtn") == 0)
+		{
+			if (m_type == MATERIAL)
+			{
+				MaterialClass::ColorType color;
+				color.r = colorInfo.Kd_r;
+				color.g = colorInfo.Kd_g;
+				color.b = colorInfo.Kd_b;
+				color.a = 1.0f;
+
+				m_material->getColors()[i] = color;
+			}
+
+			fin >> m_mesh[i].x >> m_mesh[i].y >> m_mesh[i].z;
+			fin >> m_mesh[i].tu >> m_mesh[i].tv;
+			fin >> m_mesh[i].nx >> m_mesh[i].ny >> m_mesh[i].nz;
+		}		
 	}
 
 	// Close the model file.

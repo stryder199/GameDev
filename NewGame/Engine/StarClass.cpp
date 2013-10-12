@@ -11,12 +11,12 @@ StarClass::~StarClass(){
 bool StarClass::Initialize()
 {
 	bool result;
-	mesh = new MeshClass();
-	result = mesh->Initialize("");
-	if (!result)
-		return false;
+	//mesh = new MeshClass();
+	//result = mesh->Initialize("");
+	//if (!result)
+	//	return false;
 
-	return true;
+	return false;
 }
 
 bool StarClass::Render()

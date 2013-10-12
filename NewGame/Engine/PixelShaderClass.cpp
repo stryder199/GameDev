@@ -19,9 +19,11 @@ PixelShaderClass::~PixelShaderClass()
 {
 }
 
-bool PixelShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* psFilename)
+bool PixelShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* psFilename, PixelShaderClass::ShaderType type)
 {
 	bool result;
+
+	m_type = type;
 
 	//Initialize the vertex and pixel shaders
 	result = InitializeShader(device, hwnd, psFilename);
@@ -95,41 +97,47 @@ bool PixelShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
 
-	//Create a texture sample state desc
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.BorderColor[0] = 0;
-	samplerDesc.BorderColor[1] = 0;
-	samplerDesc.BorderColor[2] = 0;
-	samplerDesc.BorderColor[3] = 0;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	//Create the texture sampler state
-	result = device->CreateSamplerState(&samplerDesc, &m_sampleState);
-	if(FAILED(result))
+	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
 	{
-		return false;
+		//Create a texture sample state desc
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		samplerDesc.BorderColor[0] = 0;
+		samplerDesc.BorderColor[1] = 0;
+		samplerDesc.BorderColor[2] = 0;
+		samplerDesc.BorderColor[3] = 0;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		//Create the texture sampler state
+		result = device->CreateSamplerState(&samplerDesc, &m_sampleState);
+		if(FAILED(result))
+		{
+			return false;
+		}
 	}
 
-	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
-	// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
-	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBufferType);
-	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	lightBufferDesc.MiscFlags = 0;
-	lightBufferDesc.StructureByteStride = 0;
+	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)
+	{
+		// Setup the description of the light dynamic constant buffer that is in the pixel shader.
+		// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
+		lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		lightBufferDesc.ByteWidth = sizeof(LightBufferType);
+		lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		lightBufferDesc.MiscFlags = 0;
+		lightBufferDesc.StructureByteStride = 0;
 
-	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-	result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-	if(FAILED(result))
-		return false;
+		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+		result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+		if (FAILED(result))
+			return false;
+	}
 
 	return true;
 }
@@ -203,34 +211,39 @@ bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, c
 	LightBufferType* dataPtr;
 	unsigned int bufferNumber;
 
-	// Set shader texture resource in the pixel shader.
-	deviceContext->PSSetShaderResources(0, 1, &texture);
-
-	//Lock the light constant buffer
-	result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if(FAILED(result))
+	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
 	{
-		return false;
+		// Set shader texture resource in the pixel shader.
+		deviceContext->PSSetShaderResources(0, 1, &texture);
 	}
 	
-	// Get a pointer to the data in the constant buffer.
-	dataPtr = (LightBufferType*)mappedResource.pData;
+	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)
+	{
+		//Lock the light constant buffer
+		result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (FAILED(result))
+		{
+			return false;
+		}
 
-	//Set the buffer values
-	dataPtr->ambientColor = ambientColor;
-	dataPtr->diffuseColor = diffuseColor;
-	dataPtr->lightDirection = lightDirection;
-	dataPtr->padding = 0.0f;
+		// Get a pointer to the data in the constant buffer.
+		dataPtr = (LightBufferType*) mappedResource.pData;
 
-	//Unlock the buffer
-	deviceContext->Unmap(m_lightBuffer, 0);
+		//Set the buffer values
+		dataPtr->ambientColor = ambientColor;
+		dataPtr->diffuseColor = diffuseColor;
+		dataPtr->lightDirection = lightDirection;
+		dataPtr->padding = 0.0f;
 
-	// Set the position of the light constant buffer in the pixel shader.
-	bufferNumber = 0;
+		//Unlock the buffer
+		deviceContext->Unmap(m_lightBuffer, 0);
 
-	// Finally set the light constant buffer in the pixel shader with the updated values.
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+		// Set the position of the light constant buffer in the pixel shader.
+		bufferNumber = 0;
 
+		// Finally set the light constant buffer in the pixel shader with the updated values.
+		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+	}
 
 	return true;
 }
@@ -239,8 +252,11 @@ void PixelShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int inde
 {
 	deviceContext->PSSetShader(m_pixelShader, NULL, 0);
 
-	//Set the sampler state in the pixel shader
-	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
+	{
+		//Set the sampler state in the pixel shader
+		deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+	}
 
 	return;
 }
