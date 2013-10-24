@@ -24,9 +24,9 @@ public:
 	ThreeDGraphicsClass(const ThreeDGraphicsClass&);
 	~ThreeDGraphicsClass();
 
-	bool Initialize(ID3D11Device* device);
+	bool Initialize();
 
-	bool RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera);
+	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera);
 
 private:
 	EnvironmentArtClass* envArt;

@@ -14,9 +14,8 @@
 class WindowClass{
 
 public:
-	WindowClass();
-	WindowClass(const WindowClass&);
 	~WindowClass();
+	static WindowClass* getInstance();
 
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
 	HWND gethWnd();
@@ -25,8 +24,13 @@ public:
 	int getWindowHeight();
 	int getWindowWidth();
 
+private:
+	WindowClass();
+	WindowClass(const WindowClass&);
+	WindowClass& operator=(WindowClass& const) {};
 
 private:
+	static WindowClass* m_pInstance;
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
 	int SCREEN_WIDTH;

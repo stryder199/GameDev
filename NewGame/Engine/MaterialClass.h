@@ -8,7 +8,9 @@
 
 //=================================
 // included dependencies
+#include <vector>
 
+using namespace std;
 
 class MaterialClass
 {
@@ -25,21 +27,23 @@ public:
 		float Kd_r, Kd_g, Kd_b;
 		float Ks_r, Ks_g, Ks_b;
 		float Ni, d, illum;
+		string map_Kd;
 	}MaterialInfo;
 
 public:
 	MaterialClass();
 	~MaterialClass();
 
-	bool Initialize(int colorCount);
+	bool Initialize();
 	void Shutdown();
 
-	ColorType* getColors();
+	vector<ColorType>* getColors();
 	int getColorCount();
 
+	void addColorData(ColorType data);
+
 private:
-	ColorType* m_Colors;
-	int m_colorCount;
+	vector<ColorType> m_vecColors;
 };
 
 #endif

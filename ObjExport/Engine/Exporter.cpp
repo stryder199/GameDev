@@ -319,7 +319,8 @@ bool Exporter::WriteOutputFile(string filepath)
 			fout << "mtl " << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ns << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ka_r << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ka_g <<
 				' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ka_b << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Kd_r << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Kd_g << ' ' <<
 				(*m_allMaterials)[(*m_materialFaceIndex)[i]].Kd_b << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ks_r << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ks_g <<
-				' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ks_b << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ni << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].d << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].illum << endl;
+				' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ks_b << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].Ni << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].d <<
+				' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].illum << ' ' << (*m_allMaterials)[(*m_materialFaceIndex)[i]].map_Kd << endl;
 		}
 
 		vIndex = (*m_faces)[i].vIndex1 - 1;

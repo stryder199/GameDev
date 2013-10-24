@@ -33,7 +33,7 @@ public:
 	EventClass(const EventClass&);
 	~EventClass();
 
-	bool Initialize(HINSTANCE, HWND, int, int);
+	bool Initialize(HINSTANCE);
 	void Shutdown();
 	bool Render();
 

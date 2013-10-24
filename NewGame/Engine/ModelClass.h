@@ -16,6 +16,7 @@ class LightClass;
 // included dependencies
 #include <D3D11.h>
 #include <DirectXMath.h>
+#include <vector>
 
 using namespace DirectX;
 
@@ -36,19 +37,19 @@ protected:
 	};
 
 public:
-	virtual bool Initialize(MeshClass* mesh, TextureClass* texture, ID3D11Device* device) { return false; }
-	virtual bool Render(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource) { return false; }
+	virtual bool Initialize(MeshClass* mesh) { return false; }
+	virtual bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource) { return false; }
 	virtual void Shutdown() {}
 
 protected:
-	bool InitializeBuffers(ID3D11Device* device);
+	bool InitializeBuffers();
+	bool RenderBuffers(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	void ShutdownBuffers();
+	virtual bool PreProcessing() { return false; };
 
 	MeshClass* m_mesh;
-	TextureClass* m_texture;
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer, *m_colorBuffer;
 	float pos_x, pos_y, pos_z;
-
+	XMFLOAT4X4 m_worldMatrix;
 };
 
 #endif /* ModelClass_H_ */

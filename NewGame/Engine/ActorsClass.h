@@ -24,8 +24,8 @@ public:
 	ActorsClass();
 	~ActorsClass();
 
-	bool Initialize(ID3D11Device* device);
-	bool RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
+	bool Initialize();
+	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	
 private:
 	std::vector<ModelClass*>* allModels;

@@ -51,7 +51,7 @@ bool ProgramRootClass::Go()
 			result = Render();
 			if(!result)
 			{
-				MessageBox(m_Graphics->getWindowObj()->gethWnd(), L"Frame Processing Failed", L"Error", MB_OK);
+				MessageBox(WindowClass::getInstance()->gethWnd(), L"Frame Processing Failed", L"Error", MB_OK);
 				done = true;
 			}
 		}
@@ -162,7 +162,7 @@ bool ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
 	if(!m_Events)
 		return false;
 
-	result = m_Events->Initialize( hInstance, m_Graphics->getWindowObj()->gethWnd(),  m_Graphics->getWindowObj()->getScreenWidth(), m_Graphics->getWindowObj()->getScreenWidth() );
+	result = m_Events->Initialize( hInstance );
 	if(!result)
 		return false;
 

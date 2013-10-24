@@ -9,8 +9,6 @@
 
 GraphicsClass::GraphicsClass()
 {
-	m_Window = 0;
-	m_D3D = 0;
 	m_Camera = 0;
 	m_Shader = 0;
 	m_2DGraphics = 0;
@@ -29,21 +27,11 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
 
-	//Window Init
-	m_Window = new WindowClass();
-	if(!m_Window)
-		return false;
-
-	result = m_Window->Initialize(hInstance, iCmdShow);
+	result = WindowClass::getInstance()->Initialize(hInstance, iCmdShow);
 	if(!result)
 		return false;
 
-	//Directx Device Init
-	m_D3D = new D3DClass();
-	if(!m_D3D)
-		return false;
-
-	result = m_D3D->Initialize(m_Window->getWindowWidth(), m_Window->getWindowHeight(), m_Window->VSYNC_ENABLED, m_Window->gethWnd(), m_Window->FULL_SCREEN, m_Window->SCREEN_DEPTH, m_Window->SCREEN_NEAR);
+	result = D3DClass::getInstance()->Initialize();
 	if(!result)
 		return false;
 
@@ -61,7 +49,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!m_Shader)
 		return false;
 
-	result = m_Shader->Initialize(m_D3D->GetDevice(), m_Window->gethWnd());
+	result = m_Shader->Initialize();
 	if(!result)
 		return false;
 
@@ -70,7 +58,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!m_2DGraphics)
 		return false;
 
-	result = m_2DGraphics->Initialize(m_D3D->GetDevice(), m_Window->getScreenWidth(), m_Window->getScreenHeight());
+	result = m_2DGraphics->Initialize(WindowClass::getInstance()->getScreenWidth(), WindowClass::getInstance()->getScreenHeight());
 	if(!result)
 		return false;
 
@@ -79,16 +67,11 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!m_3DGraphics)
 		return false;
 
-	result = m_3DGraphics->Initialize(m_D3D->GetDevice());
+	result = m_3DGraphics->Initialize();
 	if(!result)
 		return false;
 
 	return true;
-}
-
-WindowClass* GraphicsClass::getWindowObj()
-{
-	return m_Window;
 }
 
 bool GraphicsClass::Render()
@@ -96,18 +79,18 @@ bool GraphicsClass::Render()
 	bool result;
 
 	// Clear the buffers to begin the scene.
-	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	D3DClass::getInstance()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//Generate the view matrix based on the camera's position
 	m_Camera->Render();
 
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
-	result = m_3DGraphics->RenderAll(m_D3D, m_Shader, m_Camera);
+	result = m_3DGraphics->RenderAll(m_Shader, m_Camera);
 	if (!result)
 		return false;
 
 	// Present the rendered scene to the screen.
-	m_D3D->EndScene();
+	D3DClass::getInstance()->EndScene();
 
 	return true;
 }

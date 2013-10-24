@@ -12,50 +12,32 @@
 #include <string>
 
 class MaterialClass;
+class ObjectMeshClass;
+
+using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: MeshClass
 ////////////////////////////////////////////////////////////////////////////////
 class MeshClass
 {
-public:
-	struct MeshType
-	{
-		float x, y, z;
-		float tu, tv;
-		float nx, ny, nz;
-	};
-
-	enum MeshColorType
-	{
-		MATERIAL = 0,
-		TEXTURE = 1,
-		NONE = 2
-	};
 
 public:
 	MeshClass();
 	MeshClass(const MeshClass&);
 	~MeshClass();
 
-	bool Initialize(char* filename, MeshColorType type);
+	bool Initialize(char* filename);
 	void Shutdown();
 
-	int getIndexCount();
-	int getVertexCount();
-	MeshType* getMesh();
-	MeshColorType getMeshColorType();
-	MaterialClass* getMaterial();
-	
+	vector<ObjectMeshClass*>* getAllObjects();
 
 private:
 	bool LoadModel(char* filename);
 	void ReleaseModel();
 
-	int m_vertexCount, m_indexCount;
-	MeshType* m_mesh;
-	MaterialClass* m_material;
-	MeshColorType m_type;
+	vector<ObjectMeshClass*> m_allObjects;
+	int m_totalVertexCount, m_totalIndexCount;
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "ShaderControllerClass.h"
 #include "PixelShaderClass.h"
 #include "VertexShaderClass.h"
+#include "WindowClass.h"
+#include "D3DClass.h"
 
 ShaderControllerClass::ShaderControllerClass()
 {
@@ -10,7 +12,7 @@ ShaderControllerClass::~ShaderControllerClass()
 {
 }
 
-bool ShaderControllerClass::Initialize(ID3D11Device* device, HWND hwnd)
+bool ShaderControllerClass::Initialize()
 {
 	bool result;
 	D3D11_INPUT_ELEMENT_DESC *posTexNorPolygonLayout, *posTexPolygonLayout, *posNorColPolygonLayout;
@@ -99,47 +101,47 @@ bool ShaderControllerClass::Initialize(ID3D11Device* device, HWND hwnd)
 	posTexPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	posTexPolygonLayout[1].InstanceDataStepRate = 0;
 
-	result = m_threeDMaterialPS.Initialize(device, hwnd, MaterialPSFilename, PixelShaderClass::ShaderType::THREEDMATERIAL);
+	result = m_threeDMaterialPS.Initialize(MaterialPSFilename, PixelShaderClass::ShaderType::THREEDMATERIAL);
 	if (!result)
 		return false;
 
-	result = m_threeDMaterialVS.Initialize(device, hwnd, MaterialVSFilename, posNorColPolygonLayout, posNorColLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
+	result = m_threeDMaterialVS.Initialize(MaterialVSFilename, posNorColPolygonLayout, posNorColLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
 	if (!result)
 		return false;
 
-	result = m_threeDTexturePS.Initialize(device, hwnd, TexturePSFilename, PixelShaderClass::ShaderType::THREEDTEXTURE);
+	result = m_threeDTexturePS.Initialize(TexturePSFilename, PixelShaderClass::ShaderType::THREEDTEXTURE);
 	if (!result)
 		return false;
 
-	result = m_threeDTextureVS.Initialize(device, hwnd, TextureVSFilename, posTexNorPolygonLayout, posTexNorLayoutCount, VertexShaderClass::ShaderType::THREEDTEXTURE);
+	result = m_threeDTextureVS.Initialize(TextureVSFilename, posTexNorPolygonLayout, posTexNorLayoutCount, VertexShaderClass::ShaderType::THREEDTEXTURE);
 	if (!result)
 		return false;
 
-	result = m_twoDPS.Initialize(device, hwnd, TwoDPSFilename, PixelShaderClass::ShaderType::TWOD);
+	result = m_twoDPS.Initialize(TwoDPSFilename, PixelShaderClass::ShaderType::TWOD);
 	if (!result)
 		return false;
 
-	result = m_twoDVS.Initialize(device, hwnd, TwoDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TWOD);
+	result = m_twoDVS.Initialize(TwoDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TWOD);
 	if (!result)
 		return false;
 
 	return true;
 }
 
-bool ShaderControllerClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 									ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)
 		return false;
 
-	result = m_pixelFocus->Render(deviceContext, indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
+	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
 	if (!result)
 		return false;
 
-	deviceContext->DrawIndexed(indexCount, 0, 0);
+	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 
 	return result;
 }

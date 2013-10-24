@@ -124,6 +124,7 @@ int main()
 
 		if (CheckForNewerVersion((*it)))
 		{
+			// Skip this file
 			continue;
 		}
 

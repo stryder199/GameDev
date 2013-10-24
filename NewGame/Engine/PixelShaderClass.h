@@ -48,18 +48,18 @@ public:
 	PixelShaderClass(const PixelShaderClass&);
 	~PixelShaderClass();
 
-	bool Initialize(ID3D11Device* device, HWND hwnd, WCHAR* psFilename, ShaderType type);
+	bool Initialize(WCHAR* psFilename, ShaderType type);
 	void Shutdown();
-	bool Render(ID3D11DeviceContext*, int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 
 	ShaderType getShaderType();
 private:
-	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* psFilename);
+	bool InitializeShader(WCHAR* psFilename);
 	void ShutdownShader();
-	void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);
+	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(ID3D11DeviceContext*, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
-	void RenderShader(ID3D11DeviceContext*, int);
+	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	void RenderShader(int);
 
 private:
 	ID3D11PixelShader* m_pixelShader;

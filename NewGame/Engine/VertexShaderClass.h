@@ -48,18 +48,18 @@ public:
 	VertexShaderClass(const VertexShaderClass&);
 	~VertexShaderClass();
 
-	bool Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
+	bool Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
 	void Shutdown();
-	bool Render(ID3D11DeviceContext*, int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
+	bool Render(int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
 
 	ShaderType getShaderType();
 private:
-	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
+	bool InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
 	void ShutdownShader();
-	void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);
+	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(ID3D11DeviceContext*, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
-	void RenderShader(ID3D11DeviceContext*, int);
+	bool SetShaderParameters(const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
+	void RenderShader(int);
 
 private:
 	ID3D11VertexShader* m_vertexShader;

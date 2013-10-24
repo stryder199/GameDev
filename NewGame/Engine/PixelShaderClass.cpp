@@ -2,6 +2,8 @@
 // Filename: PixelShaderClass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "PixelShaderClass.h"
+#include "D3DClass.h"
+#include "WindowClass.h"
 
 PixelShaderClass::PixelShaderClass()
 {
@@ -19,14 +21,14 @@ PixelShaderClass::~PixelShaderClass()
 {
 }
 
-bool PixelShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* psFilename, PixelShaderClass::ShaderType type)
+bool PixelShaderClass::Initialize(WCHAR* psFilename, PixelShaderClass::ShaderType type)
 {
 	bool result;
 
 	m_type = type;
 
 	//Initialize the vertex and pixel shaders
-	result = InitializeShader(device, hwnd, psFilename);
+	result = InitializeShader(psFilename);
 	if(!result)
 		return false;
 
@@ -41,23 +43,23 @@ void PixelShaderClass::Shutdown()
 	return;
 }
 
-bool PixelShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 						 ID3D11ShaderResourceView* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
 	if(!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(indexCount);
 
 	return true;
 }
 
-bool PixelShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* psFilename)
+bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -78,19 +80,19 @@ bool PixelShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		// If the shader failed to compile it should have writen something to the error message.
 		if(errorMessage)
 		{
-			OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
+			OutputShaderErrorMessage(errorMessage, psFilename);
 		}
 		// If there was  nothing in the error message then it simply could not find the file itself.
 		else
 		{
-			MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
+			MessageBox(WindowClass::getInstance()->gethWnd(), psFilename, L"Missing Shader File", MB_OK);
 		}
 
 		return false;
 	}
 
 	//Create the pixel shader from the buffer
-	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+	result = D3DClass::getInstance()->GetDevice()->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	if(FAILED(result))
 		return false;
 
@@ -115,7 +117,7 @@ bool PixelShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 		//Create the texture sampler state
-		result = device->CreateSamplerState(&samplerDesc, &m_sampleState);
+		result = D3DClass::getInstance()->GetDevice()->CreateSamplerState(&samplerDesc, &m_sampleState);
 		if(FAILED(result))
 		{
 			return false;
@@ -134,7 +136,7 @@ bool PixelShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* 
 		lightBufferDesc.StructureByteStride = 0;
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-		result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+		result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 		if (FAILED(result))
 			return false;
 	}
@@ -168,7 +170,7 @@ void PixelShaderClass::ShutdownShader()
 	return;
 }
 
-void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
@@ -198,12 +200,12 @@ void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND h
 	errorMessage = 0;
 
 	// Pop a message up on the screen to notify the user to check the text file for compile errors.
-	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+	MessageBox(WindowClass::getInstance()->gethWnd(), L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 
 	return;
 }
 
-bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 											ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	HRESULT result;
@@ -214,13 +216,13 @@ bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, c
 	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
 	{
 		// Set shader texture resource in the pixel shader.
-		deviceContext->PSSetShaderResources(0, 1, &texture);
+		D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &texture);
 	}
 	
 	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)
 	{
 		//Lock the light constant buffer
-		result = deviceContext->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		result = D3DClass::getInstance()->GetDeviceContext()->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		if (FAILED(result))
 		{
 			return false;
@@ -236,26 +238,26 @@ bool PixelShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, c
 		dataPtr->padding = 0.0f;
 
 		//Unlock the buffer
-		deviceContext->Unmap(m_lightBuffer, 0);
+		D3DClass::getInstance()->GetDeviceContext()->Unmap(m_lightBuffer, 0);
 
 		// Set the position of the light constant buffer in the pixel shader.
 		bufferNumber = 0;
 
 		// Finally set the light constant buffer in the pixel shader with the updated values.
-		deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+		D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
 	}
 
 	return true;
 }
 
-void PixelShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void PixelShaderClass::RenderShader(int indexCount)
 {
-	deviceContext->PSSetShader(m_pixelShader, NULL, 0);
+	D3DClass::getInstance()->GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
 
 	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
 	{
 		//Set the sampler state in the pixel shader
-		deviceContext->PSSetSamplers(0, 1, &m_sampleState);
+		D3DClass::getInstance()->GetDeviceContext()->PSSetSamplers(0, 1, &m_sampleState);
 	}
 
 	return;

@@ -22,9 +22,9 @@ public:
 	TwoDGraphicsClass(const TwoDGraphicsClass&);
 	~TwoDGraphicsClass();
 
-	bool Initialize(ID3D11Device* device, int screenWidth, int screenHeight);
+	bool Initialize(int screenWidth, int screenHeight);
 
-	bool RenderAll(D3DClass* D3D, CameraClass* camera, ShaderControllerClass* shader);
+	bool RenderAll(CameraClass* camera, ShaderControllerClass* shader);
 
 private:
 	BitmapClass* m_Bitmap;

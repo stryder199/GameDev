@@ -1,4 +1,7 @@
 #include "D3DClass.h"
+#include "WindowClass.h"
+
+D3DClass* D3DClass::m_pInstance = NULL;
 
 D3DClass::D3DClass()
 {
@@ -23,8 +26,15 @@ D3DClass::~D3DClass()
 {
 }
 
-bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen, 
-						  float screenDepth, float screenNear)
+D3DClass* D3DClass::getInstance()
+{
+	if (!m_pInstance)
+		m_pInstance = new D3DClass();
+
+	return m_pInstance;
+}
+
+bool D3DClass::Initialize()
 {
 	HRESULT result;
 	IDXGIFactory* factory;
@@ -47,7 +57,7 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 
 
 	// Store the vsync setting.
-	m_vsync_enabled = vsync;
+	m_vsync_enabled = WindowClass::getInstance()->VSYNC_ENABLED;
 
 	// Create a DirectX graphics interface factory.
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
@@ -95,9 +105,9 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
 	for(i=0; i<numModes; i++)
 	{
-		if(displayModeList[i].Width == (unsigned int)screenWidth)
+		if (displayModeList[i].Width == (unsigned int) WindowClass::getInstance()->getScreenWidth())
 		{
-			if(displayModeList[i].Height == (unsigned int)screenHeight)
+			if (displayModeList[i].Height == (unsigned int) WindowClass::getInstance()->getScreenHeight())
 			{
 				numerator = displayModeList[i].RefreshRate.Numerator;
 				denominator = displayModeList[i].RefreshRate.Denominator;
@@ -128,8 +138,8 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
     swapChainDesc.BufferCount = 1;
 
 	// Set the width and height of the back buffer.
-    swapChainDesc.BufferDesc.Width = screenWidth;
-    swapChainDesc.BufferDesc.Height = screenHeight;
+	swapChainDesc.BufferDesc.Width = WindowClass::getInstance()->getScreenWidth();
+	swapChainDesc.BufferDesc.Height = WindowClass::getInstance()->getScreenHeight();
 
 	// Set regular 32-bit surface for the back buffer.
     swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -150,14 +160,14 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
 	// Set the handle for the window to render to.
-    swapChainDesc.OutputWindow = hwnd;
+	swapChainDesc.OutputWindow = WindowClass::getInstance()->gethWnd();
 
 	// Turn multisampling off.
     swapChainDesc.SampleDesc.Count = 1;
     swapChainDesc.SampleDesc.Quality = 0;
 
 	// Set to full screen or windowed mode.
-	if(fullscreen)
+	if (WindowClass::getInstance()->FULL_SCREEN)
 	{
 		swapChainDesc.Windowed = false;
 	}
@@ -209,8 +219,8 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 	// Set up the description of the depth buffer.
-	depthBufferDesc.Width = screenWidth;
-	depthBufferDesc.Height = screenHeight;
+	depthBufferDesc.Width = WindowClass::getInstance()->getScreenWidth();
+	depthBufferDesc.Height = WindowClass::getInstance()->getScreenHeight();
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -303,8 +313,8 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	m_deviceContext->RSSetState(m_rasterState);
 	
 	// Setup the viewport for rendering.
-    viewport.Width = (float)screenWidth;
-    viewport.Height = (float)screenHeight;
+	viewport.Width = (float) WindowClass::getInstance()->getScreenWidth();
+	viewport.Height = (float) WindowClass::getInstance()->getScreenHeight();
     viewport.MinDepth = 0.0f;
     viewport.MaxDepth = 1.0f;
     viewport.TopLeftX = 0.0f;
@@ -315,16 +325,17 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 
 	// Setup the projection matrix.
 	fieldOfView = (float)XM_PI / 4.0f;
-	screenAspect = (float)screenWidth / (float)screenHeight;
+	screenAspect = (float) WindowClass::getInstance()->getScreenWidth() / (float) WindowClass::getInstance()->getScreenHeight();
 
 	// Create the projection matrix for 3D rendering.
-	projMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+	projMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, WindowClass::getInstance()->SCREEN_NEAR, WindowClass::getInstance()->SCREEN_DEPTH);
 
     // Initialize the world matrix to the identity matrix.
 	worldMatrix = XMMatrixIdentity();
 
 	// Create an orthographic projection matrix for 2D rendering.
-	orthoMatrix = XMMatrixOrthographicLH((float) screenWidth, (float) screenHeight, screenNear, screenDepth);
+	orthoMatrix = XMMatrixOrthographicLH((float) WindowClass::getInstance()->getScreenWidth(), (float) WindowClass::getInstance()->getScreenHeight(),
+		WindowClass::getInstance()->SCREEN_NEAR, WindowClass::getInstance()->SCREEN_DEPTH);
 
 	// Clear the second depth stencil state before setting the parameters.
 	ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));

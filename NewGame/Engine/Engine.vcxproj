@@ -139,7 +139,9 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="MaterialClass.cpp" />
     <ClCompile Include="MeshClass.cpp" />
+    <ClCompile Include="MeshDataClass.cpp" />
     <ClCompile Include="ModelClass.cpp" />
+    <ClCompile Include="ObjectMeshClass.cpp" />
     <ClCompile Include="PixelShaderClass.cpp" />
     <ClCompile Include="PlayerClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
@@ -166,7 +168,9 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="LightClass.h" />
     <ClInclude Include="MaterialClass.h" />
     <ClInclude Include="MeshClass.h" />
+    <ClInclude Include="MeshDataClass.h" />
     <ClInclude Include="ModelClass.h" />
+    <ClInclude Include="ObjectMeshClass.h" />
     <ClInclude Include="PixelShaderClass.h" />
     <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />

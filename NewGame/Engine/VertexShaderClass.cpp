@@ -2,6 +2,8 @@
 // Filename: VertexShaderClass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "VertexShaderClass.h"
+#include "D3DClass.h"
+#include "WindowClass.h"
 
 VertexShaderClass::VertexShaderClass()
 {
@@ -19,14 +21,14 @@ VertexShaderClass::~VertexShaderClass()
 {
 }
 
-bool VertexShaderClass::Initialize(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, VertexShaderClass::ShaderType type)
+bool VertexShaderClass::Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, VertexShaderClass::ShaderType type)
 {
 	bool result;
 
 	m_type = type;
 
 	//Initialize the vertex and pixel shaders
-	result = InitializeShader(device, hwnd, vsFilename, polygonLayout, layoutCount);
+	result = InitializeShader(vsFilename, polygonLayout, layoutCount);
 	if(!result)
 		return false;
 
@@ -41,23 +43,23 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix, 
+bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix, 
 						 ID3D11ShaderResourceView* texture)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture);
 	if(!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(deviceContext, indexCount);
+	RenderShader(indexCount);
 
 	return true;
 }
 
-bool VertexShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount)
+bool VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -78,23 +80,23 @@ bool VertexShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR*
 		//If the shader failed to compile it should have written something to the error message
 		if(errorMessage)
 		{
-			OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
+			OutputShaderErrorMessage(errorMessage, vsFilename);
 		}
 		else
 		{
-			MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
+			MessageBox(WindowClass::getInstance()->gethWnd(), vsFilename, L"Missing Shader File", MB_OK);
 		}
 		return false;
 	}
 
 	//Create the vertex shader from the buffer
-	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+	result = D3DClass::getInstance()->GetDevice()->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if(FAILED(result))
 		return false;
 
 
 	//Create the vertex input layout
-	result = device->CreateInputLayout(polygonLayout, layoutCount, vertexShaderBuffer->GetBufferPointer(), 
+	result = D3DClass::getInstance()->GetDevice()->CreateInputLayout(polygonLayout, layoutCount, vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(), &m_layout);
 	if(FAILED(result))
 		return false;
@@ -112,7 +114,7 @@ bool VertexShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR*
 	matrixBufferDesc.StructureByteStride = 0;
 
 	//Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class
-	result = device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	if(FAILED(result))
 		return false;
 
@@ -145,7 +147,7 @@ void VertexShaderClass::ShutdownShader()
 	return;
 }
 
-void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
@@ -175,12 +177,12 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND 
 	errorMessage = 0;
 
 	// Pop a message up on the screen to notify the user to check the text file for compile errors.
-	MessageBox(hwnd, L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
+	MessageBox(WindowClass::getInstance()->gethWnd(), L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
 
 	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 												ID3D11ShaderResourceView* texture)
 {
 	HRESULT result;
@@ -200,7 +202,7 @@ bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 	XMStoreFloat4x4(&transposedProjectionFloatMatrix, transposedProjectionMatrix);
 
 	//Lock the constant buffer so it can be written to
-	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if(FAILED(result))
 		return false;
 
@@ -213,24 +215,24 @@ bool VertexShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, 
 	dataPtr->projection = transposedProjectionFloatMatrix;
 
 	//Unlock the constant buffer
-	deviceContext->Unmap(m_matrixBuffer, 0);
+	D3DClass::getInstance()->GetDeviceContext()->Unmap(m_matrixBuffer, 0);
 
 	//Set the position of the constant buffer in the vertex shader
 	bufferNumber = 0;
 
 	//Finally set the constant buffer in the vertex shader with the updated values
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	D3DClass::getInstance()->GetDeviceContext()->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 
 	return true;
 }
 
-void VertexShaderClass::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
+void VertexShaderClass::RenderShader(int indexCount)
 {
 	//Set the vertex input layout
-	deviceContext->IASetInputLayout(m_layout);
+	D3DClass::getInstance()->GetDeviceContext()->IASetInputLayout(m_layout);
 
 	//Set the vertex and pixel shaders that will be used to render this triangle
-	deviceContext->VSSetShader(m_vertexShader, NULL, 0);
+	D3DClass::getInstance()->GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
 
 	return ;
 }

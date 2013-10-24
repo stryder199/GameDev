@@ -20,7 +20,7 @@ ThreeDGraphicsClass::~ThreeDGraphicsClass()
 {
 }
 
-bool ThreeDGraphicsClass::Initialize(ID3D11Device* device)
+bool ThreeDGraphicsClass::Initialize()
 {
 	bool result;
 
@@ -30,7 +30,7 @@ bool ThreeDGraphicsClass::Initialize(ID3D11Device* device)
 		return false;
 
 	actors = new ActorsClass();
-	result = actors->Initialize(device);
+	result = actors->Initialize();
 	if(!result)
 		return false;
 
@@ -47,7 +47,7 @@ bool ThreeDGraphicsClass::Initialize(ID3D11Device* device)
 	return true;
 }
 
-bool ThreeDGraphicsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader, CameraClass* camera)
+bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera)
 {
 	bool result;
 
@@ -57,7 +57,7 @@ bool ThreeDGraphicsClass::RenderAll(D3DClass* D3D, ShaderControllerClass* shader
 	if(!result)
 		return false;
 
-	result = actors->RenderAll(D3D, shader, camera, m_LightSource);
+	result = actors->RenderAll(shader, camera, m_LightSource);
 	if(!result)
 		return false;
 

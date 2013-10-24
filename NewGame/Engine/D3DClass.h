@@ -19,11 +19,11 @@ using namespace DirectX;
 class D3DClass{
 
 public:
-	D3DClass();
-	D3DClass(const D3DClass&);
-	~D3DClass();
 
-	bool Initialize(int, int, bool, HWND, bool, float, float);
+	~D3DClass();
+	static D3DClass* getInstance();
+
+	bool Initialize();
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -42,6 +42,12 @@ public:
 	void TurnOffAlphaBlending();
 
 private:
+	D3DClass();
+	D3DClass(const D3DClass&);
+	D3DClass& operator=(D3DClass& const) {};
+
+	static D3DClass* m_pInstance;
+
 	bool m_vsync_enabled;
 	
 	IDXGISwapChain* m_swapChain;

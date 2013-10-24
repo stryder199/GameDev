@@ -1,4 +1,5 @@
 #include "EventClass.h"
+#include "WindowClass.h"
 
 EventClass::EventClass()
 {
@@ -13,15 +14,15 @@ EventClass::~EventClass()
 }
 
 
-bool EventClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight)
+bool EventClass::Initialize(HINSTANCE hinstance)
 {
 	HRESULT result;
 
 	EventInstance = this;
 
 	// Store the screen size which will be used for positioning the mouse cursor.
-	m_screenWidth = screenWidth;
-	m_screenHeight = screenHeight;
+	m_screenWidth = WindowClass::getInstance()->getScreenWidth();
+	m_screenHeight = WindowClass::getInstance()->getScreenHeight();
 
 	// Initialize the location of the mouse on the screen.
 	m_mouseX = 0;
@@ -49,7 +50,7 @@ bool EventClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int
 	}
 
 	// Set the cooperative level of the keyboard to not share with other programs.
-	result = m_keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	result = m_keyboard->SetCooperativeLevel(WindowClass::getInstance()->gethWnd(), DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 	if(FAILED(result))
 	{
 		return false;
@@ -77,7 +78,7 @@ bool EventClass::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int
 	}
 
 	// Set the cooperative level of the mouse to share with other programs.
-	result = m_mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	result = m_mouse->SetCooperativeLevel(WindowClass::getInstance()->gethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if(FAILED(result))
 	{
 		return false;

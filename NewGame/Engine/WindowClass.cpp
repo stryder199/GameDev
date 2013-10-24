@@ -1,6 +1,8 @@
 #include "WindowClass.h"
 #include "ProgramRootClass.h"
 
+WindowClass* WindowClass::m_pInstance = NULL;
+
 WindowClass:: WindowClass()
 {
 	m_hWnd = 0;
@@ -13,6 +15,14 @@ WindowClass::WindowClass(const WindowClass& other)
 
 WindowClass::~WindowClass()
 {
+}
+
+WindowClass* WindowClass::getInstance()
+{
+	if (!m_pInstance)
+		m_pInstance = new WindowClass();
+
+	return m_pInstance;
 }
 
 bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)

@@ -30,8 +30,8 @@ public:
 	ShaderControllerClass();
 	~ShaderControllerClass();
 
-	bool Initialize(ID3D11Device* device, HWND hwnd);
-	bool Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	bool Initialize();
+	bool Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
 					ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor);
 
 	void Set3DMaterialShaders();
