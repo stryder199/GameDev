@@ -27,7 +27,7 @@ bool ActorsClass::Initialize()
 	allModels = new std::vector<ModelClass*>;
 
 	player = new PlayerClass();
-	result = player->Initialize(playerMesh);
+	result = player->PlayerClass::Initialize(playerMesh);
 	if(!result)
 		return false;
 	allModels->push_back(player);

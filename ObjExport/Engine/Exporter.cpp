@@ -1,6 +1,5 @@
 #include "Exporter.h"
 
-
 Exporter::Exporter()
 {
 	m_allMaterials = new map<string, ColorType>();
@@ -10,6 +9,9 @@ Exporter::Exporter()
 	m_texcoords = new vector<VertexType>();
 	m_normals = new vector<VertexType>();
 	m_faces = new vector<FaceType>();;
+
+	INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\3D_Models\\OBJ_MTL";
+	OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\Formatted_3D_Models";
 }
 
 Exporter::~Exporter()

@@ -26,7 +26,6 @@ build/
 *_p.c
 *.ilk
 *.meta
-*.obj
 *.pch
 *.pdb
 *.pgc
@@ -154,4 +153,4 @@ $RECYCLE.BIN/
 # My stuff
 # ===========================
 
-Formatted_3D_Models/
+Formatted_3D_Models/*

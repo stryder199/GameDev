@@ -33,6 +33,11 @@ void ObjectMeshClass::Shutdown()
 	return;
 }
 
+vector<MeshDataClass*>* ObjectMeshClass::getAllMeshData()
+{
+	return &m_allMeshData;
+}
+
 void ObjectMeshClass::addMesh(MeshDataClass* newMesh)
 {
 	m_allMeshData.push_back(newMesh);

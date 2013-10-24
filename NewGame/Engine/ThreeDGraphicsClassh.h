@@ -18,7 +18,6 @@ class CameraClass;
 #include <D3D11.h>
 
 class ThreeDGraphicsClass{
-
 public:
 	ThreeDGraphicsClass();
 	ThreeDGraphicsClass(const ThreeDGraphicsClass&);

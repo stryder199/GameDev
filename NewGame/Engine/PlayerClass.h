@@ -28,8 +28,7 @@ public:
 	void Shutdown();
 
 private:
-	bool RenderBuffers(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
-	bool PreProcessing();
+	virtual bool PreProcessing();
 
 	float vel_x, vel_y, vel_z;
 };

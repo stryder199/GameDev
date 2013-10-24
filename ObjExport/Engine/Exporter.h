@@ -9,9 +9,6 @@
 
 using namespace std;
 
-const string INPUT_FOLDER = "D:\\Users\\Mark\\Desktop\\GameDevHell\\3D_Models\\OBJ_MTL";
-const string OUTPUT_FOLDER = "D:\\Users\\Mark\\Desktop\\GameDevHell\\Formatted_3D_Models";
-
 class Exporter
 {
 	//////////////
@@ -47,6 +44,9 @@ public:
 	bool LoadMaterialsFromFile(string mtlFilepath);
 	bool LoadObjFileData(string filename);
 	bool WriteOutputFile(string filepath);
+
+	string INPUT_FOLDER;
+	string OUTPUT_FOLDER;
 
 private:
 	map<string, ColorType> *m_allMaterials;

@@ -12,13 +12,13 @@
 bool ModelClass::InitializeBuffers()
 {
 	// For each object in the mesh
-	vector<ObjectMeshClass*>::iterator object;
-	vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
+	std::vector<ObjectMeshClass*>::iterator object;
+	std::vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
 	for (object = allObject->begin(); object != allObject->end(); ++object)
 	{
 		// For each submesh
-		vector<MeshDataClass*>::iterator subMesh;
-		vector<MeshDataClass*>* allSubmeshs = (*object)->getAllMeshData();
+		std::vector<MeshDataClass*>::iterator subMesh;
+		std::vector<MeshDataClass*>* allSubmeshs = (*object)->getAllMeshData();
 		for (subMesh = allSubmeshs->begin(); subMesh != allSubmeshs->end(); ++subMesh)
 		{
 			unsigned long* indices;
@@ -47,11 +47,11 @@ bool ModelClass::InitializeBuffers()
 				}
 
 				// For each mesh data
-				vector<MeshDataClass::MeshType>::iterator rawMeshData;
-				vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
+				std::vector<MeshDataClass::MeshType>::iterator rawMeshData;
+				std::vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
 
-				vector<MaterialClass::ColorType>* allColorData = (*subMesh)->getMaterial()->getColors();
-				vector<MaterialClass::ColorType>::iterator colorData = allColorData->begin();
+				std::vector<MaterialClass::ColorType>* allColorData = (*subMesh)->getMaterial()->getColors();
+				std::vector<MaterialClass::ColorType>::iterator colorData = allColorData->begin();
 
 				int count = 0;
 				// Load the vertex array and index array with data.
@@ -89,8 +89,8 @@ bool ModelClass::InitializeBuffers()
 				}
 
 				// For each mesh data
-				vector<MeshDataClass::MeshType>::iterator rawMeshData;
-				vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
+				std::vector<MeshDataClass::MeshType>::iterator rawMeshData;
+				std::vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
 				int count = 0;
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
@@ -176,13 +176,13 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camer
 	D3DClass::getInstance()->GetProjectionMatrix(projMatrix);
 
 	// For each object in the mesh
-	vector<ObjectMeshClass*>::iterator object;
-	vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
+	std::vector<ObjectMeshClass*>::iterator object;
+	std::vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
 	for (object = allObject->begin(); object != allObject->end(); ++object)
 	{
 		// For each submesh
-		vector<MeshDataClass*>::iterator subMesh;
-		vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
+		std::vector<MeshDataClass*>::iterator subMesh;
+		std::vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
 		for (subMesh = allMeshData->begin(); subMesh != allMeshData->end(); ++subMesh)
 		{
 			unsigned int vertexstride;
@@ -225,13 +225,13 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camer
 void ModelClass::ShutdownBuffers()
 {
 	// For each object in the mesh
-	vector<ObjectMeshClass*>::iterator object;
-	vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
+	std::vector<ObjectMeshClass*>::iterator object;
+	std::vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
 	for (object = allObject->begin(); object != allObject->end(); ++object)
 	{
 		// For each submesh
-		vector<MeshDataClass*>::iterator subMesh;
-		vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
+		std::vector<MeshDataClass*>::iterator subMesh;
+		std::vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
 		for (subMesh = allMeshData->begin(); subMesh != allMeshData->end(); ++subMesh)
 		{
 			// Release the index buffer.

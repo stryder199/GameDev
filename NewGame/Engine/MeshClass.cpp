@@ -169,6 +169,10 @@ bool MeshClass::LoadModel(char* filename)
 	return true;
 }
 
+vector<ObjectMeshClass*>* MeshClass::getAllObjects()
+{
+	return &m_allObjects;
+}
 
 void MeshClass::ReleaseModel()
 {

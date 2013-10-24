@@ -42,9 +42,14 @@ bool MeshDataClass::Initialize(MeshColorType type, string textureFilename)
 	return true;
 }
 
-void Shutdown()
+void MeshDataClass::Shutdown()
 {
+	return;
+}
 
+vector<MeshDataClass::MeshType>* MeshDataClass::getRawMeshData()
+{
+	return &m_vecMesh;
 }
 
 int MeshDataClass::getIndexCount()
@@ -65,6 +70,26 @@ MeshDataClass::MeshColorType MeshDataClass::getMeshColorType()
 MaterialClass* MeshDataClass::getMaterial()
 {
 	return m_material;
+}
+
+ID3D11Buffer* MeshDataClass::getColorBuffer()
+{
+	return m_colorBuffer;
+}
+
+ID3D11Buffer* MeshDataClass::getVertexBuffer()
+{
+	return m_vertexBuffer;
+}
+
+ID3D11Buffer* MeshDataClass::getIndexBuffer()
+{
+	return m_indexBuffer;
+}
+
+TextureClass* MeshDataClass::getTexture()
+{
+	return m_texture;
 }
 
 void MeshDataClass::addMeshData(MeshType data)

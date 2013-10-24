@@ -28,7 +28,7 @@ bool PlayerClass::Initialize( MeshClass* objMesh )
 	m_mesh = objMesh;
 
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.
-	result = InitializeBuffers();
+	result = ModelClass::InitializeBuffers();
 	if(!result)
 		return false;
 
@@ -38,7 +38,7 @@ bool PlayerClass::Initialize( MeshClass* objMesh )
 void PlayerClass::Shutdown()
 {
 	//Release the vertex and index buffers
-	ShutdownBuffers();
+	ModelClass::ShutdownBuffers();
 
 	return;
 }
@@ -51,7 +51,7 @@ bool PlayerClass::Render(ShaderControllerClass* shader, CameraClass* camera, Lig
 	if (!result)
 		return false;
 
-	result = RenderBuffers(shader, camera, lightSource);
+	result = ModelClass::RenderBuffers(shader, camera, lightSource);
 	if(!result)
 		return false;
 

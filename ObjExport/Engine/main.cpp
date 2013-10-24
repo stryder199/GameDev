@@ -22,6 +22,9 @@ LPCWSTR toLWideStr(string s);
 
 bool CheckForNewerVersion(string filename)
 {
+	string INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\3D_Models\\OBJ_MTL";
+	string OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\Formatted_3D_Models";
+
 	string inputFullPath = INPUT_FOLDER + "\\" + filename;
 	string outputFullPath = OUTPUT_FOLDER + "\\" + filename;
 	outputFullPath.erase(outputFullPath.end() - 4, outputFullPath.end());
@@ -112,6 +115,9 @@ int main()
 {
 	bool result;
 	char garbage;
+
+	string INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\3D_Models\\OBJ_MTL";
+	string OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\Formatted_3D_Models";
 
 	vector<string> filenameList = listFile(INPUT_FOLDER, "obj");
 

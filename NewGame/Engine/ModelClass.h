@@ -37,15 +37,15 @@ protected:
 	};
 
 public:
-	virtual bool Initialize(MeshClass* mesh) { return false; }
-	virtual bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource) { return false; }
-	virtual void Shutdown() {}
+	virtual bool Initialize(MeshClass* mesh) = 0;
+	virtual bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource) = 0;
+	virtual void Shutdown() = 0;
 
 protected:
 	bool InitializeBuffers();
 	bool RenderBuffers(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	void ShutdownBuffers();
-	virtual bool PreProcessing() { return false; };
+	virtual bool PreProcessing() = 0;
 
 	MeshClass* m_mesh;
 	float pos_x, pos_y, pos_z;
