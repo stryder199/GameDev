@@ -16,28 +16,28 @@ MeshDataClass::~MeshDataClass()
 {
 }
 
-bool MeshDataClass::Initialize(MeshColorType type, string textureFilename)
+bool MeshDataClass::Initialize(MaterialClass* mat)
 {
 	bool result;
 
-	m_type = type;
+	m_type = MATERIAL;
 
 	m_vecMesh = vector<MeshType>();
 
-	if (m_type == MATERIAL)
-	{
-		m_material = new MaterialClass();
-		result = m_material->Initialize();
-		if (!result)
-			return false;
-	}
-	else if (m_type == TEXTURE)
-	{
-		m_texture = new TextureClass();
-		result = m_texture->Initialize(toWChar(textureFilename));
-		if (!result)
-			return false;
-	}
+	m_material = mat;
+
+	return true;
+}
+
+bool MeshDataClass::Initialize(TextureClass* tex)
+{
+	bool result;
+
+	m_type = TEXTURE;
+
+	m_vecMesh = vector<MeshType>();
+
+	m_texture = tex;
 
 	return true;
 }

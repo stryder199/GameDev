@@ -30,7 +30,8 @@ public:
 	MeshDataClass();
 	~MeshDataClass();
 
-	bool Initialize(MeshColorType type, string textureFilename);
+	bool Initialize(MaterialClass* mat);
+	bool Initialize(TextureClass* tex);
 	void Shutdown();
 
 	int getIndexCount();

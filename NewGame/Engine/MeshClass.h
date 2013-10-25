@@ -11,7 +11,6 @@
 #include <vector>
 #include <string>
 
-class MaterialClass;
 class ObjectMeshClass;
 
 using namespace std;

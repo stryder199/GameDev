@@ -100,7 +100,15 @@ bool Exporter::LoadMaterialsFromFile(string mtlFilepath)
 			}
 			else if (sinput.compare("map_Kd") == 0)
 			{
-				mtlin >> newColor.map_Kd;
+				mtlin >> sinput;
+				string fullFilename = sinput;
+
+				while (mtlin.peek() != '\n')
+				{
+					mtlin >> sinput;
+					fullFilename = fullFilename + " " + sinput;
+				}
+				newColor.map_Kd = fullFilename;
 			}
 
 			mtlin >> sinput;

@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "MeshClass.h"
 #include "MaterialClass.h"
+#include "TextureClass.h"
 #include "ObjectMeshClass.h"
 #include "MeshDataClass.h"
 
@@ -16,6 +17,38 @@ MeshClass::MeshClass(const MeshClass& other)
 
 MeshClass::~MeshClass()
 {
+}
+
+MaterialClass::MaterialInfo readMtlLine(ifstream* fin)
+{
+	string sinput;
+	// Load material Data
+	MaterialClass::MaterialInfo colorInfo = MaterialClass::MaterialInfo();
+	*fin >> colorInfo.Ns >> colorInfo.Ka_r >> colorInfo.Ka_g >> colorInfo.Ka_b >> colorInfo.Kd_r >>
+		colorInfo.Kd_g >> colorInfo.Kd_b >> colorInfo.Ks_r >> colorInfo.Ks_g >> colorInfo.Ks_b >>
+		colorInfo.Ni >> colorInfo.d >> colorInfo.illum;
+	*fin >> sinput;
+	colorInfo.map_Kd = sinput;
+
+	while ((fin->peek() != '\n'))
+	{
+		*fin >> sinput;
+		colorInfo.map_Kd = colorInfo.map_Kd + " " + sinput;
+	}
+
+	return colorInfo;
+}
+
+MeshDataClass::MeshType readVtnLine(ifstream* fin)
+{
+	//Load vertices until a new object starts
+	MeshDataClass::MeshType newMeshData = MeshDataClass::MeshType();
+
+	*fin >> newMeshData.x >> newMeshData.y >> newMeshData.z;
+	*fin >> newMeshData.tu >> newMeshData.tv;
+	*fin >> newMeshData.nx >> newMeshData.ny >> newMeshData.nz;
+
+	return newMeshData;
 }
 
 bool MeshClass::Initialize(char* meshFilename)
@@ -69,21 +102,28 @@ bool MeshClass::LoadModel(char* filename)
 	// Set the number of indices to be the same as the vertex count.
 	m_totalIndexCount = m_totalVertexCount;
 
+	fin >> sinput;
+	fin >> sinput;
+
+	MaterialClass* currentMaterial = 0;
+	TextureClass* currentTexture = 0;
+	MeshDataClass::MeshColorType type = MeshDataClass::MeshColorType();
+
+	// For each object in the model
 	while (sinput != "")
 	{
 		if (sinput.compare("o") == 0)
 		{
-			ObjectMeshClass* newObject = new ObjectMeshClass();
-
 			//Load the object name
 			fin >> sinput;
 			string objectName = sinput;
-			while ((fin.peek() != '\n'))
+			while (fin.peek() != '\n')
 			{
 				fin >> sinput;
 				objectName = objectName + " " + sinput;
 			}
 
+			ObjectMeshClass* newObject = new ObjectMeshClass();
 			result = newObject->Initialize(objectName);
 			if (!result)
 				return false;
@@ -91,51 +131,73 @@ bool MeshClass::LoadModel(char* filename)
 			//Get the next command
 			fin >> sinput;
 
-			//If you are in the same object
-			while (sinput.compare("o") != 0)
-			{
-				MeshDataClass::MeshColorType type;
-				MeshDataClass* newMesh = new MeshDataClass();
-				string textureFilename;
+			MeshDataClass* newMesh = new MeshDataClass();
+			MaterialClass::MaterialInfo colorInfo = MaterialClass::MaterialInfo();
+			
+			//Are we using the same material as the last object??
+			//If we have a material
+			if (sinput.compare("mtl") == 0)
+			{	
+				colorInfo = readMtlLine(&fin);
 
-				// Load material Data
-				MaterialClass::MaterialInfo colorInfo;
-				fin >> colorInfo.Ns >> colorInfo.Ka_r >> colorInfo.Ka_g >> colorInfo.Ka_b >> colorInfo.Kd_r >>
-					colorInfo.Kd_g >> colorInfo.Kd_b >> colorInfo.Ks_r >> colorInfo.Ks_g >> colorInfo.Ks_b >>
-					colorInfo.Ni >> colorInfo.d >> colorInfo.illum;
-				fin >> sinput;
-				colorInfo.map_Kd = sinput;
-
-				while ((fin.peek() != '\n'))
+				if (colorInfo.map_Kd.compare("material") == 0)
 				{
-					fin >> sinput;
-					colorInfo.map_Kd = colorInfo.map_Kd + " " + sinput;
-				}
+					MaterialClass* material = new MaterialClass();
+					result = material->Initialize(colorInfo);
+					if (!result)
+						return false;
 
-				if (colorInfo.map_Kd == "material")
-				{
+					currentMaterial = material;
 					type = MeshDataClass::MeshColorType::MATERIAL;
-					textureFilename = "";
+
+					result = newMesh->Initialize(material);
+					if (!result)
+						return false;
 				}
 				else
 				{
-					type = MeshDataClass::MeshColorType::TEXTURE;
-					textureFilename = colorInfo.map_Kd;
-				}
 
-				result = newMesh->Initialize(type, textureFilename);
-				if (!result)
-					return false;
+					TextureClass* texture = new TextureClass();
+					result = texture->Initialize(toWChar(colorInfo.map_Kd));
+					if (!result)
+						return false;
+
+					currentTexture = texture;
+					type = MeshDataClass::MeshColorType::TEXTURE;
+
+					result = newMesh->Initialize(texture);
+					if (!result)
+						return false;
+				}
 
 				//Get the next command
 				fin >> sinput;
-
-				//If you are in the same object and material
-				while (sinput.compare("newmtl") != 0 && sinput.compare("o") != 0)
+			}
+			//If we want to use the same material as last time
+			else
+			{
+				if (type == MeshDataClass::MeshColorType::TEXTURE)
 				{
-					//Load vertices until a new object starts
-					MeshDataClass::MeshType newMeshData = MeshDataClass::MeshType();
+					result = newMesh->Initialize(currentTexture);
+					if (!result)
+						return false;
+				}
+				else if (type == MeshDataClass::MeshColorType::MATERIAL)
+				{
+					result = newMesh->Initialize(currentMaterial);
+					if (!result)
+						return false;
+				}
 
+				//You are already at the next command so dont get it
+			}
+
+			//For each material in the object
+			while (sinput.compare("o") != 0 && sinput != "")
+			{
+				//For each vtn until you hit a new mtl or new o
+				while (sinput.compare("mtl") != 0 && sinput.compare("o") != 0 && sinput != "")
+				{
 					if (type == MeshDataClass::MeshColorType::MATERIAL)
 					{
 						MaterialClass::ColorType color;
@@ -147,16 +209,55 @@ bool MeshClass::LoadModel(char* filename)
 						newMesh->getMaterial()->addColorData(color);
 					}
 
-					fin >> newMeshData.x >> newMeshData.y >> newMeshData.z;
-					fin >> newMeshData.tu >> newMeshData.tv;
-					fin >> newMeshData.nx >> newMeshData.ny >> newMeshData.nz;
-
+					//Load vertices until a new object starts
+					MeshDataClass::MeshType newMeshData = readVtnLine(&fin);
 					newMesh->addMeshData(newMeshData);
 
 					fin >> sinput;
 				}
+
 				// We are at the end of either our object or our material
 				newObject->addMesh(newMesh);
+
+				//If we have a material
+				if (sinput.compare("mtl") == 0)
+				{
+					newMesh = new MeshDataClass();
+					colorInfo = readMtlLine(&fin);
+
+					if (colorInfo.map_Kd == "material")
+					{
+						MaterialClass* material = new MaterialClass();
+						result = material->Initialize(colorInfo);
+						if (!result)
+							return false;
+
+						currentMaterial = material;
+						type = MeshDataClass::MeshColorType::MATERIAL;
+
+						result = newMesh->Initialize(material);
+						if (!result)
+							return false;
+					}
+					else
+					{
+
+						TextureClass* texture = new TextureClass();
+						result = texture->Initialize(toWChar("data\\" + colorInfo.map_Kd));
+						if (!result)
+							return false;
+
+						currentTexture = texture;
+						type = MeshDataClass::MeshColorType::TEXTURE;
+
+						result = newMesh->Initialize(texture);
+						if (!result)
+							return false;
+					}
+
+					//Get the next command
+					fin >> sinput;
+				}
 			}
 			//We are indeed at the end of our object
 			m_allObjects.push_back(newObject);

@@ -34,7 +34,7 @@ public:
 	MaterialClass();
 	~MaterialClass();
 
-	bool Initialize();
+	bool Initialize(MaterialInfo matInfo);
 	void Shutdown();
 
 	vector<ColorType>* getColors();
@@ -43,6 +43,7 @@ public:
 	void addColorData(ColorType data);
 
 private:
+	MaterialInfo m_materialInfo;
 	vector<ColorType> m_vecColors;
 };
 

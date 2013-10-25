@@ -10,11 +10,13 @@ MaterialClass::~MaterialClass()
 {
 }
 
-bool MaterialClass::Initialize()
+bool MaterialClass::Initialize(MaterialClass::MaterialInfo matInfo)
 {
 	bool result;
 
 	m_vecColors = vector<ColorType>();
+
+	m_materialInfo = matInfo;
 	
 	return true;
 }

@@ -20,7 +20,7 @@ bool ActorsClass::Initialize()
 	bool result;
 
 	playerMesh = new MeshClass();
-	result = playerMesh->Initialize("data/ship1a.3dmodel");
+	result = playerMesh->Initialize("data/M-1 Kaito.3dmodel");
 	if(!result)
 		return false;
 

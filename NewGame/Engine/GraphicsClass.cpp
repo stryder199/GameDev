@@ -53,14 +53,14 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!result)
 		return false;
 
-	//Init all 2D objects, UI, menus,...
-	m_2DGraphics = new TwoDGraphicsClass();
-	if(!m_2DGraphics)
-		return false;
+	////Init all 2D objects, UI, menus,...
+	//m_2DGraphics = new TwoDGraphicsClass();
+	//if(!m_2DGraphics)
+	//	return false;
 
-	result = m_2DGraphics->Initialize(WindowClass::getInstance()->getScreenWidth(), WindowClass::getInstance()->getScreenHeight());
-	if(!result)
-		return false;
+	//result = m_2DGraphics->Initialize(WindowClass::getInstance()->getScreenWidth(), WindowClass::getInstance()->getScreenHeight());
+	//if(!result)
+	//	return false;
 
 	//Init all 3d objects
 	m_3DGraphics = new ThreeDGraphicsClass();
