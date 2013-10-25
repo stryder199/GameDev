@@ -20,34 +20,93 @@ MeshClass::~MeshClass()
 {
 }
 
-MaterialClass::MaterialInfo readMtlLine(ifstream* fin)
+string readStringUntilSpace(string::iterator* it)
+{
+	string finalString = "";
+	while (*(*it) != ' ')
+	{
+		finalString += *(*it);
+		++*it;
+	}
+
+	//Go past the space or \n
+	++*it;
+	return finalString;
+}
+
+string readStringUntilNewL(string::iterator* it)
+{
+	string finalString = "";
+	while (*(*it) != '\n' && *(*it) != '\r')
+	{
+		finalString += *(*it);
+		++*it;
+	}
+	
+	//Go past \n and \r
+	if (*(*it) == '\r')
+	{
+		++*it;
+	}
+	
+	++*it;
+	return finalString;
+}
+
+float readFloat(string::iterator* it)
+{
+	string finalString = "";
+	while (*(*it) != ' ' && *(*it) != '\n' &&  *(*it) != '\r')
+	{
+		finalString += *(*it);
+		++*it;
+	}
+
+	if (*(*it) == '\r')
+	{
+		++*it;
+	}
+	//Go past the space or \n
+	++*it;
+	return atof(finalString.c_str());
+}
+
+MaterialClass::MaterialInfo readMtlLine(string::iterator* it)
 {
 	string sinput;
 	// Load material Data
 	MaterialClass::MaterialInfo colorInfo = MaterialClass::MaterialInfo();
-	*fin >> colorInfo.Ns >> colorInfo.Ka_r >> colorInfo.Ka_g >> colorInfo.Ka_b >> colorInfo.Kd_r >>
-		colorInfo.Kd_g >> colorInfo.Kd_b >> colorInfo.Ks_r >> colorInfo.Ks_g >> colorInfo.Ks_b >>
-		colorInfo.Ni >> colorInfo.d >> colorInfo.illum;
-	*fin >> sinput;
-	colorInfo.map_Kd = sinput;
-
-	while ((fin->peek() != '\n'))
-	{
-		*fin >> sinput;
-		colorInfo.map_Kd = colorInfo.map_Kd + " " + sinput;
-	}
+	colorInfo.Ns = readFloat(it);
+	colorInfo.Ka_r = readFloat(it);
+	colorInfo.Ka_g = readFloat(it);
+	colorInfo.Ka_b = readFloat(it);
+	colorInfo.Kd_r = readFloat(it);
+	colorInfo.Kd_g = readFloat(it);
+	colorInfo.Kd_b = readFloat(it);
+	colorInfo.Ks_r = readFloat(it);
+	colorInfo.Ks_g = readFloat(it);
+	colorInfo.Ks_b = readFloat(it);
+	colorInfo.Ni = readFloat(it);
+	colorInfo.d = readFloat(it);
+	colorInfo.illum = readFloat(it);
+	colorInfo.map_Kd = readStringUntilNewL(it);
 
 	return colorInfo;
 }
 
-MeshDataClass::MeshType readVtnLine(ifstream* fin)
+MeshDataClass::MeshType readVtnLine(string::iterator* it)
 {
 	//Load vertices until a new object starts
 	MeshDataClass::MeshType newMeshData = MeshDataClass::MeshType();
 
-	*fin >> newMeshData.x >> newMeshData.y >> newMeshData.z;
-	*fin >> newMeshData.tu >> newMeshData.tv;
-	*fin >> newMeshData.nx >> newMeshData.ny >> newMeshData.nz;
+	newMeshData.x = readFloat(it);
+	newMeshData.y = readFloat(it);
+	newMeshData.z = readFloat(it);
+	newMeshData.tu = readFloat(it);
+	newMeshData.tv = readFloat(it);
+	newMeshData.nx = readFloat(it);
+	newMeshData.ny = readFloat(it);
+	newMeshData.nz = readFloat(it);
 
 	return newMeshData;
 }
@@ -77,201 +136,153 @@ void MeshClass::Shutdown()
 
 bool MeshClass::LoadModel(char* filename)
 {
-	std::ifstream fin;
-	std::string sinput;
+	string sinput;
 	bool result;
 	char input;
+	
+	string s;
 
+	ifstream is(filename, ifstream::binary);
+	if (is) {
+		// get length of file:
+		is.seekg(0, is.end);
+		int length = is.tellg();
+		is.seekg(0, is.beg);
 
-	// Open the model file.  If it could not open the file then exit.
-	fin.open(filename);
-	if(fin.fail())
-	{
-		return false;
+		char * buffer = new char[length];
+	
+		// read data as a block:
+		is.read(buffer, length);
+
+		
+		s.reserve(sizeof(char) *length);
+		s = string(buffer);
+
+		// ...buffer contains the entire file...
+
+		delete[] buffer;
 	}
+	is.close();
 
-	// Read up to the value of vertex count.
-	fin.get(input);
-	while(input != ':')
-	{
-		fin.get(input);
-	}
+	string::iterator it = s.begin();
 
-	// Read in the vertex count.
-	fin >> m_totalVertexCount;
-
-	// Set the number of indices to be the same as the vertex count.
-	m_totalIndexCount = m_totalVertexCount;
-
-	fin >> sinput;
-	fin >> sinput;
-
-	MaterialClass* currentMaterial = 0;
-	TextureClass* currentTexture = 0;
-	MeshDataClass::MeshColorType type = MeshDataClass::MeshColorType();
+	MaterialClass* focusMaterial = 0;
+	TextureClass* focusTexture = 0;
+	ObjectMeshClass* focusObject = 0;
+	MeshDataClass* focusMesh = 0;
+	MaterialClass::MaterialInfo focusColorInfo;
+	MeshDataClass::MeshColorType focusType;
 
 	// For each object in the model
-	while (sinput != "")
+	while ((*it) != 'e')
 	{
-		if (sinput.compare("o") == 0)
+		//get next command
+		sinput = readStringUntilSpace(&it);
+
+		if (sinput.compare("vtn") == 0)
 		{
-			//Load the object name
-			fin >> sinput;
-			string objectName = sinput;
-			while (fin.peek() != '\n')
+			if (focusType == MeshDataClass::MeshColorType::MATERIAL)
 			{
-				fin >> sinput;
-				objectName = objectName + " " + sinput;
+				MaterialClass::ColorType color;
+				color.r = focusColorInfo.Kd_r;
+				color.g = focusColorInfo.Kd_g;
+				color.b = focusColorInfo.Kd_b;
+				color.a = 1.0f;
+
+				focusMesh->getMaterial()->addColorData(color);
 			}
 
-			ObjectMeshClass* newObject = new ObjectMeshClass();
-			result = newObject->Initialize(objectName);
+			//Load vertices until a new object starts
+			MeshDataClass::MeshType newMeshData = readVtnLine(&it);
+			focusMesh->addMeshData(newMeshData);
+			
+			//Should auto skip the new line
+			if ((*it) == 'm' || (*it) == 'o')
+			{
+				//Push the last mesh
+				focusObject->addMesh(focusMesh);
+
+			}
+		}
+		else if (sinput.compare("o") == 0)
+		{
+			//If your not the first object
+			if (focusObject != 0)
+			{
+				//Push the last object
+				m_allObjects.push_back(focusObject);
+			}
+			string objectName = readStringUntilNewL(&it);
+
+			focusObject = new ObjectMeshClass();
+			result = focusObject->Initialize(objectName);
 			if (!result)
 				return false;
 
-			//Get the next command
-			fin >> sinput;
-
-			MeshDataClass* newMesh = new MeshDataClass();
-			MaterialClass::MaterialInfo colorInfo = MaterialClass::MaterialInfo();
+			//Should auto skip to the next line
 			
-			//Are we using the same material as the last object??
-			//If we have a material
-			if (sinput.compare("mtl") == 0)
-			{	
-				colorInfo = readMtlLine(&fin);
+			//Check if you need to use the prev material
+			if ((*it) == 'v')
+			{
+				focusMesh = new MeshDataClass();
 
-				if (colorInfo.map_Kd.compare("material") == 0)
+				if (focusType == MeshDataClass::MeshColorType::MATERIAL)
 				{
-					MaterialClass* material = new MaterialClass();
-					result = material->Initialize(colorInfo);
-					if (!result)
-						return false;
-
-					currentMaterial = material;
-					type = MeshDataClass::MeshColorType::MATERIAL;
-
-					result = newMesh->Initialize(material);
+					result = focusMesh->Initialize(focusMaterial);
 					if (!result)
 						return false;
 				}
 				else
 				{
-
-					TextureClass* texture = new TextureClass();
-					result = texture->Initialize(toWChar("data\\" + colorInfo.map_Kd));
-					if (!result)
-						return false;
-
-					currentTexture = texture;
-					type = MeshDataClass::MeshColorType::TEXTURE;
-
-					result = newMesh->Initialize(texture);
+					result = focusMesh->Initialize(focusTexture);
 					if (!result)
 						return false;
 				}
-
-				//Get the next command
-				fin >> sinput;
 			}
-			//If we want to use the same material as last time
+		}
+		else if (sinput.compare("mtl") == 0)
+		{
+			focusMesh = new MeshDataClass();
+			focusColorInfo = MaterialClass::MaterialInfo();
+
+			focusColorInfo = readMtlLine(&it);
+
+			if (focusColorInfo.map_Kd.compare("material") == 0)
+			{
+				MaterialClass* material = new MaterialClass();
+				result = material->Initialize(focusColorInfo);
+				if (!result)
+					return false;
+
+				focusMaterial = material;
+				focusType = MeshDataClass::MeshColorType::MATERIAL;
+
+				result = focusMesh->Initialize(material);
+				if (!result)
+					return false;
+			}
 			else
 			{
-				if (type == MeshDataClass::MeshColorType::TEXTURE)
-				{
-					result = newMesh->Initialize(currentTexture);
-					if (!result)
-						return false;
-				}
-				else if (type == MeshDataClass::MeshColorType::MATERIAL)
-				{
-					result = newMesh->Initialize(currentMaterial);
-					if (!result)
-						return false;
-				}
+				TextureClass* texture = new TextureClass();
+				result = texture->Initialize(toWChar("data\\" + focusColorInfo.map_Kd));
+				if (!result)
+					return false;
 
-				//You are already at the next command so dont get it
+				focusTexture = texture;
+				focusType = MeshDataClass::MeshColorType::TEXTURE;
+
+				result = focusMesh->Initialize(texture);
+				if (!result)
+					return false;
 			}
 
-			//For each material in the object
-			while (sinput.compare("o") != 0 && sinput != "")
-			{
-				//For each vtn until you hit a new mtl or new o
-				while (sinput.compare("mtl") != 0 && sinput.compare("o") != 0)
-				{
-					if (type == MeshDataClass::MeshColorType::MATERIAL)
-					{
-						MaterialClass::ColorType color;
-						color.r = colorInfo.Kd_r;
-						color.g = colorInfo.Kd_g;
-						color.b = colorInfo.Kd_b;
-						color.a = 1.0f;
-
-						newMesh->getMaterial()->addColorData(color);
-					}
-
-					//Load vertices until a new object starts
-					MeshDataClass::MeshType newMeshData = readVtnLine(&fin);
-					newMesh->addMeshData(newMeshData);
-
-					if (!(fin >> sinput))
-					{
-						sinput = "";
-						break;
-					}
-						
-				}
-
-				// We are at the end of either our object or our material
-				newObject->addMesh(newMesh);
-
-				//If we have a material
-				if (sinput.compare("mtl") == 0)
-				{
-					newMesh = new MeshDataClass();
-					colorInfo = readMtlLine(&fin);
-
-					if (colorInfo.map_Kd == "material")
-					{
-						MaterialClass* material = new MaterialClass();
-						result = material->Initialize(colorInfo);
-						if (!result)
-							return false;
-
-						currentMaterial = material;
-						type = MeshDataClass::MeshColorType::MATERIAL;
-
-						result = newMesh->Initialize(material);
-						if (!result)
-							return false;
-					}
-					else
-					{
-
-						TextureClass* texture = new TextureClass();
-						result = texture->Initialize(toWChar("data\\" + colorInfo.map_Kd));
-						if (!result)
-							return false;
-
-						currentTexture = texture;
-						type = MeshDataClass::MeshColorType::TEXTURE;
-
-						result = newMesh->Initialize(texture);
-						if (!result)
-							return false;
-					}
-
-					//Get the next command
-					fin >> sinput;
-				}
-			}
-			//We are indeed at the end of our object
-			m_allObjects.push_back(newObject);
-		}
+			//Should autoskip to the next line
+		}	
 	}
 
-	// Close the model file.
-	fin.close();
+	//Add the last objects
+	focusObject->addMesh(focusMesh);
+	m_allObjects.push_back(focusObject);
 
 	return true;
 }

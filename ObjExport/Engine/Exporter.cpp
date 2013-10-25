@@ -349,6 +349,8 @@ bool Exporter::WriteOutputFile(string filepath)
 			<< (*m_normals)[nIndex].x << ' ' << (*m_normals)[nIndex].y << ' ' << (*m_normals)[nIndex].z << endl;
 	}
 
+	fout << "end" << endl;
+
 	// Close the output file.
 	fout.close();
 

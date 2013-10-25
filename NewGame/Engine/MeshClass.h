@@ -37,7 +37,6 @@ private:
 	void ReleaseModel();
 
 	vector<ObjectMeshClass*> m_allObjects;
-	int m_totalVertexCount, m_totalIndexCount;
 };
 
 #endif
