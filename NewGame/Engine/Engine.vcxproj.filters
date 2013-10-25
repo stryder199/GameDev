@@ -171,5 +171,8 @@
     <ClInclude Include="MeshDataClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WindowsHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -129,11 +129,11 @@ bool ShaderControllerClass::Initialize()
 }
 
 bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-									ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+									TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 		return false;
 

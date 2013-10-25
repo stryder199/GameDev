@@ -17,16 +17,10 @@
 
 using namespace std;
 
-vector<string> listFile(string dirPath, string extension);
-LPCWSTR toLWideStr(string s);
-
-bool CheckForNewerVersion(string filename)
+bool CheckForNewerVersion(string filename, string inputFolder, string outputFolder)
 {
-	string INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDev\\3D_Models\\OBJ_MTL";
-	string OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDev\\Formatted_3D_Models";
-
-	string inputFullPath = INPUT_FOLDER + "\\" + filename;
-	string outputFullPath = OUTPUT_FOLDER + "\\" + filename;
+	string inputFullPath = inputFolder + "\\" + filename;
+	string outputFullPath = outputFolder + "\\" + filename;
 	outputFullPath.erase(outputFullPath.end() - 4, outputFullPath.end());
 	outputFullPath += ".3dmodel";
 
@@ -65,49 +59,6 @@ bool CheckForNewerVersion(string filename)
 	return false;
 }
 
-vector<string> listFile(string dirPath, string extension)
-{
-	HANDLE hFind;
-	WIN32_FIND_DATA data;
-	vector<string> fileList;
-
-	string pathWildcard = dirPath + "\\*." + extension;
-	std::wstring stemp = std::wstring(pathWildcard.begin(), pathWildcard.end());
-	LPCWSTR lpathWildcard = stemp.c_str();
-
-	hFind = FindFirstFile(lpathWildcard, &data);
-	if (hFind != INVALID_HANDLE_VALUE) {
-		do {
-			WCHAR* wc = data.cFileName;
-
-			//convert from wide char to narrow char array
-			char ch[260];
-			char DefChar = ' ';
-			WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, NULL);
-
-			//A std:string  using the char* constructor.
-			std::string ss(ch);
-
-			fileList.push_back(ss);
-		} while (FindNextFile(hFind, &data));
-		FindClose(hFind);
-	}
-
-	return fileList;
-}
-
-LPCWSTR toLWideStr(string s)
-{
-	wstring stemp = std::wstring(s.begin(), s.end());
-	LPCWSTR lpathWildcard = stemp.c_str();
-	return lpathWildcard;
-}
-
-LPCTSTR toLTStr(string s)
-{
-	return (LPCTSTR) s.c_str();
-}
-
 //////////////////
 // MAIN PROGRAM //
 //////////////////
@@ -115,9 +66,6 @@ int main()
 {
 	bool result;
 	char garbage;
-
-	string INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDev\\3D_Models\\OBJ_MTL";
-	string OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDev\\Formatted_3D_Models";
 
 	vector<string> filenameList = listFile(INPUT_FOLDER, "obj");
 
@@ -128,10 +76,10 @@ int main()
 		time_t start, end;
 		double seconds;
 
-		if (CheckForNewerVersion((*it)))
+		if (CheckForNewerVersion((*it), INPUT_FOLDER, OUTPUT_FOLDER))
 		{
 			// Skip this file
-			continue;
+			//continue;
 		}
 
 		Exporter* ex = new Exporter();

@@ -54,12 +54,12 @@ vector<MeshDataClass::MeshType>* MeshDataClass::getRawMeshData()
 
 int MeshDataClass::getIndexCount()
 {
-	return m_indexCount;
+	return m_vecMesh.size();
 }
 
 int MeshDataClass::getVertexCount()
 {
-	return m_vertexCount;
+	return m_vecMesh.size();
 }
 
 MeshDataClass::MeshColorType MeshDataClass::getMeshColorType()
@@ -97,10 +97,17 @@ void MeshDataClass::addMeshData(MeshType data)
 	m_vecMesh.push_back(data);
 }
 
-wchar_t* toWChar(string s)
+void MeshDataClass::setVertexBuffer(ID3D11Buffer* buf)
 {
-	wchar_t* wide_string = new wchar_t[s.length() + 1];
-	std::copy(s.begin(), s.end(), wide_string);
-	wide_string[s.length()] = 0;
-	return wide_string;
+	m_vertexBuffer = buf;
+}
+
+void MeshDataClass::setIndexBuffer(ID3D11Buffer* buf)
+{
+	m_indexBuffer = buf;
+}
+
+void MeshDataClass::setColorBuffer(ID3D11Buffer* buf)
+{
+	m_colorBuffer = buf;
 }

@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exporter.h" />
+    <ClInclude Include="WindowsHelpers.h" />
   </ItemGroup>
 </Project>

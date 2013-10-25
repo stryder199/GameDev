@@ -26,9 +26,8 @@ bool ModelClass::InitializeBuffers()
 			VertexMaterialType* matVertices;
 			D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc, colorBufferDesc;
 			D3D11_SUBRESOURCE_DATA vertexData, indexData, colorData;
+			ID3D11Buffer *vertexBuf, *indexBuf;
 			HRESULT result;
-
-			int i;
 
 			// Create the index array.
 			indices = new unsigned long[(*subMesh)->getIndexCount()];
@@ -95,11 +94,11 @@ bool ModelClass::InitializeBuffers()
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
 				{
-					texVertices[i].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
-					texVertices[i].texture = XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
-					texVertices[i].normals = XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
+					texVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
+					texVertices[count].texture = XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
+					texVertices[count].normals = XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
 
-					indices[i] = count;
+					indices[count] = count;
 					count++;
 				}
 
@@ -117,14 +116,14 @@ bool ModelClass::InitializeBuffers()
 				vertexData.SysMemSlicePitch = 0;
 			}
 
-			ID3D11Buffer* tmp = (*subMesh)->getVertexBuffer();
-
 			// Now create the vertex buffer.
-			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &tmp);
+			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuf);
 			if (FAILED(result))
 			{
 				return false;
 			}
+
+			(*subMesh)->setVertexBuffer(vertexBuf);
 
 			// Set up the description of the static index buffer.
 			indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -139,14 +138,14 @@ bool ModelClass::InitializeBuffers()
 			indexData.SysMemPitch = 0;
 			indexData.SysMemSlicePitch = 0;
 
-			ID3D11Buffer* indextmp = (*subMesh)->getIndexBuffer();
-
 			// Create the index buffer.
-			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &indextmp);
+			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &indexBuf);
 			if (FAILED(result))
 			{
 				return false;
 			}
+
+			(*subMesh)->setIndexBuffer(indexBuf);
 
 			if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::MATERIAL)
 			{
@@ -192,10 +191,12 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camer
 			if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::MATERIAL)
 			{
 				vertexstride = sizeof(VertexMaterialType);
+				shader->Set3DMaterialShaders();
 			}
 			else if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::TEXTURE)
 			{
 				vertexstride = sizeof(VertexTextureType);
+				shader->Set3DTextureShaders();
 			}
 			offset = 0;
 
@@ -212,7 +213,7 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camer
 
 			//Render the model using the shader
 			result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *camera->GetViewMatrix(), projMatrix,
-				(*subMesh)->getTexture()->GetTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
+				(*subMesh)->getTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
 			if (!result)
 				return false;
 

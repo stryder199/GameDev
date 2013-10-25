@@ -43,13 +43,12 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix, 
-						 ID3D11ShaderResourceView* texture)
+bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix);
 	if(!result)
 		return false;
 
@@ -182,8 +181,7 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR
 	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-												ID3D11ShaderResourceView* texture)
+bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix)
 {
 	HRESULT result;
 	XMFLOAT4X4 transposedWorldFloatMatrix, transposedViewFloatMatrix, transposedProjectionFloatMatrix;

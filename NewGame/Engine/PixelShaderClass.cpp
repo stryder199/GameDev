@@ -4,6 +4,7 @@
 #include "PixelShaderClass.h"
 #include "D3DClass.h"
 #include "WindowClass.h"
+#include "TextureClass.h"
 
 PixelShaderClass::PixelShaderClass()
 {
@@ -44,7 +45,7 @@ void PixelShaderClass::Shutdown()
 }
 
 bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-						 ID3D11ShaderResourceView* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+						 TextureClass* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
@@ -206,7 +207,7 @@ void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR*
 }
 
 bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-											ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+											TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -215,8 +216,9 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 
 	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
 	{
+		ID3D11ShaderResourceView* textureResource = texture->GetTexture();
 		// Set shader texture resource in the pixel shader.
-		D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &texture);
+		D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
 	}
 	
 	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)

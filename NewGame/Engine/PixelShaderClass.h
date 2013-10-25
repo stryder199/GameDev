@@ -12,6 +12,8 @@
 #include <DirectXMath.h>
 #include <fstream>
 
+class TextureClass;
+
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ public:
 
 	bool Initialize(WCHAR* psFilename, ShaderType type);
 	void Shutdown();
-	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 
 	ShaderType getShaderType();
 private:
@@ -58,7 +60,7 @@ private:
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, ID3D11ShaderResourceView*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
+	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass*, XMFLOAT3, XMFLOAT4, XMFLOAT4);
 	void RenderShader(int);
 
 private:

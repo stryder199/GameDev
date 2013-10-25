@@ -12,6 +12,8 @@
 #include <DirectXMath.h>
 #include <fstream>
 
+class TextureClass;
+
 using namespace DirectX;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ public:
 
 	bool Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
 	void Shutdown();
-	bool Render(int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
+	bool Render(int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&);
 
 	ShaderType getShaderType();
 private:
@@ -58,7 +60,7 @@ private:
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&, ID3D11ShaderResourceView*);
+	bool SetShaderParameters(const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&);
 	void RenderShader(int);
 
 private:

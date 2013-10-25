@@ -10,6 +10,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <iostream>
 
 class ObjectMeshClass;
 

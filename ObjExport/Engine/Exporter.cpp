@@ -9,9 +9,6 @@ Exporter::Exporter()
 	m_texcoords = new vector<VertexType>();
 	m_normals = new vector<VertexType>();
 	m_faces = new vector<FaceType>();;
-
-	INPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\3D_Models\\OBJ_MTL";
-	OUTPUT_FOLDER = string(getenv("HOMEPATH")) + "\\Desktop\\GameDevHell\\Formatted_3D_Models";
 }
 
 Exporter::~Exporter()
@@ -307,12 +304,6 @@ bool Exporter::WriteOutputFile(string filepath)
 		cerr << "Could not create file: " + filepath << endl;
 		return false;
 	}
-
-	// Write out the file header that our model format uses.
-	fout << "Vertex Count: " << (m_faces->size() * 3) << endl;
-	fout << endl;
-	fout << "Data:" << endl;
-	fout << endl;
 
 	vector<FaceType>::iterator it;
 

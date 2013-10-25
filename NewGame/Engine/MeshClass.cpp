@@ -6,6 +6,7 @@
 #include "TextureClass.h"
 #include "ObjectMeshClass.h"
 #include "MeshDataClass.h"
+#include "WindowsHelpers.h"
 
 MeshClass::MeshClass()
 {
@@ -158,7 +159,7 @@ bool MeshClass::LoadModel(char* filename)
 				{
 
 					TextureClass* texture = new TextureClass();
-					result = texture->Initialize(toWChar(colorInfo.map_Kd));
+					result = texture->Initialize(toWChar("data\\" + colorInfo.map_Kd));
 					if (!result)
 						return false;
 
@@ -196,7 +197,7 @@ bool MeshClass::LoadModel(char* filename)
 			while (sinput.compare("o") != 0 && sinput != "")
 			{
 				//For each vtn until you hit a new mtl or new o
-				while (sinput.compare("mtl") != 0 && sinput.compare("o") != 0 && sinput != "")
+				while (sinput.compare("mtl") != 0 && sinput.compare("o") != 0)
 				{
 					if (type == MeshDataClass::MeshColorType::MATERIAL)
 					{
@@ -213,7 +214,12 @@ bool MeshClass::LoadModel(char* filename)
 					MeshDataClass::MeshType newMeshData = readVtnLine(&fin);
 					newMesh->addMeshData(newMeshData);
 
-					fin >> sinput;
+					if (!(fin >> sinput))
+					{
+						sinput = "";
+						break;
+					}
+						
 				}
 
 				// We are at the end of either our object or our material

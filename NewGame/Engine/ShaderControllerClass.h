@@ -10,6 +10,7 @@
 /////////////////
 class VertexShaderClass;
 class PixelShaderClass;
+class TextureClass;
 
 //////////////
 // INCLUDES //
@@ -32,7 +33,7 @@ public:
 
 	bool Initialize();
 	bool Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-					ID3D11ShaderResourceView* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor);
+					TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor);
 
 	void Set3DMaterialShaders();
 	void Set3DTextureShaders();

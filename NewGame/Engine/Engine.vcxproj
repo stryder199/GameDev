@@ -82,6 +82,7 @@
       <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dx11.lib;dxerr.lib;dxguid.lib;dinput8.lib;d3dcompiler.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>true</LargeAddressAware>
+      <Profile>true</Profile>
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -180,6 +181,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="StarClass.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="WindowClass.h" />
+    <ClInclude Include="WindowsHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

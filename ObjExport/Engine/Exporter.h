@@ -1,13 +1,16 @@
 #pragma once
 
-#include <Windows.h>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <map>
 #include <vector>
+#include "WindowsHelpers.h"
 
 using namespace std;
+
+static string INPUT_FOLDER = desktopDir() + "\\GameDevHell\\3D_Models\\OBJ_MTL";
+static string OUTPUT_FOLDER = desktopDir() + "\\GameDevHell\\Formatted_3D_Models";
 
 class Exporter
 {
@@ -45,9 +48,6 @@ public:
 	bool LoadObjFileData(string filename);
 	bool WriteOutputFile(string filepath);
 
-	string INPUT_FOLDER;
-	string OUTPUT_FOLDER;
-
 private:
 	map<string, ColorType> *m_allMaterials;
 	map<int, string> *m_materialFaceIndex;
@@ -55,21 +55,3 @@ private:
 	vector<VertexType> *m_vertices, *m_texcoords, *m_normals;
 	vector<FaceType> *m_faces;
 };
-
-static TCHAR* toTStr(string s)
-{
-	TCHAR *param = new TCHAR[s.size() + 1];
-	param[s.size()] = 0;
-	copy(s.begin(), s.end(), param);
-	return param;
-}
-
-static bool FileExists(const string fileName)
-{
-	DWORD       fileAttr;
-
-	fileAttr = GetFileAttributes(toTStr(fileName));
-	if (0xFFFFFFFF == fileAttr)
-		return false;
-	return true;
-}

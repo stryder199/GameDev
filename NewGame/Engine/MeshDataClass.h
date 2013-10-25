@@ -44,6 +44,10 @@ public:
 	ID3D11Buffer* getIndexBuffer();
 	ID3D11Buffer* getColorBuffer();
 
+	void setVertexBuffer(ID3D11Buffer* buf);
+	void setIndexBuffer(ID3D11Buffer* buf);
+	void setColorBuffer(ID3D11Buffer* buf);
+
 	void addMeshData(MeshType data);
 
 private:
@@ -55,5 +59,3 @@ private:
 	TextureClass* m_texture;
 	MeshColorType m_type;
 };
-
-wchar_t* toWChar(string s);
