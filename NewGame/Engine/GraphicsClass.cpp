@@ -6,6 +6,7 @@
 #include "MeshClass.h"
 #include "ThreeDGraphicsClassh.h"
 #include "TwoDGraphicsClass.h"
+#include "ActorsClass.h"
 
 GraphicsClass::GraphicsClass()
 {
@@ -26,10 +27,6 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
-
-	result = WindowClass::getInstance()->Initialize(hInstance, iCmdShow);
-	if(!result)
-		return false;
 
 	result = D3DClass::getInstance()->Initialize();
 	if(!result)
@@ -81,9 +78,6 @@ bool GraphicsClass::Render()
 	// Clear the buffers to begin the scene.
 	D3DClass::getInstance()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-	//Generate the view matrix based on the camera's position
-	m_Camera->Render();
-
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
 	result = m_3DGraphics->RenderAll(m_Shader, m_Camera);
 	if (!result)
@@ -98,4 +92,9 @@ bool GraphicsClass::Render()
 CameraClass* GraphicsClass::getCamera()
 {
 	return m_Camera;
+}
+
+PlayerClass* GraphicsClass::getPlayer()
+{
+	return m_3DGraphics->getActors()->getPlayer();
 }

@@ -9,19 +9,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 	ProgramRootClass* programRoot;
 	bool result;
 	
-	
 	// Create the system object.
 	programRoot = new ProgramRootClass();
 	if(!programRoot)
 	{
-		return 0;
+		return -1;
 	}
 
 	// Initialize and run the system object.
 	result = programRoot->Initialize(hInstance, iCmdshow);
-	if(result)
+	if (!result)
 	{
-		programRoot->Go();
+		return -1;
+	}
+
+	result = programRoot->Go();
+	if (!result)
+	{
+		return -1;
 	}
 
 	// Shutdown and release the system object.

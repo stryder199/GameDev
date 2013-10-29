@@ -1,4 +1,5 @@
 #include "CameraClass.h"
+#include "PlayerClass.h"
 
 CameraClass::CameraClass()
 {
@@ -31,12 +32,12 @@ CameraClass::~CameraClass()
 
 bool CameraClass::Initialize()
 {
-	bool result;
+	//bool result; not used
 
 	m_viewMatrix = new XMFLOAT4X4();
 
 	//Set the initial position of the camera
-	SetPosition(0.0f, 0.0f, -10.0f);
+	SetPosition(0.0f, 0.0f, 0.0f);
 	SetRotation(0.0f, 0.0f, 0.0f);
 
 	return true;
@@ -100,7 +101,7 @@ void CameraClass::setVelRotZ( float vel )
 	m_velRotZ = vel;
 }
 
-void CameraClass::Render()
+void CameraClass::Render(PlayerClass* player)
 {
 	XMVECTOR up, position, lookAt;
 	float yaw, pitch, roll;
@@ -109,23 +110,23 @@ void CameraClass::Render()
 	//Setup the vector that points upwards
 	up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	m_positionX += m_velX;
-	m_positionY += m_velY;
-	m_positionZ += m_velZ;
+	m_positionX = player->getPositionX();
+	m_positionY = player->getPositionY();
+	m_positionZ = player->getPositionZ() + -2.0f;
 
 	//Setup the position of the camera in the world
 	position = XMVectorSet(m_positionX, m_positionY, m_positionZ, 0.0f);
 
 	lookAt = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 
-	m_rotationX += m_velRotX;
-	m_rotationY += m_velRotY;
-	m_rotationZ += m_velRotZ;
+	m_rotationX = player->getRotationX();
+	m_rotationY = player->getRotationY();
+	m_rotationZ = player->getRotationZ();
 
 	//Set the yaw (Y axis), pitch (X axis), and roll (Z axis) roations in radians;
-	pitch = m_rotationX * 0.0174532925f;
-	yaw   = m_rotationY * 0.0174532925f;
-	roll  = m_rotationZ * 0.0174532925f;
+	pitch = m_rotationX;
+	yaw   = m_rotationY;
+	roll  = m_rotationZ ;
 
 	//Create the rotation matrix from the yaw, pitch and roll values.
 	rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);

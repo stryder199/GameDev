@@ -4,6 +4,7 @@
 #include "SoundClass.h"
 #include "WindowClass.h"
 #include "CameraClass.h"
+#include "PlayerClass.h"
 
 ProgramRootClass::ProgramRootClass()
 {
@@ -62,76 +63,28 @@ bool ProgramRootClass::Go()
 			done = true;
 		}
 
-		if(m_Events->IsUpPressed() == true)
+		if(m_Events->IsWPressed() == true)
 		{
-			m_Graphics->getCamera()->setVelY(1.0f);
+			m_Graphics->getPlayer()->SetVelZ(0.01f);
 		}
-		else if(m_Events->IsDownPressed() == true)
+		else if(m_Events->IsSPressed() == true)
 		{
-			m_Graphics->getCamera()->setVelY(-1.0f);
+			m_Graphics->getPlayer()->SetVelZ(-0.01f);
 		}
 		else{
-			m_Graphics->getCamera()->setVelY(0.0f);
+			m_Graphics->getPlayer()->SetVelZ(0.0f);
 		}
 
-		if(m_Events->IsRightPressed() == true)
+		if(m_Events->IsDPressed() == true)
 		{
-			m_Graphics->getCamera()->setVelX(1.0f);
+			m_Graphics->getPlayer()->SetRotVelY(XM_PI/30);
 		}
-		else if(m_Events->IsLeftPressed() == true)
+		else if(m_Events->IsAPressed() == true)
 		{
-			m_Graphics->getCamera()->setVelX(-1.0f);
+			m_Graphics->getPlayer()->SetRotVelY(-1.0f * XM_PI / 30);
 		}
 		else{
-			m_Graphics->getCamera()->setVelX(0.0f);
-		}
-
-		if(m_Events->IsRightClickPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelZ(1.0f);
-		}
-		else if(m_Events->IsLeftClickPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelZ(-1.0f);
-		}
-		else{
-			m_Graphics->getCamera()->setVelZ(0.0f);
-		}
-
-		if(m_Events->IsSPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotX(1.0f);
-		}
-		else if(m_Events->IsWPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotX(-1.0f);
-		}
-		else{
-			m_Graphics->getCamera()->setVelRotX(0.0f);
-		}
-
-		if(m_Events->IsAPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotY(1.0f);
-		}
-		else if(m_Events->IsDPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotY(-1.0f);
-		}
-		else{
-			m_Graphics->getCamera()->setVelRotY(0.0f);
-		}
-
-		if(m_Events->IsEPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotZ(1.0f);
-		}
-		else if(m_Events->IsQPressed() == true)
-		{
-			m_Graphics->getCamera()->setVelRotZ(-1.0f);
-		}
-		else{
-			m_Graphics->getCamera()->setVelRotZ(0.0f);
+			m_Graphics->getPlayer()->SetRotVelY(0.0f);
 		}
 	}
 
@@ -140,21 +93,17 @@ bool ProgramRootClass::Go()
 
 bool ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
 {
-	bool result;	
+	bool result;
+
+	result = WindowClass::getInstance()->Initialize(hInstance, iCmdshow);
+	if (!result)
+		return false;
 
 	m_Sounds = new SoundClass();
 	if(!m_Sounds)
 		return false;
 
 	result = m_Sounds->Initialize();
-	if(!result)
-		return false;
-
-	m_Graphics = new GraphicsClass();
-	if(!m_Graphics)
-		return false;
-
-	result = m_Graphics->Initialize(hInstance, iCmdshow);
 	if(!result)
 		return false;
 	
@@ -164,6 +113,14 @@ bool ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
 
 	result = m_Events->Initialize( hInstance );
 	if(!result)
+		return false;
+
+	m_Graphics = new GraphicsClass();
+	if (!m_Graphics)
+		return false;
+
+	result = m_Graphics->Initialize(hInstance, iCmdshow);
+	if (!result)
 		return false;
 
 	return true;

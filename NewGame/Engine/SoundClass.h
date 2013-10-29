@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef SoundClass_H_
-#define SoundClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -19,5 +18,3 @@ public:
 
 	bool Initialize();
 };
-
-#endif /* SoundClass_H_ */

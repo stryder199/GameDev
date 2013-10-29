@@ -18,7 +18,7 @@ MeshDataClass::~MeshDataClass()
 
 bool MeshDataClass::Initialize(MaterialClass* mat)
 {
-	bool result;
+	//bool result; not used
 
 	m_type = MATERIAL;
 
@@ -31,7 +31,7 @@ bool MeshDataClass::Initialize(MaterialClass* mat)
 
 bool MeshDataClass::Initialize(TextureClass* tex)
 {
-	bool result;
+	//bool result; not used
 
 	m_type = TEXTURE;
 

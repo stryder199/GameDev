@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef ActorsClass_H_
-#define ActorsClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -26,13 +25,10 @@ public:
 
 	bool Initialize();
 	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
-	
+
+	PlayerClass* getPlayer();
 private:
-	std::vector<ModelClass*>* allModels;
-	PlayerClass* player;
-	MeshClass* playerMesh;
-	TextureClass* playerTex;
+	std::vector<ModelClass*> allModels;
+	PlayerClass* m_player;
 
 };
-
-#endif /* ActorsClass_H_ */

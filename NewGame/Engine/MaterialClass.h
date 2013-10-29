@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef MaterialClass_H_
-#define MaterialClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -46,5 +45,3 @@ private:
 	MaterialInfo m_materialInfo;
 	vector<ColorType> m_vecColors;
 };
-
-#endif

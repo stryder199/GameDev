@@ -12,7 +12,7 @@ MaterialClass::~MaterialClass()
 
 bool MaterialClass::Initialize(MaterialClass::MaterialInfo matInfo)
 {
-	bool result;
+	//bool result; not used
 
 	m_vecColors = vector<ColorType>();
 

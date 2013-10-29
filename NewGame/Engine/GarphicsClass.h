@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef GraphicsClass_H_
-#define GraphicsClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -11,6 +10,7 @@ class CameraClass;
 class ShaderControllerClass;
 class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
+class PlayerClass;
 
 //=================================
 // included dependencies
@@ -27,6 +27,7 @@ public:
 	bool Render();
 
 	CameraClass* getCamera();
+	PlayerClass* getPlayer();
 
 private:
 	CameraClass* m_Camera;
@@ -34,5 +35,3 @@ private:
 	TwoDGraphicsClass* m_2DGraphics;
 	ThreeDGraphicsClass* m_3DGraphics;
 };
-
-#endif /* GraphicsClass_H_ */

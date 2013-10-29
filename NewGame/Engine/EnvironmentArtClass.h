@@ -1,15 +1,20 @@
 //=================================
 // include guard
-#ifndef EnvironmentArtClass_H_
-#define EnvironmentArtClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
 class StarClass;
+class PlanetClass;
+class ShaderControllerClass;
+class CameraClass;
+class LightClass;
 
 //=================================
 // included dependencies
 #include <vector>
+
+using namespace std;
 
 class EnvironmentArtClass{
 
@@ -18,11 +23,9 @@ public:
 	~EnvironmentArtClass();
 	
 	bool Initialize();
-	bool RenderAll();
+	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 
 private:
-	std::vector<StarClass>* allStars;
-
+	vector<StarClass*> allStars;
+	vector<PlanetClass*> allPlanets;
 };
-
-#endif /* EnvironmentArtClass_H_ */

@@ -79,7 +79,7 @@ int main()
 		if (CheckForNewerVersion((*it), INPUT_FOLDER, OUTPUT_FOLDER))
 		{
 			// Skip this file
-			//continue;
+			continue;
 		}
 
 		Exporter* ex = new Exporter();

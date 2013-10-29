@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef ThreeDGraphicsClass_H_
-#define ThreeDGraphicsClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -27,10 +26,10 @@ public:
 
 	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera);
 
-private:
-	EnvironmentArtClass* envArt;
-	ActorsClass* actors;
-	LightClass* m_LightSource;
-};
+	ActorsClass* getActors();
 
-#endif /* ThreeDGraphicsClass_H_ */
+private:
+	EnvironmentArtClass* m_envArt;
+	ActorsClass* m_actors;
+	LightClass* m_lightSource;
+};

@@ -1,11 +1,10 @@
 //=================================
 // include guard
-#ifndef CameraClass_H_
-#define CameraClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
-
+class PlayerClass;
 
 //=================================
 // included dependencies
@@ -26,7 +25,7 @@ public:
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetRotation();
 
-	void Render();
+	void Render(PlayerClass* player);
 	bool Initialize();
 	XMFLOAT4X4* GetViewMatrix();
 
@@ -46,5 +45,3 @@ private:
 	XMFLOAT4X4 *m_viewMatrix;
 
 };
-
-#endif /* CameraClass_H_ */

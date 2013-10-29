@@ -258,3 +258,86 @@ void ModelClass::ShutdownBuffers()
 
 	return;
 }
+
+void ModelClass::CalculateWorldMatrix()
+{
+	XMMATRIX worldMatrix = XMMatrixIdentity();
+
+	// Move the model to the location it should be rendered at.
+	XMMATRIX translationMatrix = XMMatrixTranslation(pos_x, pos_y, pos_z);
+	XMMATRIX pointTranslationMatrix = XMMatrixTranslation(point_pos_x, point_pos_y, point_pos_z);
+	XMMATRIX scalingMatrix = XMMatrixScaling(scale_x, scale_y, scale_z);
+	XMMATRIX rotXMatrix = XMMatrixRotationX(rot_x);
+	XMMATRIX rotYMatrix = XMMatrixRotationY(rot_y);
+	XMMATRIX rotZMatrix = XMMatrixRotationZ(rot_z);
+
+
+	worldMatrix *= scalingMatrix;
+	worldMatrix *= pointTranslationMatrix;
+	worldMatrix *= rotXMatrix;
+	worldMatrix *= rotYMatrix;
+	worldMatrix *= rotZMatrix;
+	worldMatrix *= translationMatrix;
+
+	XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
+}
+
+float ModelClass::getPositionX()
+{
+	return pos_x;
+}
+
+float ModelClass::getPositionY()
+{
+	return pos_y;
+}
+
+float ModelClass::getPositionZ()
+{
+	return pos_z;
+}
+
+float ModelClass::getRotationX()
+{
+	return rot_x;
+}
+
+float ModelClass::getRotationY()
+{
+	return rot_y;
+}
+
+float ModelClass::getRotationZ()
+{
+	return rot_z;
+}
+
+float ModelClass::getScaleX()
+{
+	return scale_x;
+}
+
+float ModelClass::getScaleY()
+{
+	return scale_y;
+}
+
+float ModelClass::getScaleZ()
+{
+	return scale_z;
+}
+
+float ModelClass::getPointPositionX()
+{
+	return point_pos_x;
+}
+
+float ModelClass::getPointPositionY()
+{
+	return point_pos_y;
+}
+
+float ModelClass::getPointPositionZ()
+{
+	return point_pos_z;
+}

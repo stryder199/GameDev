@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef StarClass_H_
-#define StarClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -9,19 +8,21 @@ class MeshClass;
 
 //=================================
 // included dependencies
+#include "ModelClass.h"
 
-class StarClass{
+class StarClass : ModelClass{
 
 public:
 	StarClass();
 	~StarClass();
 	
-	bool Initialize();
-	bool Render();
+	bool Initialize(MeshClass* mesh);
+	void Shutdown();
 
+	bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 private:
-	MeshClass* mesh;
+	virtual bool PreProcessing();
+
+	float m_rotationSpeed_y;
 
 };
-
-#endif /* StarClass_H_ */

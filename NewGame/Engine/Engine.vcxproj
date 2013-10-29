@@ -144,6 +144,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="ObjectMeshClass.cpp" />
     <ClCompile Include="PixelShaderClass.cpp" />
+    <ClCompile Include="PlanetClass.cpp" />
     <ClCompile Include="PlayerClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
     <ClCompile Include="ShipClass.cpp" />
@@ -173,6 +174,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="ModelClass.h" />
     <ClInclude Include="ObjectMeshClass.h" />
     <ClInclude Include="PixelShaderClass.h" />
+    <ClInclude Include="PlanetClass.h" />
     <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />
     <ClInclude Include="ShipClass.h" />

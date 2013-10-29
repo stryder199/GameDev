@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef EventClass_H_
-#define EventClass_H_
+#pragma once
 
 ///////////////////////////////
 // PRE-PROCESSING DIRECTIVES //
@@ -73,7 +72,4 @@ private:
 	int m_mouseX, m_mouseY;
 
 };
-
 static EventClass* EventInstance = 0;
-
-#endif /* EventClass_H_ */

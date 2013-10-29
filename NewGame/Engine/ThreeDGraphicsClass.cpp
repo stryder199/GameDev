@@ -8,8 +8,8 @@
 
 ThreeDGraphicsClass::ThreeDGraphicsClass()
 {
-	envArt = 0;
-	actors = 0;
+	m_envArt = 0;
+	m_actors = 0;
 }
 
 ThreeDGraphicsClass::ThreeDGraphicsClass(const ThreeDGraphicsClass& other)
@@ -24,25 +24,25 @@ bool ThreeDGraphicsClass::Initialize()
 {
 	bool result;
 
-	envArt = new EnvironmentArtClass();
-	result = envArt->Initialize();
+	m_envArt = new EnvironmentArtClass();
+	result = m_envArt->Initialize();
 	if(!result)
 		return false;
 
-	actors = new ActorsClass();
-	result = actors->Initialize();
+	m_actors = new ActorsClass();
+	result = m_actors->Initialize();
 	if(!result)
 		return false;
 
 		// Create the light object.
-	m_LightSource = new LightClass;
-	if(!m_LightSource)
+	m_lightSource = new LightClass;
+	if(!m_lightSource)
 		return false;
 
 	// Initialize the light object.
-	m_LightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	m_LightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_LightSource->SetDirection(0.0f, 0.0f, 1.0f);
+	m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
 
 	return true;
 }
@@ -51,15 +51,23 @@ bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader, CameraClass* 
 {
 	bool result;
 
+	//Generate the view matrix based on the camera's position
+	camera->Render(m_actors->getPlayer());
+
 	shader->Set3DMaterialShaders();
 
-	result = envArt->RenderAll();
+	result = m_envArt->RenderAll(shader, camera, m_lightSource);
 	if(!result)
 		return false;
 
-	result = actors->RenderAll(shader, camera, m_LightSource);
+	result = m_actors->RenderAll(shader, camera, m_lightSource);
 	if(!result)
 		return false;
 
 	return true;
+}
+
+ActorsClass* ThreeDGraphicsClass::getActors()
+{
+	return m_actors;
 }

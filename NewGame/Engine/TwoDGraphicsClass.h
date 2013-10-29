@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef TwoDGraphicsClass_H_
-#define TwoDGraphicsClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -30,5 +29,3 @@ private:
 	BitmapClass* m_Bitmap;
 	LightClass* m_DefaultLightSource;
 };
-
-#endif /* TwoDGraphicsClass_H_ */

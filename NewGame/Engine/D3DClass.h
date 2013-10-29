@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef D3DClass_H_
-#define D3DClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -67,5 +66,3 @@ private:
 	ID3D11BlendState* m_alphaEnableBlendingState;
 	ID3D11BlendState* m_alphaDisableBlendingState;
 };
-
-#endif /* D3DClass_H_ */

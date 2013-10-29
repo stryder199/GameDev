@@ -7,9 +7,9 @@
 #include "ShaderControllerClass.h"
 #include "TextureClass.h"
 
-ActorsClass::ActorsClass(){
-	playerMesh = 0;
-	playerTex = 0;
+ActorsClass::ActorsClass()
+{
+	m_player = 0;
 }
 
 ActorsClass::~ActorsClass(){
@@ -19,18 +19,19 @@ bool ActorsClass::Initialize()
 {
 	bool result;
 
-	playerMesh = new MeshClass();
+	allModels = vector<ModelClass*>();
+
+	MeshClass* playerMesh = new MeshClass();
 	result = playerMesh->Initialize("data/M-1 Kaito.3dmodel");
 	if(!result)
 		return false;
 
-	allModels = new std::vector<ModelClass*>;
-
-	player = new PlayerClass();
-	result = player->PlayerClass::Initialize(playerMesh);
+	m_player = new PlayerClass();
+	result = m_player->PlayerClass::Initialize(playerMesh);
 	if(!result)
 		return false;
-	allModels->push_back(player);
+
+	allModels.push_back(m_player);
 
 	return true;
 }
@@ -39,7 +40,7 @@ bool ActorsClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera, 
 	bool result;
 	std::vector<ModelClass*>::iterator it;
 	
-	for (it = allModels->begin(); it != allModels->end(); ++it)
+	for (it = allModels.begin(); it != allModels.end(); ++it)
 	{
 		result = (*it)->Render(shader, camera, lightSource);
 		if(!result)
@@ -47,4 +48,9 @@ bool ActorsClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera, 
 	}
 
 	return true;
+}
+
+PlayerClass* ActorsClass::getPlayer()
+{
+	return m_player;
 }

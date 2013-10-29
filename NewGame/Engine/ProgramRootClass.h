@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef ProgramRootClass_H_
-#define ProgramRootClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -34,5 +33,3 @@ private:
 };
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
-
-#endif /* ProgramRootClass_H_ */

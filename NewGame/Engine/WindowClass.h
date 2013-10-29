@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef WindowClass_H_
-#define WindowClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -45,5 +44,3 @@ public:
 	float SCREEN_NEAR;
 
 };
-
-#endif /* WindowClass_H_ */

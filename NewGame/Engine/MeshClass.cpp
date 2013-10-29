@@ -138,7 +138,6 @@ bool MeshClass::LoadModel(char* filename)
 {
 	string sinput;
 	bool result;
-	char input;
 	
 	string s;
 

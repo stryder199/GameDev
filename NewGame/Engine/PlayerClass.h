@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef PlayerClass_H_
-#define PlayerClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -24,13 +23,19 @@ public:
 	~PlayerClass();
 
 	bool Initialize(MeshClass* mesh);
-	bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	void Shutdown();
 
+	bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
+
+	void SetVelX(float x);
+	void SetVelY(float y);
+	void SetVelZ(float z);
+	void SetRotVelX(float x);
+	void SetRotVelY(float y);
+	void SetRotVelZ(float z);
 private:
 	virtual bool PreProcessing();
 
 	float vel_x, vel_y, vel_z;
+	float rotVel_x, rotVel_y, rotVel_z;
 };
-
-#endif /* PlayerClass_H_ */

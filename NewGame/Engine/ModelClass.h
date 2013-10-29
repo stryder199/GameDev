@@ -1,7 +1,6 @@
 //=================================
 // include guard
-#ifndef ModelClass_H_
-#define ModelClass_H_
+#pragma once
 
 //=================================
 // forward declared dependencies
@@ -41,15 +40,30 @@ public:
 	virtual bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource) = 0;
 	virtual void Shutdown() = 0;
 
+	float getPositionX();
+	float getPositionY();
+	float getPositionZ();
+	float getRotationX();
+	float getRotationY();
+	float getRotationZ();
+	float getScaleX();
+	float getScaleY();
+	float getScaleZ();
+	float getPointPositionX();
+	float getPointPositionY();
+	float getPointPositionZ();
+
 protected:
 	bool InitializeBuffers();
 	bool RenderBuffers(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
 	void ShutdownBuffers();
+	void CalculateWorldMatrix();
 	virtual bool PreProcessing() = 0;
 
 	MeshClass* m_mesh;
 	float pos_x, pos_y, pos_z;
+	float point_pos_x, point_pos_y, point_pos_z;
+	float rot_x, rot_y, rot_z;
+	float scale_x, scale_y, scale_z;
 	XMFLOAT4X4 m_worldMatrix;
 };
-
-#endif /* ModelClass_H_ */
