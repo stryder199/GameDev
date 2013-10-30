@@ -36,13 +36,13 @@ bool ActorsClass::Initialize()
 	return true;
 }
 
-bool ActorsClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource){
+bool ActorsClass::RenderAll(ShaderControllerClass* shader, LightClass* lightSource){
 	bool result;
 	std::vector<ModelClass*>::iterator it;
 	
 	for (it = allModels.begin(); it != allModels.end(); ++it)
 	{
-		result = (*it)->Render(shader, camera, lightSource);
+		result = (*it)->Render(shader, lightSource);
 		if(!result)
 			return false;
 	}

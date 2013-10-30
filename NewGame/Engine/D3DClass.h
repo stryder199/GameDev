@@ -18,7 +18,6 @@ using namespace DirectX;
 class D3DClass{
 
 public:
-
 	~D3DClass();
 	static D3DClass* getInstance();
 

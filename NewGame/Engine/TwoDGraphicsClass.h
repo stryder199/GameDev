@@ -23,7 +23,7 @@ public:
 
 	bool Initialize(int screenWidth, int screenHeight);
 
-	bool RenderAll(CameraClass* camera, ShaderControllerClass* shader);
+	bool RenderAll(ShaderControllerClass* shader);
 
 private:
 	BitmapClass* m_Bitmap;

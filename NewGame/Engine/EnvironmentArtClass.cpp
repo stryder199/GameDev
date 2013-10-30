@@ -47,19 +47,19 @@ bool EnvironmentArtClass::Initialize()
 	return true;
 }
 
-bool EnvironmentArtClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
+bool EnvironmentArtClass::RenderAll(ShaderControllerClass* shader, LightClass* lightSource)
 {
 	vector<StarClass*>::iterator starIt;
 	vector<PlanetClass*>::iterator planetIt;
 
 	for (starIt = allStars.begin(); starIt != allStars.end(); ++starIt)
 	{
-		(*starIt)->Render(shader, camera, lightSource);
+		(*starIt)->Render(shader, lightSource);
 	}
 
 	for (planetIt = allPlanets.begin(); planetIt != allPlanets.end(); ++planetIt)
 	{
-		(*planetIt)->Render(shader, camera, lightSource);
+		(*planetIt)->Render(shader, lightSource);
 	}
 
 	return true;

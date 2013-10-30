@@ -11,7 +11,7 @@ PlanetClass::PlanetClass()
 	m_rotationSpeed_y = 0.0025f;
 	pos_x = 0.0f;
 	pos_y = 0.0f;
-	pos_z = 0.0f;
+	pos_z = 10.0f;
 	rot_x = 0.366519143f;
 	rot_y = 0.0f;
 	rot_z = 0.0f;
@@ -50,7 +50,7 @@ void PlanetClass::Shutdown()
 	return;
 }
 
-bool PlanetClass::Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
+bool PlanetClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
 {
 	bool result;
 
@@ -58,7 +58,7 @@ bool PlanetClass::Render(ShaderControllerClass* shader, CameraClass* camera, Lig
 	if (!result)
 		return false;
 
-	result = ModelClass::RenderBuffers(shader, camera, lightSource);
+	result = ModelClass::RenderBuffers(shader, lightSource);
 	if (!result)
 		return false;
 

@@ -47,20 +47,17 @@ bool ThreeDGraphicsClass::Initialize()
 	return true;
 }
 
-bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader, CameraClass* camera)
+bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 {
 	bool result;
 
-	//Generate the view matrix based on the camera's position
-	camera->Render(m_actors->getPlayer());
-
 	shader->Set3DMaterialShaders();
 
-	result = m_envArt->RenderAll(shader, camera, m_lightSource);
+	result = m_envArt->RenderAll(shader, m_lightSource);
 	if(!result)
 		return false;
 
-	result = m_actors->RenderAll(shader, camera, m_lightSource);
+	result = m_actors->RenderAll(shader, m_lightSource);
 	if(!result)
 		return false;
 

@@ -26,11 +26,8 @@ public:
 	bool Initialize(HINSTANCE, int);
 	bool Render();
 
-	CameraClass* getCamera();
 	PlayerClass* getPlayer();
-
 private:
-	CameraClass* m_Camera;
 	ShaderControllerClass* m_Shader;
 	TwoDGraphicsClass* m_2DGraphics;
 	ThreeDGraphicsClass* m_3DGraphics;

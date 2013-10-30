@@ -167,7 +167,7 @@ bool ModelClass::InitializeBuffers()
 	return true;
 }
 
-bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
+bool ModelClass::RenderBuffers(ShaderControllerClass* shader, LightClass* lightSource)
 {
 	bool result;
 	XMFLOAT4X4 projMatrix;
@@ -212,7 +212,7 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, CameraClass* camer
 			D3DClass::getInstance()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			//Render the model using the shader
-			result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *camera->GetViewMatrix(), projMatrix,
+			result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
 				(*subMesh)->getTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
 			if (!result)
 				return false;

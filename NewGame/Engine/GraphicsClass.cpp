@@ -10,7 +10,6 @@
 
 GraphicsClass::GraphicsClass()
 {
-	m_Camera = 0;
 	m_Shader = 0;
 	m_2DGraphics = 0;
 	m_3DGraphics = 0;
@@ -32,12 +31,7 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!result)
 		return false;
 
-	//Create the camera object
-	m_Camera = new CameraClass;
-	if(!m_Camera)
-		return false;
-
-	result = m_Camera->Initialize();
+	result = CameraClass::getInstance()->Initialize();
 	if(!result)
 		return false;
 
@@ -79,7 +73,7 @@ bool GraphicsClass::Render()
 	D3DClass::getInstance()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
-	result = m_3DGraphics->RenderAll(m_Shader, m_Camera);
+	result = m_3DGraphics->RenderAll(m_Shader);
 	if (!result)
 		return false;
 
@@ -87,11 +81,6 @@ bool GraphicsClass::Render()
 	D3DClass::getInstance()->EndScene();
 
 	return true;
-}
-
-CameraClass* GraphicsClass::getCamera()
-{
-	return m_Camera;
 }
 
 PlayerClass* GraphicsClass::getPlayer()

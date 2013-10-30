@@ -13,11 +13,9 @@ class PlayerClass;
 using namespace DirectX;
 
 class CameraClass{
-
 public:
-	CameraClass();
-	CameraClass(const CameraClass&);
 	~CameraClass();
+	static CameraClass* getInstance();
 
 	void SetPosition(float, float, float);
 	void SetRotation(float, float, float);
@@ -38,8 +36,14 @@ public:
 	void setVelRotZ(float);
 
 private:
-	float m_positionX, m_positionY, m_positionZ;
-	float m_rotationX, m_rotationY, m_rotationZ;
+	CameraClass();
+	CameraClass(const CameraClass&) {};
+	CameraClass& operator=(CameraClass& const) {};
+
+	static CameraClass* m_pInstance;
+	float m_posX, m_posY, m_posZ;
+	float m_rotX, m_rotY, m_rotZ;
+	float m_pointPosX, m_pointPosY, m_pointPosZ;
 	float m_velX, m_velY, m_velZ;
 	float m_velRotX, m_velRotY, m_velRotZ;
 	XMFLOAT4X4 *m_viewMatrix;

@@ -42,7 +42,7 @@ bool TwoDGraphicsClass::Initialize(int screenWidth, int screenHeight)
 	return true;
 }
 
-bool TwoDGraphicsClass::RenderAll(CameraClass* camera, ShaderControllerClass* shader)
+bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 {
 	//bool result;
 	//XMFLOAT4X4 worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;

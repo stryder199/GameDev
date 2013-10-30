@@ -24,7 +24,7 @@ public:
 
 	bool Initialize();
 
-	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera);
+	bool RenderAll(ShaderControllerClass* shader);
 
 	ActorsClass* getActors();
 

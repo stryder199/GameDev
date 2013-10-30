@@ -19,7 +19,7 @@ public:
 	bool Initialize(MeshClass* mesh);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
+	bool Render(ShaderControllerClass* shader, LightClass* lightSource);
 private:
 	virtual bool PreProcessing();
 

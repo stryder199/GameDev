@@ -43,7 +43,7 @@ void StarClass::Shutdown()
 	return;
 }
 
-bool StarClass::Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
+bool StarClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
 {
 	bool result;
 
@@ -51,7 +51,7 @@ bool StarClass::Render(ShaderControllerClass* shader, CameraClass* camera, Light
 	if (!result)
 		return false;
 
-	result = ModelClass::RenderBuffers(shader, camera, lightSource);
+	result = ModelClass::RenderBuffers(shader, lightSource);
 	if (!result)
 		return false;
 

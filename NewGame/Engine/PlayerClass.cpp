@@ -16,9 +16,9 @@ PlayerClass::PlayerClass(){
 	point_pos_x = 0.0f;
 	point_pos_y = 0.0f;
 	point_pos_z = 0.0f;
-	scale_x = 0.02f;
-	scale_y = 0.02f;
-	scale_z = 0.02f;
+	scale_x = 0.002f;
+	scale_y = 0.002f;
+	scale_z = 0.002f;
 	vel_x = 0.0f;
 	vel_y = 0.0f;
 	vel_z = 0.0f;
@@ -52,7 +52,7 @@ void PlayerClass::Shutdown()
 	return;
 }
 
-bool PlayerClass::Render(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource)
+bool PlayerClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
 {
 	bool result;
 
@@ -60,7 +60,10 @@ bool PlayerClass::Render(ShaderControllerClass* shader, CameraClass* camera, Lig
 	if (!result)
 		return false;
 
-	result = ModelClass::RenderBuffers(shader, camera, lightSource);
+	//Generate the view matrix based on the camera's position
+	CameraClass::getInstance()->Render(this);
+
+	result = ModelClass::RenderBuffers(shader, lightSource);
 	if(!result)
 		return false;
 

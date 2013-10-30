@@ -23,7 +23,7 @@ public:
 	~EnvironmentArtClass();
 	
 	bool Initialize();
-	bool RenderAll(ShaderControllerClass* shader, CameraClass* camera, LightClass* lightSource);
+	bool RenderAll(ShaderControllerClass* shader, LightClass* lightSource);
 
 private:
 	vector<StarClass*> allStars;
