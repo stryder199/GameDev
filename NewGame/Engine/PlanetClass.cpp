@@ -8,6 +8,7 @@
 PlanetClass::PlanetClass()
 {
 	m_mesh = 0;
+	m_lightSource = 0;
 	m_rotationSpeed_y = 0.0025f;
 	pos_x = 0.0f;
 	pos_y = 0.0f;
@@ -34,6 +35,15 @@ bool PlanetClass::Initialize(MeshClass* objMesh)
 
 	m_mesh = objMesh;
 
+	// Create the light object.
+	m_lightSource = new LightClass();
+	if (!m_lightSource)
+		return false;
+	// Initialize the light object.
+	m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
+
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.
 	result = ModelClass::InitializeBuffers();
 	if (!result)
@@ -50,7 +60,7 @@ void PlanetClass::Shutdown()
 	return;
 }
 
-bool PlanetClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
+bool PlanetClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
 
@@ -58,7 +68,7 @@ bool PlanetClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
 	if (!result)
 		return false;
 
-	result = ModelClass::RenderBuffers(shader, lightSource);
+	result = ModelClass::RenderBuffers(shader);
 	if (!result)
 		return false;
 

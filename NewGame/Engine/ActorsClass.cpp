@@ -22,7 +22,7 @@ bool ActorsClass::Initialize()
 	allModels = vector<ModelClass*>();
 
 	MeshClass* playerMesh = new MeshClass();
-	result = playerMesh->Initialize("data/M-1 Kaito.3dmodel");
+	result = playerMesh->Initialize("data/defiant.3dmodel");
 	if(!result)
 		return false;
 
@@ -36,13 +36,13 @@ bool ActorsClass::Initialize()
 	return true;
 }
 
-bool ActorsClass::RenderAll(ShaderControllerClass* shader, LightClass* lightSource){
+bool ActorsClass::RenderAll(ShaderControllerClass* shader){
 	bool result;
 	std::vector<ModelClass*>::iterator it;
 	
 	for (it = allModels.begin(); it != allModels.end(); ++it)
 	{
-		result = (*it)->Render(shader, lightSource);
+		result = (*it)->Render(shader);
 		if(!result)
 			return false;
 	}

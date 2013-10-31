@@ -65,23 +65,23 @@ bool ProgramRootClass::Go()
 
 		if(m_Events->IsWPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetVelZ(0.01f);
+			m_Graphics->getPlayer()->SetEnginePower(1.0f);
 		}
 		else if(m_Events->IsSPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetVelZ(-0.01f);
+			m_Graphics->getPlayer()->SetEnginePower(-1.0f);
 		}
 		else{
-			m_Graphics->getPlayer()->SetVelZ(0.0f);
+			m_Graphics->getPlayer()->SetEnginePower(0.0f);
 		}
 
 		if(m_Events->IsDPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetRotVelY(XM_PI/30);
+			m_Graphics->getPlayer()->SetRotVelY(XM_PI/100);
 		}
 		else if(m_Events->IsAPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetRotVelY(-1.0f * XM_PI / 30);
+			m_Graphics->getPlayer()->SetRotVelY(-1.0f * XM_PI / 100);
 		}
 		else{
 			m_Graphics->getPlayer()->SetRotVelY(0.0f);

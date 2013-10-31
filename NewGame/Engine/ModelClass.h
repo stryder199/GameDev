@@ -37,7 +37,7 @@ protected:
 
 public:
 	virtual bool Initialize(MeshClass* mesh) = 0;
-	virtual bool Render(ShaderControllerClass* shader, LightClass* lightSource) = 0;
+	virtual bool Render(ShaderControllerClass* shader) = 0;
 	virtual void Shutdown() = 0;
 
 	float getPositionX();
@@ -55,12 +55,13 @@ public:
 
 protected:
 	bool InitializeBuffers();
-	bool RenderBuffers(ShaderControllerClass* shader, LightClass* lightSource);
+	bool RenderBuffers(ShaderControllerClass* shader);
 	void ShutdownBuffers();
 	void CalculateWorldMatrix();
 	virtual bool PreProcessing() = 0;
 
 	MeshClass* m_mesh;
+	LightClass *m_lightSource;
 	float pos_x, pos_y, pos_z;
 	float point_pos_x, point_pos_y, point_pos_z;
 	float rot_x, rot_y, rot_z;

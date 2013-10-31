@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <stdlib.h>
 #include <shlobj.h>
 #include <stdio.h>
 #include <string>
@@ -20,7 +21,7 @@ static string desktopDir()
 		return "ERROR";
 }
 
-LPCWSTR toLWideStr(string s)
+static LPCWSTR toLWideStr(string s)
 {
 	wstring stemp = std::wstring(s.begin(), s.end());
 	LPCWSTR lpathWildcard = stemp.c_str();
@@ -35,12 +36,12 @@ static wchar_t* toWChar(string s)
 	return wide_string;
 }
 
-LPCTSTR toLTStr(string s)
+static LPCTSTR toLTStr(string s)
 {
 	return (LPCTSTR) s.c_str();
 }
 
-vector<string> listFile(string dirPath, string extension)
+static vector<string> listFile(string dirPath, string extension)
 {
 	HANDLE hFind;
 	WIN32_FIND_DATA data;
@@ -87,4 +88,11 @@ static bool FileExists(const string fileName)
 	if (0xFFFFFFFF == fileAttr)
 		return false;
 	return true;
+}
+
+static float RandomFloat(float a, float b) {
+	float random = ((float) rand()) / (float) RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
 }

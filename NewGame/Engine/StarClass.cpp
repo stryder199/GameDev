@@ -1,11 +1,13 @@
 #include "StarClass.h"
 #include "MeshClass.h"
+#include "LightClass.h"
 
-StarClass::StarClass(){
+StarClass::StarClass(float posx, float posy, float posz){
 	m_mesh = 0;
-	pos_x = 0.0f;
-	pos_y = 0.0f;
-	pos_z = -100.0f;
+	m_lightSource = 0;
+	pos_x = posx;
+	pos_y = posy;
+	pos_z = posz;
 	rot_x = 0.0f;
 	rot_y = 0.0f;
 	rot_z = 0.0f;
@@ -27,6 +29,15 @@ bool StarClass::Initialize(MeshClass* objMesh)
 
 	m_mesh = objMesh;
 
+	// Create the light object.
+	m_lightSource = new LightClass();
+	if (!m_lightSource)
+		return false;
+	// Initialize the light object.
+	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDirection(0.0f, 0.0f, -1.0f);
+
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.
 	result = ModelClass::InitializeBuffers();
 	if (!result)
@@ -43,7 +54,7 @@ void StarClass::Shutdown()
 	return;
 }
 
-bool StarClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
+bool StarClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
 
@@ -51,7 +62,7 @@ bool StarClass::Render(ShaderControllerClass* shader, LightClass* lightSource)
 	if (!result)
 		return false;
 
-	result = ModelClass::RenderBuffers(shader, lightSource);
+	result = ModelClass::RenderBuffers(shader);
 	if (!result)
 		return false;
 

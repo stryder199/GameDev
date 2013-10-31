@@ -167,7 +167,7 @@ bool ModelClass::InitializeBuffers()
 	return true;
 }
 
-bool ModelClass::RenderBuffers(ShaderControllerClass* shader, LightClass* lightSource)
+bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 {
 	bool result;
 	XMFLOAT4X4 projMatrix;
@@ -213,10 +213,9 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader, LightClass* lightS
 
 			//Render the model using the shader
 			result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-				(*subMesh)->getTexture(), lightSource->GetDirection(), lightSource->GetAmbientColor(), lightSource->GetDiffuseColor());
+				(*subMesh)->getTexture(), m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
 			if (!result)
 				return false;
-
 		}
 	}
 

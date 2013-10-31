@@ -25,8 +25,9 @@ public:
 	bool Initialize(MeshClass* mesh);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader, LightClass* lightSource);
+	bool Render(ShaderControllerClass* shader);
 
+	void SetEnginePower(float x);
 	void SetVelX(float x);
 	void SetVelY(float y);
 	void SetVelZ(float z);
@@ -36,6 +37,7 @@ public:
 private:
 	virtual bool PreProcessing();
 
+	float engine_power;
 	float vel_x, vel_y, vel_z;
 	float rotVel_x, rotVel_y, rotVel_z;
 };

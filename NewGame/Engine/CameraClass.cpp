@@ -25,7 +25,7 @@ CameraClass::CameraClass()
 
 	m_pointPosX = 0.0f;
 	m_pointPosY = 0.0f;
-	m_pointPosZ = -10.0f;
+	m_pointPosZ = -0.15f;
 }
 
 CameraClass* CameraClass::getInstance()
@@ -106,42 +106,59 @@ void CameraClass::setVelRotZ( float vel )
 void CameraClass::Render(PlayerClass* player)
 {
 	XMVECTOR up, position, lookAt;
+	float playerOriginX, playerOriginY, playerOriginZ;
 	float yaw, pitch, roll;
-	XMMATRIX rotationMatrix;
-	XMMATRIX worldMatrix;
-	XMMATRIX pointTranslationMatrix;
+	XMMATRIX rotationMatrix, positionRotMatrixX, positionRotMatrixY, positionRotMatrixZ;
+	XMMATRIX worldMatrix, positionWorldMatrix;
+	XMMATRIX pointTranslationMatrix, translationMatrix;
+
+	playerOriginX = player->getPositionX();
+	playerOriginY = player->getPositionY() + 0.008f;
+	playerOriginZ = player->getPositionZ();
+	
+	m_rotX = player->getRotationX();
+	m_rotY = player->getRotationY() + XM_PI;
+	m_rotZ = player->getRotationZ();
+
+	positionRotMatrixX = XMMatrixRotationX(m_rotX);
+	positionRotMatrixY = XMMatrixRotationY(m_rotY);
+	positionRotMatrixZ = XMMatrixRotationZ(m_rotZ);
+
+	pointTranslationMatrix = XMMatrixTranslation(m_pointPosX, m_pointPosY, m_pointPosZ);
+	translationMatrix = XMMatrixTranslation(playerOriginX, playerOriginY, playerOriginZ);
+
+	positionWorldMatrix = XMMatrixIdentity();
+	positionWorldMatrix *= pointTranslationMatrix;
+	positionWorldMatrix *= positionRotMatrixX;
+	positionWorldMatrix *= positionRotMatrixY;
+	positionWorldMatrix *= positionRotMatrixZ;
+	positionWorldMatrix *= translationMatrix;
+
+	position = XMVector4Transform(XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f) , positionWorldMatrix);
+
+	m_posX = position.m128_f32[0];
+	m_posY = position.m128_f32[1];
+	m_posZ = position.m128_f32[2];
 
 	//Setup the vector that points upwards
 	up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	lookAt = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-	worldMatrix = XMMatrixIdentity();
+	lookAt = XMVectorSet(playerOriginX, playerOriginY, playerOriginZ, 0.0f) - position;
+	lookAt = XMVector3Normalize(lookAt);
 
-	m_posX = player->getPositionX();
-	m_posY = player->getPositionY();
-	m_posZ = player->getPositionZ();
+	////Set the yaw (Y axis), pitch (X axis), and roll (Z axis) roations in radians;
+	//pitch = m_rotX;
+	//yaw   = m_rotY;
+	//roll  = m_rotZ;
 
-	//Setup the position of the camera in the world
-	position = XMVectorSet(m_posX, m_posY, m_posZ, 0.0f);
-	
-	m_rotX = player->getRotationX();
-	m_rotY = player->getRotationY();
-	m_rotZ = player->getRotationZ();
+	////Create the rotation matrix from the yaw, pitch and roll values.
+	//rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
-	//Set the yaw (Y axis), pitch (X axis), and roll (Z axis) roations in radians;
-	pitch = m_rotX;
-	yaw   = m_rotY;
-	roll  = m_rotZ;
+	//worldMatrix = XMMatrixIdentity();
+	//worldMatrix *= rotationMatrix;
 
-	//Create the rotation matrix from the yaw, pitch and roll values.
-	rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
-	pointTranslationMatrix = XMMatrixTranslation(m_pointPosX, m_pointPosY, m_pointPosZ);
-
-	//worldMatrix *= pointTranslationMatrix;
-	worldMatrix *= rotationMatrix;
-
-	//Transform the lookAt and up vector by the rotation matrux so the view is correctly rotated at the origin
-	lookAt = XMVector3TransformCoord(lookAt, worldMatrix);
-	up = XMVector3TransformCoord(up, worldMatrix);
+	////Transform the lookAt and up vector by the rotation matrux so the view is correctly rotated at the origin
+	//lookAt = XMVector3TransformCoord(lookAt, worldMatrix);
+	//up = XMVector3TransformCoord(up, worldMatrix);
 
 	//Translate the rotated camera position to the location of the viewer
 	lookAt = position + lookAt;

@@ -13,13 +13,13 @@ class MeshClass;
 class StarClass : ModelClass{
 
 public:
-	StarClass();
+	StarClass(float posx, float posy, float posz);
 	~StarClass();
 	
 	bool Initialize(MeshClass* mesh);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader, LightClass* lightSource);
+	bool Render(ShaderControllerClass* shader);
 private:
 	virtual bool PreProcessing();
 

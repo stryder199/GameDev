@@ -31,5 +31,4 @@ public:
 private:
 	EnvironmentArtClass* m_envArt;
 	ActorsClass* m_actors;
-	LightClass* m_lightSource;
 };

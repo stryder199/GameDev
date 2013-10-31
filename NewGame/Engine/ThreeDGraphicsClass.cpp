@@ -34,16 +34,6 @@ bool ThreeDGraphicsClass::Initialize()
 	if(!result)
 		return false;
 
-		// Create the light object.
-	m_lightSource = new LightClass;
-	if(!m_lightSource)
-		return false;
-
-	// Initialize the light object.
-	m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
-
 	return true;
 }
 
@@ -53,11 +43,11 @@ bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 
 	shader->Set3DMaterialShaders();
 
-	result = m_envArt->RenderAll(shader, m_lightSource);
+	result = m_envArt->RenderAll(shader);
 	if(!result)
 		return false;
 
-	result = m_actors->RenderAll(shader, m_lightSource);
+	result = m_actors->RenderAll(shader);
 	if(!result)
 		return false;
 
