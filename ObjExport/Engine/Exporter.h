@@ -5,6 +5,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include <assert.h>
 #include "WindowsHelpers.h"
 
 using namespace std;
@@ -52,6 +53,6 @@ private:
 	map<string, ColorType> *m_allMaterials;
 	map<int, string> *m_materialFaceIndex;
 	map<int, string> *m_objectIndex;
-	vector<VertexType> *m_vertices, *m_texcoords, *m_normals;
+	vector<VertexType> *m_vertices, *m_texcoords, *m_normals, *m_guns;
 	vector<FaceType> *m_faces;
 };

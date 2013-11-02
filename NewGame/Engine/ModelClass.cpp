@@ -263,12 +263,12 @@ void ModelClass::CalculateWorldMatrix()
 	XMMATRIX worldMatrix = XMMatrixIdentity();
 
 	// Move the model to the location it should be rendered at.
-	XMMATRIX translationMatrix = XMMatrixTranslation(pos_x, pos_y, pos_z);
-	XMMATRIX pointTranslationMatrix = XMMatrixTranslation(point_pos_x, point_pos_y, point_pos_z);
-	XMMATRIX scalingMatrix = XMMatrixScaling(scale_x, scale_y, scale_z);
-	XMMATRIX rotXMatrix = XMMatrixRotationX(rot_x);
-	XMMATRIX rotYMatrix = XMMatrixRotationY(rot_y);
-	XMMATRIX rotZMatrix = XMMatrixRotationZ(rot_z);
+	XMMATRIX translationMatrix = XMMatrixTranslation(m_pos.x, m_pos.y, m_pos.z);
+	XMMATRIX pointTranslationMatrix = XMMatrixTranslation(m_point_pos.x, m_point_pos.y, m_point_pos.z);
+	XMMATRIX scalingMatrix = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
+	XMMATRIX rotXMatrix = XMMatrixRotationX(m_rot.x);
+	XMMATRIX rotYMatrix = XMMatrixRotationY(m_rot.y);
+	XMMATRIX rotZMatrix = XMMatrixRotationZ(m_rot.z);
 
 
 	worldMatrix *= scalingMatrix;
@@ -281,62 +281,73 @@ void ModelClass::CalculateWorldMatrix()
 	XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
 }
 
-float ModelClass::getPositionX()
+XMFLOAT3 ModelClass::getPosition()
 {
-	return pos_x;
+	return m_pos;
 }
 
-float ModelClass::getPositionY()
+XMFLOAT3 ModelClass::getRotation()
 {
-	return pos_y;
+	return m_rot;
 }
 
-float ModelClass::getPositionZ()
+XMFLOAT3 ModelClass::getScale()
 {
-	return pos_z;
+	return m_scale;
 }
 
-float ModelClass::getRotationX()
+XMFLOAT3 ModelClass::getPointPosition()
 {
-	return rot_x;
+	return m_point_pos;
 }
 
-float ModelClass::getRotationY()
+XMFLOAT3 ModelClass::getDirection()
 {
-	return rot_y;
+	return m_dir;
 }
 
-float ModelClass::getRotationZ()
+void ModelClass::ConstrainRotation()
 {
-	return rot_z;
+	if (m_rot.x >= 2 * (float) XM_PI)
+		m_rot.x = m_rot.x - 2 * (float) XM_PI;
+	else if (m_rot.x < 0.0f)
+		m_rot.x = 2 * (float) XM_PI + m_rot.x;
+
+	if (m_rot.y >= 2 * (float) XM_PI)
+		m_rot.y = m_rot.y - 2 * (float) XM_PI;
+	else if (m_rot.y < 0.0f)
+		m_rot.y = 2 * (float) XM_PI + m_rot.y;
+
+	if (m_rot.z >= 2 * (float) XM_PI)
+		m_rot.z = m_rot.z - 2 * (float) XM_PI;
+	else if (m_rot.z < 0.0f)
+		m_rot.z = 2 * (float) XM_PI + m_rot.z;
 }
 
-float ModelClass::getScaleX()
+void ModelClass::CalculateDirection()
 {
-	return scale_x;
-}
+	if (m_rot.y >= 0.0f && m_rot.y < (XM_PI / 2.0f))
+	{
+		m_dir.x = (m_rot.y / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= (XM_PI / 2.0f) && m_rot.y < ((3.0f*XM_PI) / 2.0f))
+	{
+		m_dir.x = ((XM_PI - m_rot.y) / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= ((3.0f*XM_PI) / 2.0f) && m_rot.y < (2 * XM_PI))
+	{
+		m_dir.x = ((m_rot.y - 2 * XM_PI) / (XM_PI / 2.0f));
+	}
 
-float ModelClass::getScaleY()
-{
-	return scale_y;
-}
-
-float ModelClass::getScaleZ()
-{
-	return scale_z;
-}
-
-float ModelClass::getPointPositionX()
-{
-	return point_pos_x;
-}
-
-float ModelClass::getPointPositionY()
-{
-	return point_pos_y;
-}
-
-float ModelClass::getPointPositionZ()
-{
-	return point_pos_z;
+	if (m_rot.y >= 0.0f && m_rot.y < XM_PI)
+	{
+		m_dir.z = (((XM_PI / 2.0f) - m_rot.y) / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= XM_PI && m_rot.y < (2 * XM_PI))
+	{
+		m_dir.z = ((m_rot.y - ((3.0f*XM_PI) / 2.0f)) / (XM_PI / 2.0f));
+	}
+	XMVECTOR normalizedVector;
+	normalizedVector = XMVector3Normalize(XMLoadFloat3(&m_dir));
+	XMStoreFloat3(&m_dir, normalizedVector);
 }

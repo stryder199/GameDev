@@ -41,11 +41,7 @@ private:
 	CameraClass& operator=(CameraClass& const) {};
 
 	static CameraClass* m_pInstance;
-	float m_posX, m_posY, m_posZ;
-	float m_rotX, m_rotY, m_rotZ;
-	float m_pointPosX, m_pointPosY, m_pointPosZ;
-	float m_velX, m_velY, m_velZ;
-	float m_velRotX, m_velRotY, m_velRotZ;
+	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
 	XMFLOAT4X4 *m_viewMatrix;
 
 };

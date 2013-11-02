@@ -36,35 +36,26 @@ protected:
 	};
 
 public:
-	virtual bool Initialize(MeshClass* mesh) = 0;
 	virtual bool Render(ShaderControllerClass* shader) = 0;
 	virtual void Shutdown() = 0;
 
-	float getPositionX();
-	float getPositionY();
-	float getPositionZ();
-	float getRotationX();
-	float getRotationY();
-	float getRotationZ();
-	float getScaleX();
-	float getScaleY();
-	float getScaleZ();
-	float getPointPositionX();
-	float getPointPositionY();
-	float getPointPositionZ();
+	XMFLOAT3 getPosition();
+	XMFLOAT3 getRotation();
+	XMFLOAT3 getScale();
+	XMFLOAT3 getPointPosition();
+	XMFLOAT3 getDirection();
 
 protected:
 	bool InitializeBuffers();
 	bool RenderBuffers(ShaderControllerClass* shader);
 	void ShutdownBuffers();
 	void CalculateWorldMatrix();
+	void ConstrainRotation();
+	void CalculateDirection();
 	virtual bool PreProcessing() = 0;
 
 	MeshClass* m_mesh;
 	LightClass *m_lightSource;
-	float pos_x, pos_y, pos_z;
-	float point_pos_x, point_pos_y, point_pos_z;
-	float rot_x, rot_y, rot_z;
-	float scale_x, scale_y, scale_z;
+	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
 	XMFLOAT4X4 m_worldMatrix;
 };

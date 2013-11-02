@@ -8,7 +8,8 @@ Exporter::Exporter()
 	m_vertices = new vector<VertexType>();
 	m_texcoords = new vector<VertexType>();
 	m_normals = new vector<VertexType>();
-	m_faces = new vector<FaceType>();;
+	m_faces = new vector<FaceType>();
+	m_guns = new vector<VertexType>();
 }
 
 Exporter::~Exporter()
@@ -204,7 +205,6 @@ bool Exporter::LoadObjFileData(string filename)
 			m_normals->push_back(normal);
 			normalIndex++;
 		}
-
 		// Read in the faces.
 		else if (sinput.compare("f") == 0)
 		{
@@ -217,13 +217,11 @@ bool Exporter::LoadObjFileData(string filename)
 			m_faces->push_back(face);
 			faceIndex++;
 		}
-
 		else if (sinput.compare("usemtl") == 0)
 		{
 			fin >> sinput;
 			(*m_materialFaceIndex)[faceIndex] = sinput;
 		}
-
 		else if (sinput.compare("mtllib") == 0)
 		{
 			fin >> sinput;
@@ -240,24 +238,7 @@ bool Exporter::LoadObjFileData(string filename)
 			if (!result)
 				return false;
 		}
-
-		else if (sinput.compare("object") == 0)
-		{
-			fin >> sinput;
-			string objectName = sinput;
-
-			while ((fin.peek() != '\n'))
-			{
-				fin >> sinput;
-				objectName = objectName + " " + sinput;
-			}
-			(*m_objectIndex)[faceIndex] = objectName;
-
-			//Skip the #
-			fin >> sinput;
-		}
-
-		else if (sinput.compare("o") == 0 || sinput.compare("g") == 0)
+		else if (sinput.compare("o") == 0 || sinput.compare("g") == 0 || sinput.compare("object") == 0)
 		{
 			fin >> sinput;
 			string objectName = sinput;
@@ -268,7 +249,38 @@ bool Exporter::LoadObjFileData(string filename)
 				objectName = objectName + " " + sinput;
 			}
 
-			(*m_objectIndex)[faceIndex] = objectName;
+			if (objectName.find("Gun") != string::npos)
+			{
+				VertexType gunPosition;
+				fin >> sinput;
+				assert(sinput.compare("v") == 0);
+				
+				double verx, very, verz;
+				fin >> verx >> very >> verz;
+
+				gunPosition.x = (float) verx;
+				gunPosition.y = (float) very;
+				gunPosition.z = (float) verz;
+
+				// Invert the Z vertex to change to left hand system.
+				gunPosition.z = gunPosition.z * -1.0f;
+
+				m_guns->push_back(gunPosition);
+
+				// Make sure that the face index is corrent
+				m_vertices->push_back(gunPosition);
+				vertexIndex++;
+			}
+			else
+			{
+				(*m_objectIndex)[faceIndex] = objectName;
+
+				if (sinput.compare("object") == 0)
+				{
+					//Skip the #
+					fin >> sinput;
+				}
+			}
 		}
 
 		// Start reading the beginning of the next line.
@@ -347,6 +359,12 @@ bool Exporter::WriteOutputFile(string filepath)
 		fout << "vtn " << (*m_vertices)[vIndex].x << ' ' << (*m_vertices)[vIndex].y << ' ' << (*m_vertices)[vIndex].z << ' '
 			<< (*m_texcoords)[tIndex].x << ' ' << (*m_texcoords)[tIndex].y << ' '
 			<< (*m_normals)[nIndex].x << ' ' << (*m_normals)[nIndex].y << ' ' << (*m_normals)[nIndex].z << endl;
+	}
+
+	vector<VertexType>::iterator gun;
+	for (gun = m_guns->begin(); gun != m_guns->end(); ++gun)
+	{
+		fout << "gun " << (*gun).x << ' ' << (*gun).y << ' ' << (*gun).z << endl;
 	}
 
 	fout << "end" << endl;

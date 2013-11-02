@@ -346,6 +346,17 @@ bool EventClass::IsDPressed()
 	return false;
 }
 
+bool EventClass::IsSpacePressed()
+{
+	// Do a bitwise and on the keyboard state to check if the A key is currently being pressed.
+	if(m_keyboardState[DIK_SPACE] & 0x80)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 bool EventClass::IsFPressed()
 {
 	// Do a bitwise and on the keyboard state to check if the S key is currently being pressed.

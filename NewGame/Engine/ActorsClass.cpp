@@ -22,7 +22,7 @@ bool ActorsClass::Initialize()
 	allModels = vector<ModelClass*>();
 
 	MeshClass* playerMesh = new MeshClass();
-	result = playerMesh->Initialize("data/defiant.3dmodel");
+	result = playerMesh->Initialize("data/Ghost_Fighter.3dmodel");
 	if(!result)
 		return false;
 

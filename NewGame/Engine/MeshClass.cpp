@@ -111,11 +111,24 @@ MeshDataClass::MeshType readVtnLine(string::iterator* it)
 	return newMeshData;
 }
 
+DirectX::XMFLOAT3 readGunLine(string::iterator* it)
+{
+	//Load vertices until a new object starts
+	DirectX::XMFLOAT3 newVertex = DirectX::XMFLOAT3();
+
+	newVertex.x = readFloat(it);
+	newVertex.y = readFloat(it);
+	newVertex.z = readFloat(it);
+
+	return newVertex;
+}
+
 bool MeshClass::Initialize(char* meshFilename)
 {
 	bool result;
 
 	m_allObjects = vector<ObjectMeshClass*>();
+	m_guns = vector<DirectX::XMFLOAT3>();
 
 	// Load in the model data,
 	result = LoadModel(meshFilename);
@@ -160,6 +173,10 @@ bool MeshClass::LoadModel(char* filename)
 		// ...buffer contains the entire file...
 
 		delete[] buffer;
+	}
+	else {
+		cerr << "Could not find file: " << filename << endl;
+		return false;
 	}
 	is.close();
 
@@ -277,6 +294,11 @@ bool MeshClass::LoadModel(char* filename)
 
 			//Should autoskip to the next line
 		}	
+		else if (sinput.compare("gun") == 0)
+		{
+			DirectX::XMFLOAT3 newGun = readGunLine(&it);
+			m_guns.push_back(newGun);
+		}
 	}
 
 	//Add the last objects
@@ -289,6 +311,11 @@ bool MeshClass::LoadModel(char* filename)
 vector<ObjectMeshClass*>* MeshClass::getAllObjects()
 {
 	return &m_allObjects;
+}
+
+vector<DirectX::XMFLOAT3>* MeshClass::getGuns()
+{
+	return &m_guns;
 }
 
 void MeshClass::ReleaseModel()

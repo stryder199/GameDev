@@ -16,6 +16,6 @@ public:
 private:
 	virtual bool PreProcessing();
 
-	float m_rotationSpeed_y;
+	XMFLOAT3 m_rotVel;
 };
 

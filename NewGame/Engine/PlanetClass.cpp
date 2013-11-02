@@ -9,19 +9,12 @@ PlanetClass::PlanetClass()
 {
 	m_mesh = 0;
 	m_lightSource = 0;
-	m_rotationSpeed_y = 0.0025f;
-	pos_x = 0.0f;
-	pos_y = 0.0f;
-	pos_z = 10.0f;
-	rot_x = 0.366519143f;
-	rot_y = 0.0f;
-	rot_z = 0.0f;
-	point_pos_x = 0.0f;
-	point_pos_y = 0.0f;
-	point_pos_z = 0.0f;
-	scale_x = 0.025f;
-	scale_y = 0.025f;
-	scale_z = 0.025f;
+	m_pos = XMFLOAT3(0.0f, 0.0f, 10.0f);
+	m_rot = XMFLOAT3(0.366519143f, 0.0f, 0.0f);
+	m_scale = XMFLOAT3(0.025f, 0.025f, 0.025f);
+	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_rotVel = XMFLOAT3(0.0f, 0.0025f, 0.0f);
 }
 
 
@@ -79,9 +72,10 @@ bool PlanetClass::PreProcessing()
 {
 	//bool result; not used
 
-	rot_y += m_rotationSpeed_y;
-	if (rot_y > 2*(float) XM_PI)
-		rot_y = rot_y - 2*(float) XM_PI;
+	m_rot.x += m_rotVel.x;
+	m_rot.y += m_rotVel.y;
+	m_rot.z += m_rotVel.z;
+	ConstrainRotation();
 
 	CalculateWorldMatrix();
 	return true;

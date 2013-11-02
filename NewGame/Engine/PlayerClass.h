@@ -10,10 +10,13 @@ class D3DClass;
 class CameraClass;
 class TextureClass;
 class LightClass;
+class BulletClass;
+class Timer;
 
 //=================================
 // included dependencies
 #include "ModelClass.h"
+#include <vector>
 
 using namespace DirectX;
 
@@ -27,6 +30,9 @@ public:
 
 	bool Render(ShaderControllerClass* shader);
 
+	void SpawnBullet(XMFLOAT3 spawnPos);
+	void FireWeapon();
+
 	void SetEnginePower(float x);
 	void SetVelX(float x);
 	void SetVelY(float y);
@@ -37,7 +43,10 @@ public:
 private:
 	virtual bool PreProcessing();
 
+	bool m_isWeaponFiring;
+	Timer* weaponTimer;
 	float engine_power;
-	float vel_x, vel_y, vel_z;
-	float rotVel_x, rotVel_y, rotVel_z;
+	XMFLOAT3 m_vel, m_rotVel;
+	std::vector<BulletClass*> m_allBullets;
+	MeshClass *m_bulletMesh;
 };

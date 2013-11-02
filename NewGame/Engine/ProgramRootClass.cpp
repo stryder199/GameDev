@@ -86,6 +86,11 @@ bool ProgramRootClass::Go()
 		else{
 			m_Graphics->getPlayer()->SetRotVelY(0.0f);
 		}
+
+		if (m_Events->IsSpacePressed())
+		{
+			m_Graphics->getPlayer()->FireWeapon();
+		}
 	}
 
 	return true;

@@ -5,19 +5,12 @@
 StarClass::StarClass(float posx, float posy, float posz){
 	m_mesh = 0;
 	m_lightSource = 0;
-	pos_x = posx;
-	pos_y = posy;
-	pos_z = posz;
-	rot_x = 0.0f;
-	rot_y = 0.0f;
-	rot_z = 0.0f;
-	point_pos_x = 0.0f;
-	point_pos_y = 0.0f;
-	point_pos_z = 0.0f;
-	scale_x = 0.25f;
-	scale_y = 0.25f;
-	scale_z = 0.25f;
-	m_rotationSpeed_y = 0.0025f;
+	m_pos = XMFLOAT3(posx, posy, posz);
+	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_scale = XMFLOAT3(0.025f, 0.025f, 0.025f);
+	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_rotVel = XMFLOAT3(0.0f, 0.0025f, 0.0f);
 }
 
 StarClass::~StarClass(){
@@ -48,9 +41,6 @@ bool StarClass::Initialize(MeshClass* objMesh)
 
 void StarClass::Shutdown()
 {
-	//Release the vertex and index buffers
-	ModelClass::ShutdownBuffers();
-
 	return;
 }
 
@@ -73,9 +63,10 @@ bool StarClass::PreProcessing()
 {
 	//bool result; not used
 
-	rot_y += m_rotationSpeed_y;
-	if (rot_y > 2 * (float) XM_PI)
-		rot_y = rot_y - 2*(float) XM_PI;
+	m_rot.x += m_rotVel.x;
+	m_rot.y += m_rotVel.y;
+	m_rot.z += m_rotVel.z;
+	ConstrainRotation();
 
 	CalculateWorldMatrix();
 	return true;

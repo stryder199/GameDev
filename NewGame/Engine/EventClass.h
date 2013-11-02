@@ -51,6 +51,7 @@ public:
 	bool IsFPressed();
 	bool IsLeftClickPressed();
 	bool IsRightClickPressed();
+	bool IsSpacePressed();
 	bool IsKeyPressed(unsigned int keycode);
 
 	void GetMouseLocation(int&, int&);
