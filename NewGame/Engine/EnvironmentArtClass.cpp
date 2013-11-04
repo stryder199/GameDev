@@ -22,17 +22,17 @@ bool EnvironmentArtClass::Initialize()
 	allPlanets = vector<PlanetClass*>();
 
 	MeshClass *earthMesh = new MeshClass();
-	result = earthMesh->Initialize("data/earth.3dmodel");
+	result = earthMesh->Initialize("data/earth.3dmodel", MeshClass::THREED);
 	if (!result)
 		return false;
 
 	MeshClass *sunMesh = new MeshClass();
-	result = sunMesh->Initialize("data/sun.3dmodel");
+	result = sunMesh->Initialize("data/sun.3dmodel", MeshClass::THREED);
 	if (!result)
 		return false;
 
 	MeshClass *starMesh = new MeshClass();
-	result = starMesh->Initialize("data/star.3dmodel");
+	result = starMesh->Initialize("data/star.3dmodel", MeshClass::THREED);
 	if (!result)
 		return false;
 
@@ -55,20 +55,20 @@ bool EnvironmentArtClass::Initialize()
 		float posY = RandomFloat(0.0f, 200.0f);
 		float posZ = RandomFloat(0.0f, 200.0f);
 
-		if (posX < 100.f && posY < 100.0f && posZ < 100.0f)
+		if (posX < posX / 2.0f && posY < posY / 2.0f && posZ < posZ/2.0f)
 		{
 			int randomSeed = rand() % 3;
 			if (randomSeed == 0)
 			{
-				posX += 100.0f;
+				posX += posX / 2.0f;
 			}
 			else if (randomSeed == 1)
 			{
-				posY += 100.0f;
+				posY += posY / 2.0f;
 			}
 			else if (randomSeed == 2)
 			{
-				posZ += 100.0f;
+				posZ += posZ / 2.0f;
 			}
 		}
 

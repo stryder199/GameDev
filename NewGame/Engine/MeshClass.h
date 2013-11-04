@@ -21,15 +21,25 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 class MeshClass
 {
+public:
+	enum MeshType
+	{
+		THREED = 0,
+		TWOD = 1,
+		TEXT = 2,
+		NONE = 3
+	};
 
 public:
 	MeshClass();
 	MeshClass(const MeshClass&);
 	~MeshClass();
 
-	bool Initialize(char* filename);
+	bool Initialize(char* filename, MeshType type);
+	bool Initialize(ObjectMeshClass *object, MeshType type);
 	void Shutdown();
 
+	MeshType getMeshType();
 	vector<ObjectMeshClass*>* getAllObjects();
 	vector<DirectX::XMFLOAT3>* getGuns();
 
@@ -39,4 +49,5 @@ private:
 
 	vector<ObjectMeshClass*> m_allObjects;
 	vector<DirectX::XMFLOAT3> m_guns;
+	MeshType m_type;
 };

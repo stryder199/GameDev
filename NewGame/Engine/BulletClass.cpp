@@ -33,15 +33,6 @@ bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 	m_rot.y *= -1.0f;
 	ConstrainRotation();
 
-	// Create the light object.
-	m_lightSource = new LightClass();
-	if (!m_lightSource)
-		return false;
-	// Initialize the light object.
-	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
-
 	m_life = new Timer();
 	m_life->start();
 
@@ -82,7 +73,7 @@ bool BulletClass::Render(ShaderControllerClass* shader)
 bool BulletClass::PreProcessing()
 {
 	//bool result; not used
-	float bulletSpeed = 0.01f;
+	float bulletSpeed = 0.03f;
 
 	XMVECTOR pos = XMLoadFloat3(&m_pos);
 	XMVECTOR dir = XMLoadFloat3(&m_dir);

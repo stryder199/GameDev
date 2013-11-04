@@ -1,4 +1,7 @@
 #include "TwoDGraphicsClass.h"
+#include "MeshClass.h"
+#include "TextClass.h"
+#include "FontClass.h"
 #include "BitmapClass.h"
 #include "D3DClass.h"
 #include "ShaderControllerClass.h"
@@ -7,7 +10,6 @@
 
 TwoDGraphicsClass::TwoDGraphicsClass()
 {
-	m_Bitmap = 0;
 	m_DefaultLightSource = 0;
 }
 
@@ -19,19 +21,9 @@ TwoDGraphicsClass::~TwoDGraphicsClass()
 {
 }
 
-bool TwoDGraphicsClass::Initialize(int screenWidth, int screenHeight)
+bool TwoDGraphicsClass::Initialize()
 {
 	bool result;
-
-	m_Bitmap = new BitmapClass();
-	if(!m_Bitmap)
-		return false;
-
-	result = m_Bitmap->Initialize(screenWidth, screenHeight, L"../Engine/data/seafloor.dds", 256, 256);
-	if(!result)
-	{
-		return false;
-	}
 
 	m_DefaultLightSource = new LightClass();
 
@@ -39,38 +31,62 @@ bool TwoDGraphicsClass::Initialize(int screenWidth, int screenHeight)
 	m_DefaultLightSource->SetDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDirection(0.0, 0.0, -1.0);
 
+	MeshClass *seafloor = new MeshClass();
+	result = seafloor->Initialize("data/2dtex.3dmodel", MeshClass::TWOD);
+	if (!result)
+		return false;
+
+	FontClass *font = new FontClass();
+	result = font->Initialize("data/fontdata.txt", L"data/font.dds");
+	if (!result)
+		return false;
+
+	TextClass *text = new TextClass();
+	result = text->Initialize("Test Test Test.", font, XMFLOAT2(0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	if (!result)
+		return false;
+	m_allText.push_back(text);
+
+	BitmapClass *bitmap = new BitmapClass();
+	result = bitmap->Initialize(seafloor, m_DefaultLightSource, XMFLOAT2(0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	if(!result)
+		return false;
+	//m_allBitmaps.push_back(bitmap);
+
 	return true;
 }
 
 bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 {
-	//bool result;
-	//XMFLOAT4X4 worldMatrix, viewMatrix, projectionMatrix, orthoMatrix;
+	bool result;
 
-	//shader->Set2DShaders();
+	shader->Set2DShaders();
 
-	//// Get the world, view, projection, and ortho matrices from the camera and d3d objects.
-	//viewMatrix = *camera->GetViewMatrix();
-	//D3DClass::getInstance()->GetWorldMatrix(worldMatrix);
-	//D3DClass::getInstance()->GetProjectionMatrix(projectionMatrix);
-	//D3DClass::getInstance()->GetOrthoMatrix(orthoMatrix);
+	//Turn off the ZBuffer since 2D elements have no Z component
+	D3DClass::getInstance()->TurnZBufferOff();
 
-	////Turn off the ZBuffer since 2D elements have no Z component
-	//D3DClass::getInstance()->TurnZBufferOff();
+	vector<BitmapClass*>::iterator bitmap;
+	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
+	{
+		result = (*bitmap)->Render(shader);
+		if (!result)
+			return false;
+	}
 
-	////Render all the 2D objects
-	//result = m_Bitmap->Render(100, 100);
-	//if(!result)
-	//	return false;
+	shader->SetTextShaders();
 
-	////Render the model using the shader
-	//result = shader->Render(m_Bitmap->GetIndexCount(), worldMatrix, *camera->GetViewMatrix(), orthoMatrix,
-	//	m_Bitmap->GetTexture(), m_DefaultLightSource->GetDirection(), m_DefaultLightSource->GetAmbientColor(), m_DefaultLightSource->GetDiffuseColor());
-	//if(!result)
-	//	return false;
+	D3DClass::getInstance()->TurnOnAlphaBlending();
+	vector<TextClass*>::iterator text;
+	for (text = m_allText.begin(); text != m_allText.end(); ++text)
+	{
+		result = (*text)->Render(shader);
+		if (!result)
+			return false;
+	}
+	D3DClass::getInstance()->TurnOffAlphaBlending();
 
-	////Turn the ZBuffer back on for future 3d rendering
-	//D3DClass::getInstance()->TurnZBufferOn();
+	//Turn the ZBuffer back on for future 3d rendering
+	D3DClass::getInstance()->TurnZBufferOn();
 
-	return false;
+	return true;
 }

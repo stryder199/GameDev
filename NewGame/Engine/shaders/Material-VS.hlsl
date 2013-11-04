@@ -20,14 +20,12 @@ struct VertexInputType
 {
 	float4 position : POSITION;
 	float3 normal : NORMAL;
-	float4 color : COLOR;
 };
 
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
 	float3 normal : NORMAL;
-	float4 color : COLOR;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -49,8 +47,6 @@ PixelInputType MyVertexShader(VertexInputType input)
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 
 	output.normal = normalize(output.normal);
-	
-	output.color = input.color;
 
 	return output;
 }

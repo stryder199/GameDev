@@ -89,7 +89,7 @@ bool ProgramRootClass::Go()
 
 		if (m_Events->IsSpacePressed())
 		{
-			m_Graphics->getPlayer()->FireWeapon();
+			m_Graphics->getPlayer()->StartWeaponFiring();
 		}
 	}
 

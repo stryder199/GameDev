@@ -8,6 +8,7 @@
 #include "LightClass.h"
 #include "ShaderControllerClass.h"
 #include "TextureClass.h"
+#include "PixelShaderClass.h"
 
 bool ModelClass::InitializeBuffers()
 {
@@ -24,8 +25,9 @@ bool ModelClass::InitializeBuffers()
 			unsigned long* indices;
 			VertexTextureType* texVertices;
 			VertexMaterialType* matVertices;
-			D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc, colorBufferDesc;
-			D3D11_SUBRESOURCE_DATA vertexData, indexData, colorData;
+			VertexTextType* textVertices;
+			D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+			D3D11_SUBRESOURCE_DATA vertexData, indexData;
 			ID3D11Buffer *vertexBuf, *indexBuf;
 			HRESULT result;
 
@@ -36,7 +38,7 @@ bool ModelClass::InitializeBuffers()
 				return false;
 			}
 
-			if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::MATERIAL)
+			if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::MATERIAL)
 			{
 				// Create the vertex array.
 				matVertices = new VertexMaterialType[(*subMesh)->getVertexCount()];
@@ -46,11 +48,8 @@ bool ModelClass::InitializeBuffers()
 				}
 
 				// For each mesh data
-				std::vector<MeshDataClass::MeshType>::iterator rawMeshData;
-				std::vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
-
-				std::vector<MaterialClass::ColorType>* allColorData = (*subMesh)->getMaterial()->getColors();
-				std::vector<MaterialClass::ColorType>::iterator colorData = allColorData->begin();
+				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
 
 				int count = 0;
 				// Load the vertex array and index array with data.
@@ -58,11 +57,9 @@ bool ModelClass::InitializeBuffers()
 				{
 					matVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
 					matVertices[count].normals = XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
-					matVertices[count].color = XMFLOAT4((*colorData).r, (*colorData).g, (*colorData).b, 1.0f);
 
 					indices[count] = count;
 					count++;
-					colorData++;
 				}
 
 				// Set up the description of the static vertex buffer.
@@ -78,7 +75,7 @@ bool ModelClass::InitializeBuffers()
 				vertexData.SysMemPitch = 0;
 				vertexData.SysMemSlicePitch = 0;
 			}
-			else if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::TEXTURE)
+			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
 			{
 				// Create the vertex array.
 				texVertices = new VertexTextureType[(*subMesh)->getVertexCount()];
@@ -88,8 +85,8 @@ bool ModelClass::InitializeBuffers()
 				}
 
 				// For each mesh data
-				std::vector<MeshDataClass::MeshType>::iterator rawMeshData;
-				std::vector<MeshDataClass::MeshType>* allMeshData = (*subMesh)->getRawMeshData();
+				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
 				int count = 0;
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
@@ -112,6 +109,42 @@ bool ModelClass::InitializeBuffers()
 
 				// Give the subresource structure a pointer to the vertex data.
 				vertexData.pSysMem = texVertices;
+				vertexData.SysMemPitch = 0;
+				vertexData.SysMemSlicePitch = 0;
+			}
+			else if (m_mesh->getMeshType() == MeshClass::TEXT || m_mesh->getMeshType() == MeshClass::TWOD)
+			{
+				// Create the vertex array.
+				textVertices = new VertexTextType[(*subMesh)->getVertexCount()];
+				if (!textVertices)
+				{
+					return false;
+				}
+
+				// For each mesh data
+				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
+				int count = 0;
+				// Load the vertex array and index array with data.
+				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
+				{
+					textVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
+					textVertices[count].texture = XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
+
+					indices[count] = count;
+					count++;
+				}
+
+				// Set up the description of the static vertex buffer.
+				vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+				vertexBufferDesc.ByteWidth = sizeof(VertexTextType) * (*subMesh)->getVertexCount();
+				vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+				vertexBufferDesc.CPUAccessFlags = 0;
+				vertexBufferDesc.MiscFlags = 0;
+				vertexBufferDesc.StructureByteStride = 0;
+
+				// Give the subresource structure a pointer to the vertex data.
+				vertexData.pSysMem = textVertices;
 				vertexData.SysMemPitch = 0;
 				vertexData.SysMemSlicePitch = 0;
 			}
@@ -147,16 +180,20 @@ bool ModelClass::InitializeBuffers()
 
 			(*subMesh)->setIndexBuffer(indexBuf);
 
-			if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::MATERIAL)
+			if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::MATERIAL)
 			{
 				delete[] matVertices;
 				matVertices = 0;
 			}
-			else if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::TEXTURE)
+			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
 			{
-				// Release the arrays now that the vertex and index buffers have been created and loaded.
 				delete[] texVertices;
 				texVertices = 0;
+			}
+			else if (m_mesh->getMeshType() == MeshClass::TEXT || m_mesh->getMeshType() == MeshClass::TWOD)
+			{
+				delete[] textVertices;
+				textVertices = 0;
 			}
 
 			delete[] indices;
@@ -187,17 +224,25 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 			unsigned int vertexstride;
 			unsigned int offset;
 
-			//Set vertex buffer stride and offset.
-			if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::MATERIAL)
+			if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::MATERIAL)
 			{
 				vertexstride = sizeof(VertexMaterialType);
 				shader->Set3DMaterialShaders();
 			}
-			else if ((*subMesh)->getMeshColorType() == MeshDataClass::MeshColorType::TEXTURE)
+			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
 			{
 				vertexstride = sizeof(VertexTextureType);
 				shader->Set3DTextureShaders();
 			}
+			else if (m_mesh->getMeshType() == MeshClass::TEXT || m_mesh->getMeshType() == MeshClass::TWOD)
+			{
+				vertexstride = sizeof(VertexTextType);
+			}
+			else
+			{
+				return false;
+			}
+
 			offset = 0;
 
 			ID3D11Buffer* tmp = (*subMesh)->getVertexBuffer();
@@ -211,11 +256,47 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 			// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 			D3DClass::getInstance()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-			//Render the model using the shader
-			result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-				(*subMesh)->getTexture(), m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
-			if (!result)
+			if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::MATERIAL)
+			{
+				XMFLOAT4 color = XMFLOAT4((*subMesh)->getMaterial()->getMaterialInfo().Kd_r,
+					(*subMesh)->getMaterial()->getMaterialInfo().Kd_g,
+					(*subMesh)->getMaterial()->getMaterialInfo().Kd_b,
+					1.0f);
+				//Render the model using the shader
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
+					m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor(), color);
+				if (!result)
+					return false;
+			}
+			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
+			{
+				//Render the model using the shader
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
+					(*subMesh)->getTexture(), m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
+				if (!result)
+					return false;
+			}
+			else if (m_mesh->getMeshType() == MeshClass::TEXT)
+			{
+				XMFLOAT4 color = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+				//Render the model using the shader
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
+					(*subMesh)->getTexture(), color);
+				if (!result)
+					return false;
+			}
+			else if (m_mesh->getMeshType() == MeshClass::TWOD)
+			{
+				//Render the model using the shader
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
+					(*subMesh)->getTexture());
+				if (!result)
+					return false;
+			}
+			else
+			{
 				return false;
+			}
 		}
 	}
 

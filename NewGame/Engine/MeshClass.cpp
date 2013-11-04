@@ -94,10 +94,10 @@ MaterialClass::MaterialInfo readMtlLine(string::iterator* it)
 	return colorInfo;
 }
 
-MeshDataClass::MeshType readVtnLine(string::iterator* it)
+MeshDataClass::MeshDataType readVtnLine(string::iterator* it)
 {
 	//Load vertices until a new object starts
-	MeshDataClass::MeshType newMeshData = MeshDataClass::MeshType();
+	MeshDataClass::MeshDataType newMeshData = MeshDataClass::MeshDataType();
 
 	newMeshData.x = readFloat(it);
 	newMeshData.y = readFloat(it);
@@ -123,9 +123,11 @@ DirectX::XMFLOAT3 readGunLine(string::iterator* it)
 	return newVertex;
 }
 
-bool MeshClass::Initialize(char* meshFilename)
+bool MeshClass::Initialize(char* meshFilename, MeshClass::MeshType type)
 {
 	bool result;
+
+	m_type = type;
 
 	m_allObjects = vector<ObjectMeshClass*>();
 	m_guns = vector<DirectX::XMFLOAT3>();
@@ -136,6 +138,20 @@ bool MeshClass::Initialize(char* meshFilename)
 	{
 		return false;
 	}
+
+	return true;
+}
+
+bool MeshClass::Initialize(ObjectMeshClass *object, MeshClass::MeshType type)
+{
+	bool result;
+
+	m_type = type;
+
+	m_allObjects = vector<ObjectMeshClass*>();
+	m_guns = vector<DirectX::XMFLOAT3>();
+
+	m_allObjects.push_back(object);
 
 	return true;
 }
@@ -186,7 +202,6 @@ bool MeshClass::LoadModel(char* filename)
 	TextureClass* focusTexture = 0;
 	ObjectMeshClass* focusObject = 0;
 	MeshDataClass* focusMesh = 0;
-	MaterialClass::MaterialInfo focusColorInfo;
 	MeshDataClass::MeshColorType focusType;
 
 	// For each object in the model
@@ -197,19 +212,8 @@ bool MeshClass::LoadModel(char* filename)
 
 		if (sinput.compare("vtn") == 0)
 		{
-			if (focusType == MeshDataClass::MeshColorType::MATERIAL)
-			{
-				MaterialClass::ColorType color;
-				color.r = focusColorInfo.Kd_r;
-				color.g = focusColorInfo.Kd_g;
-				color.b = focusColorInfo.Kd_b;
-				color.a = 1.0f;
-
-				focusMesh->getMaterial()->addColorData(color);
-			}
-
 			//Load vertices until a new object starts
-			MeshDataClass::MeshType newMeshData = readVtnLine(&it);
+			MeshDataClass::MeshDataType newMeshData = readVtnLine(&it);
 			focusMesh->addMeshData(newMeshData);
 			
 			//Should auto skip the new line
@@ -259,7 +263,7 @@ bool MeshClass::LoadModel(char* filename)
 		else if (sinput.compare("mtl") == 0)
 		{
 			focusMesh = new MeshDataClass();
-			focusColorInfo = MaterialClass::MaterialInfo();
+			MaterialClass::MaterialInfo focusColorInfo = MaterialClass::MaterialInfo();
 
 			focusColorInfo = readMtlLine(&it);
 
@@ -270,7 +274,6 @@ bool MeshClass::LoadModel(char* filename)
 				if (!result)
 					return false;
 
-				focusMaterial = material;
 				focusType = MeshDataClass::MeshColorType::MATERIAL;
 
 				result = focusMesh->Initialize(material);
@@ -327,4 +330,9 @@ void MeshClass::ReleaseModel()
 	}
 
 	return;
+}
+
+MeshClass::MeshType MeshClass::getMeshType()
+{
+	return m_type;
 }

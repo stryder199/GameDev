@@ -137,6 +137,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="D3DClass.cpp" />
     <ClCompile Include="EnvironmentArtClass.cpp" />
     <ClCompile Include="EventClass.cpp" />
+    <ClCompile Include="FontClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="LightClass.cpp" />
     <ClCompile Include="MaterialClass.cpp" />
@@ -149,6 +150,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="PlayerClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
     <ClCompile Include="ShipClass.cpp" />
+    <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexShaderClass.cpp" />
     <ClCompile Include="SoundClass.cpp" />
@@ -169,6 +171,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="D3DClass.h" />
     <ClInclude Include="EnvironmentArtClass.h" />
     <ClInclude Include="EventClass.h" />
+    <ClInclude Include="FontClass.h" />
     <ClInclude Include="GarphicsClass.h" />
     <ClInclude Include="LightClass.h" />
     <ClInclude Include="MaterialClass.h" />
@@ -181,6 +184,7 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />
     <ClInclude Include="ShipClass.h" />
+    <ClInclude Include="TextClass.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VertexShaderClass.h" />
     <ClInclude Include="SoundClass.h" />

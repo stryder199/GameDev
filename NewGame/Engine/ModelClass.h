@@ -32,7 +32,12 @@ protected:
 	{
 		XMFLOAT3 position;
 		XMFLOAT3 normals;
-		XMFLOAT4 color;
+	};
+
+	struct VertexTextType
+	{
+		XMFLOAT3 position;
+		XMFLOAT2 texture;
 	};
 
 public:

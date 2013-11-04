@@ -16,11 +16,6 @@ class MaterialClass
 public: 
 	typedef struct
 	{
-		float r, g, b, a;
-	}ColorType;
-
-	typedef struct
-	{
 		float Ns;
 		float Ka_r, Ka_g, Ka_b;
 		float Kd_r, Kd_g, Kd_b;
@@ -36,12 +31,7 @@ public:
 	bool Initialize(MaterialInfo matInfo);
 	void Shutdown();
 
-	vector<ColorType>* getColors();
-	int getColorCount();
-
-	void addColorData(ColorType data);
-
+	MaterialInfo getMaterialInfo();
 private:
 	MaterialInfo m_materialInfo;
-	vector<ColorType> m_vecColors;
 };

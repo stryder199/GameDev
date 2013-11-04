@@ -25,7 +25,8 @@ public:
 	{
 		TWOD = 0,
 		THREEDMATERIAL = 1,
-		THREEDTEXTURE = 2
+		THREEDTEXTURE = 2,
+		TEXT = 3
 	};
 
 private:

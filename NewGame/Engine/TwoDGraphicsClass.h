@@ -5,14 +5,16 @@
 //=================================
 // forward declared dependencies
 class BitmapClass;
-class D3DClass;
-class CameraClass;
+class TextClass;
 class ShaderControllerClass;
 class LightClass;
 
 //=================================
 // included dependencies
 #include <d3d11.h>
+#include <vector>
+
+using namespace std;
 
 class TwoDGraphicsClass{
 
@@ -21,11 +23,12 @@ public:
 	TwoDGraphicsClass(const TwoDGraphicsClass&);
 	~TwoDGraphicsClass();
 
-	bool Initialize(int screenWidth, int screenHeight);
+	bool Initialize();
 
 	bool RenderAll(ShaderControllerClass* shader);
 
 private:
-	BitmapClass* m_Bitmap;
+	vector<BitmapClass*> m_allBitmaps;
+	vector<TextClass*> m_allText;
 	LightClass* m_DefaultLightSource;
 };

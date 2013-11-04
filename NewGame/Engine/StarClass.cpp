@@ -7,7 +7,7 @@ StarClass::StarClass(float posx, float posy, float posz){
 	m_lightSource = 0;
 	m_pos = XMFLOAT3(posx, posy, posz);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(0.025f, 0.025f, 0.025f);
+	m_scale = XMFLOAT3(0.1f, 0.1f, 0.1f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rotVel = XMFLOAT3(0.0f, 0.0025f, 0.0f);
@@ -28,7 +28,7 @@ bool StarClass::Initialize(MeshClass* objMesh)
 		return false;
 	// Initialize the light object.
 	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
-	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDiffuseColor(0.0f, 0.0f, 0.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, -1.0f);
 
 	//Initialize the vertex and index buffers that hold the geometry for the triangle.

@@ -16,6 +16,7 @@ class Timer;
 //=================================
 // included dependencies
 #include "ModelClass.h"
+#include "Timer.h"
 #include <vector>
 
 using namespace DirectX;
@@ -32,6 +33,7 @@ public:
 
 	void SpawnBullet(XMFLOAT3 spawnPos);
 	void FireWeapon();
+	void StartWeaponFiring();
 
 	void SetEnginePower(float x);
 	void SetVelX(float x);
@@ -44,7 +46,8 @@ private:
 	virtual bool PreProcessing();
 
 	bool m_isWeaponFiring;
-	Timer* weaponTimer;
+	Timer m_weaponReloadTimer, m_weaponPulseTimer;
+	int m_weaponPulseCount, m_weaponPulseMaxCount;
 	float engine_power;
 	XMFLOAT3 m_vel, m_rotVel;
 	std::vector<BulletClass*> m_allBullets;

@@ -10,6 +10,7 @@ PixelShaderClass::PixelShaderClass()
 {
 	m_pixelShader = 0;
 	m_lightBuffer = 0;
+	m_colorBuffer = 0;
 	m_sampleState = 0;
 }
 
@@ -60,12 +61,60 @@ bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, con
 	return true;
 }
 
+bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, 
+	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+{
+	bool result;
+
+	//Set the shader parameters that it will use for rendering
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, lightDirection, ambientColor, diffuseColor, color);
+	if (!result)
+		return false;
+
+	//Now render the prepared buffers with the shader.
+	RenderShader(indexCount);
+
+	return true;
+}
+
+bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture, XMFLOAT4 color)
+{
+	bool result;
+
+	//Set the shader parameters that it will use for rendering
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture, color);
+	if (!result)
+		return false;
+
+	//Now render the prepared buffers with the shader.
+	RenderShader(indexCount);
+
+	return true;
+}
+
+bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture)
+{
+	bool result;
+
+	//Set the shader parameters that it will use for rendering
+	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture);
+	if (!result)
+		return false;
+
+	//Now render the prepared buffers with the shader.
+	RenderShader(indexCount);
+
+	return true;
+}
+
 bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
 	ID3D10Blob* pixelShaderBuffer;
-	D3D11_BUFFER_DESC lightBufferDesc;
+	D3D11_BUFFER_DESC lightBufferDesc, colorBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 
 
@@ -100,7 +149,7 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
 
-	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
+	if (m_type == THREEDTEXTURE || m_type == TWOD || m_type == TEXT)
 	{
 		//Create a texture sample state desc
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -125,7 +174,7 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 		}
 	}
 
-	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)
+	if (m_type == THREEDTEXTURE || m_type == THREEDMATERIAL)
 	{
 		// Setup the description of the light dynamic constant buffer that is in the pixel shader.
 		// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
@@ -138,6 +187,23 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+		if (FAILED(result))
+			return false;
+	}
+
+	if (m_type == TEXT || m_type == THREEDMATERIAL)
+	{
+		// Setup the description of the light dynamic constant buffer that is in the pixel shader.
+		// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
+		colorBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		colorBufferDesc.ByteWidth = sizeof(ColorBufferType);
+		colorBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		colorBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		colorBufferDesc.MiscFlags = 0;
+		colorBufferDesc.StructureByteStride = 0;
+
+		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+		result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&colorBufferDesc, NULL, &m_colorBuffer);
 		if (FAILED(result))
 			return false;
 	}
@@ -214,40 +280,145 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 	LightBufferType* dataPtr;
 	unsigned int bufferNumber;
 
-	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
+
+	ID3D11ShaderResourceView* textureResource = texture->GetTexture();
+	// Set shader texture resource in the pixel shader.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
+
+	//Lock the light constant buffer
+	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
 	{
-		ID3D11ShaderResourceView* textureResource = texture->GetTexture();
-		// Set shader texture resource in the pixel shader.
-		D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
+		return false;
 	}
-	
-	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::THREEDMATERIAL)
+
+	// Get a pointer to the data in the constant buffer.
+	dataPtr = (LightBufferType*) mappedResource.pData;
+
+	//Set the buffer values
+	dataPtr->ambientColor = ambientColor;
+	dataPtr->diffuseColor = diffuseColor;
+	dataPtr->lightDirection = lightDirection;
+	dataPtr->padding = 0.0f;
+
+	//Unlock the buffer
+	D3DClass::getInstance()->GetDeviceContext()->Unmap(m_lightBuffer, 0);
+
+	// Set the position of the light constant buffer in the pixel shader.
+	bufferNumber = 0;
+
+	// Finally set the light constant buffer in the pixel shader with the updated values.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+
+	return true;
+}
+
+bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture, XMFLOAT4 color)
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	ColorBufferType* dataPtr;
+	unsigned int bufferNumber;
+
+	ID3D11ShaderResourceView* textureResource = texture->GetTexture();
+	// Set shader texture resource in the pixel shader.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
+
+	//Lock the light constant buffer
+	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
 	{
-		//Lock the light constant buffer
-		result = D3DClass::getInstance()->GetDeviceContext()->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-		if (FAILED(result))
-		{
-			return false;
-		}
-
-		// Get a pointer to the data in the constant buffer.
-		dataPtr = (LightBufferType*) mappedResource.pData;
-
-		//Set the buffer values
-		dataPtr->ambientColor = ambientColor;
-		dataPtr->diffuseColor = diffuseColor;
-		dataPtr->lightDirection = lightDirection;
-		dataPtr->padding = 0.0f;
-
-		//Unlock the buffer
-		D3DClass::getInstance()->GetDeviceContext()->Unmap(m_lightBuffer, 0);
-
-		// Set the position of the light constant buffer in the pixel shader.
-		bufferNumber = 0;
-
-		// Finally set the light constant buffer in the pixel shader with the updated values.
-		D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+		return false;
 	}
+
+	// Get a pointer to the data in the constant buffer.
+	dataPtr = (ColorBufferType*) mappedResource.pData;
+
+	//Set the buffer values
+	dataPtr->color = color;
+
+	//Unlock the buffer
+	D3DClass::getInstance()->GetDeviceContext()->Unmap(m_colorBuffer, 0);
+
+	// Set the position of the light constant buffer in the pixel shader.
+	bufferNumber = 0;
+
+	// Finally set the light constant buffer in the pixel shader with the updated values.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 1, &m_colorBuffer);
+
+	return true;
+}
+
+bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture)
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	unsigned int bufferNumber;
+
+	ID3D11ShaderResourceView* textureResource = texture->GetTexture();
+	// Set shader texture resource in the pixel shader.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
+
+	return true;
+}
+
+
+bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource, mappedResource2;
+	LightBufferType* dataPtr;
+	ColorBufferType* dataPtr2;
+	unsigned int bufferNumber;
+
+	//Lock the light constant buffer
+	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Get a pointer to the data in the constant buffer.
+	dataPtr = (LightBufferType*) mappedResource.pData;
+
+	//Set the buffer values
+	dataPtr->ambientColor = ambientColor;
+	dataPtr->diffuseColor = diffuseColor;
+	dataPtr->lightDirection = lightDirection;
+	dataPtr->padding = 0.0f;
+
+	//Unlock the buffer
+	D3DClass::getInstance()->GetDeviceContext()->Unmap(m_lightBuffer, 0);
+
+	// Set the position of the light constant buffer in the pixel shader.
+	bufferNumber = 0;
+
+	// Finally set the light constant buffer in the pixel shader with the updated values.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 2, &m_lightBuffer);
+
+	bufferNumber++;
+
+	//Lock the light constant buffer
+	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource2);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Get a pointer to the data in the constant buffer.
+	dataPtr2 = (ColorBufferType*) mappedResource2.pData;
+
+	//Set the buffer values
+	dataPtr2->color = color;
+
+	//Unlock the buffer
+	D3DClass::getInstance()->GetDeviceContext()->Unmap(m_colorBuffer, 0);
+
+	// Finally set the light constant buffer in the pixel shader with the updated values.
+	D3DClass::getInstance()->GetDeviceContext()->PSSetConstantBuffers(bufferNumber, 2, &m_colorBuffer);
 
 	return true;
 }
@@ -263,4 +434,9 @@ void PixelShaderClass::RenderShader(int indexCount)
 	}
 
 	return;
+}
+
+PixelShaderClass::ShaderType PixelShaderClass::getShaderType()
+{
+	return m_type;
 }

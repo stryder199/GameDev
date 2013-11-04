@@ -10,7 +10,6 @@
 PlayerClass::PlayerClass(){
 	m_mesh = 0;
 	m_lightSource = 0;
-	weaponTimer = 0;
 	m_isWeaponFiring = false;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -47,11 +46,15 @@ bool PlayerClass::Initialize( MeshClass* objMesh )
 	m_allBullets = std::vector<BulletClass*>();
 
 	m_bulletMesh = new MeshClass();
-	result = m_bulletMesh->Initialize("data/bullet.3dmodel");
+	result = m_bulletMesh->Initialize("data/bullet.3dmodel", MeshClass::THREED);
 	if (!result)
 		return false;
 
-	weaponTimer = new Timer();
+	m_weaponReloadTimer = Timer();
+	m_weaponPulseTimer = Timer();
+	m_weaponPulseMaxCount = 3;
+	m_weaponPulseCount = 0;
+
 
 	return true;
 }
@@ -73,20 +76,31 @@ void PlayerClass::SpawnBullet(XMFLOAT3 spawnPos)
 
 void PlayerClass::FireWeapon()
 {
-	if (!weaponTimer->is_started())
+	m_isWeaponFiring = true;
+	vector<XMFLOAT3>::iterator gun;
+	for (gun = m_mesh->getGuns()->begin(); gun != m_mesh->getGuns()->end(); ++gun)
 	{
-		m_isWeaponFiring = true;
-		vector<XMFLOAT3>::iterator gun;
-		for (gun = m_mesh->getGuns()->begin(); gun != m_mesh->getGuns()->end(); ++gun)
-		{
-			XMVECTOR gunPos = XMLoadFloat3(&(*gun));
-			gunPos = XMVector4Transform(gunPos, XMLoadFloat4x4(&m_worldMatrix));
-			XMFLOAT3 pos;
-			XMStoreFloat3(&pos, gunPos);
-			SpawnBullet(pos);
-		}
-		
-		weaponTimer->start();
+		XMFLOAT4 gunPos = XMFLOAT4((*gun).x, (*gun).y, (*gun).z, 1.0f);
+		XMVECTOR gunPosVec = XMLoadFloat4(&gunPos);
+		gunPosVec = XMVector4Transform(gunPosVec, XMLoadFloat4x4(&m_worldMatrix));
+		XMFLOAT3 pos;
+		XMStoreFloat3(&pos, gunPosVec);
+		SpawnBullet(pos);
+	}
+	if (m_weaponPulseCount == 0)
+	{
+		m_weaponReloadTimer.start();
+	}
+
+	m_weaponPulseTimer.start();
+	m_weaponPulseCount++;
+}
+
+void PlayerClass::StartWeaponFiring()
+{
+	if (!m_weaponReloadTimer.is_started())
+	{
+		FireWeapon();
 	}
 }
 
@@ -106,7 +120,7 @@ bool PlayerClass::Render(ShaderControllerClass* shader)
 	int count = 0;
 	for (bullet = m_allBullets.begin(); bullet != m_allBullets.end(); ++bullet)
 	{
-		if ((*bullet)->GetTimeAlive() > 6000)
+		if ((*bullet)->GetTimeAlive() > 10000)
 		{
 			deadBullets.push_back(count);
 		}
@@ -144,10 +158,16 @@ bool PlayerClass::PreProcessing()
 
 	if (m_isWeaponFiring)
 	{
-		if (weaponTimer->get_ticks() > 500)
+		if (m_weaponReloadTimer.get_ticks() > 1000)
 		{
 			m_isWeaponFiring = false;
-			weaponTimer->stop();
+			m_weaponReloadTimer.stop();
+			m_weaponPulseTimer.stop();
+			m_weaponPulseCount = 0;
+		}
+		if (m_weaponPulseTimer.get_ticks() > 100 && m_weaponPulseCount < m_weaponPulseMaxCount)
+		{
+			FireWeapon();
 		}
 	}
 

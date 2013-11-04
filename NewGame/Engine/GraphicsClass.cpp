@@ -44,14 +44,14 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!result)
 		return false;
 
-	////Init all 2D objects, UI, menus,...
-	//m_2DGraphics = new TwoDGraphicsClass();
-	//if(!m_2DGraphics)
-	//	return false;
+	//Init all 2D objects, UI, menus,...
+	m_2DGraphics = new TwoDGraphicsClass();
+	if(!m_2DGraphics)
+		return false;
 
-	//result = m_2DGraphics->Initialize(WindowClass::getInstance()->getScreenWidth(), WindowClass::getInstance()->getScreenHeight());
-	//if(!result)
-	//	return false;
+	result = m_2DGraphics->Initialize();
+	if(!result)
+		return false;
 
 	//Init all 3d objects
 	m_3DGraphics = new ThreeDGraphicsClass();
@@ -74,6 +74,10 @@ bool GraphicsClass::Render()
 
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
 	result = m_3DGraphics->RenderAll(m_Shader);
+	if (!result)
+		return false;
+
+	result = m_2DGraphics->RenderAll(m_Shader);
 	if (!result)
 		return false;
 

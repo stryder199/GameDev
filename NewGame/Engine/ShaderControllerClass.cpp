@@ -15,8 +15,8 @@ ShaderControllerClass::~ShaderControllerClass()
 bool ShaderControllerClass::Initialize()
 {
 	bool result;
-	D3D11_INPUT_ELEMENT_DESC *posTexNorPolygonLayout, *posTexPolygonLayout, *posNorColPolygonLayout;
-	int posTexNorLayoutCount, posTexLayoutCount, posNorColLayoutCount;
+	D3D11_INPUT_ELEMENT_DESC *posTexNorPolygonLayout, *posTexPolygonLayout, *posNorPolygonLayout;
+	int posTexNorLayoutCount, posTexLayoutCount, posNorLayoutCount;
 
 	WCHAR* MaterialPSFilename = L"shaders\\Material-PS.hlsl";
 	WCHAR* MaterialVSFilename = L"shaders\\Material-VS.hlsl";
@@ -26,6 +26,9 @@ bool ShaderControllerClass::Initialize()
 
 	WCHAR* TwoDPSFilename = L"shaders\\2D-PS.hlsl";
 	WCHAR* TwoDVSFilename = L"shaders\\2D-VS.hlsl";
+
+	WCHAR* TextDPSFilename = L"shaders\\Text-PS.hlsl";
+	WCHAR* TextDVSFilename = L"shaders\\Text-VS.hlsl";
 
 	posTexNorLayoutCount = 3;
 	posTexNorPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[posTexNorLayoutCount];
@@ -55,33 +58,25 @@ bool ShaderControllerClass::Initialize()
 	posTexNorPolygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	posTexNorPolygonLayout[2].InstanceDataStepRate = 0;
 
-	posNorColLayoutCount = 3;
-	posNorColPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[posNorColLayoutCount];
+	posNorLayoutCount = 2;
+	posNorPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[posNorLayoutCount];
 	//Now setup the layout of the data that goes into the shader
 	//This setup needs to match the VertexType structure in the MeshClass and in the shader
-	posNorColPolygonLayout[0].SemanticName = "POSITION";
-	posNorColPolygonLayout[0].SemanticIndex = 0;
-	posNorColPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	posNorColPolygonLayout[0].InputSlot = 0;
-	posNorColPolygonLayout[0].AlignedByteOffset = 0;
-	posNorColPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	posNorColPolygonLayout[0].InstanceDataStepRate = 0;
+	posNorPolygonLayout[0].SemanticName = "POSITION";
+	posNorPolygonLayout[0].SemanticIndex = 0;
+	posNorPolygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	posNorPolygonLayout[0].InputSlot = 0;
+	posNorPolygonLayout[0].AlignedByteOffset = 0;
+	posNorPolygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	posNorPolygonLayout[0].InstanceDataStepRate = 0;
 
-	posNorColPolygonLayout[1].SemanticName = "NORMAL";
-	posNorColPolygonLayout[1].SemanticIndex = 0;
-	posNorColPolygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	posNorColPolygonLayout[1].InputSlot = 0;
-	posNorColPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	posNorColPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	posNorColPolygonLayout[1].InstanceDataStepRate = 0;
-
-	posNorColPolygonLayout[2].SemanticName = "COLOR";
-	posNorColPolygonLayout[2].SemanticIndex = 0;
-	posNorColPolygonLayout[2].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	posNorColPolygonLayout[2].InputSlot = 0;
-	posNorColPolygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	posNorColPolygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	posNorColPolygonLayout[2].InstanceDataStepRate = 0;
+	posNorPolygonLayout[1].SemanticName = "NORMAL";
+	posNorPolygonLayout[1].SemanticIndex = 0;
+	posNorPolygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	posNorPolygonLayout[1].InputSlot = 0;
+	posNorPolygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	posNorPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	posNorPolygonLayout[1].InstanceDataStepRate = 0;
 
 	posTexLayoutCount = 2;
 	posTexPolygonLayout = new D3D11_INPUT_ELEMENT_DESC[posTexLayoutCount];
@@ -105,7 +100,7 @@ bool ShaderControllerClass::Initialize()
 	if (!result)
 		return false;
 
-	result = m_threeDMaterialVS.Initialize(MaterialVSFilename, posNorColPolygonLayout, posNorColLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
+	result = m_threeDMaterialVS.Initialize(MaterialVSFilename, posNorPolygonLayout, posNorLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
 	if (!result)
 		return false;
 
@@ -122,6 +117,14 @@ bool ShaderControllerClass::Initialize()
 		return false;
 
 	result = m_twoDVS.Initialize(TwoDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TWOD);
+	if (!result)
+		return false;
+
+	result = m_textPS.Initialize(TextDPSFilename, PixelShaderClass::ShaderType::TEXT);
+	if (!result)
+		return false;
+
+	result = m_textVS.Initialize(TextDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TEXT);
 	if (!result)
 		return false;
 
@@ -143,13 +146,73 @@ bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix
 
 	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 
-	return result;
+	return true;
+}
+
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+{
+	bool result;
+
+	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+		return false;
+
+	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, lightDirection, ambientColor, diffuseColor, color);
+	if (!result)
+		return false;
+
+	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+
+	return true;
+}
+
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture, XMFLOAT4 color)
+{
+	bool result;
+
+	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+		return false;
+
+	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, color);
+	if (!result)
+		return false;
+
+	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+
+	return true;
+}
+
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
+	TextureClass* texture)
+{
+	bool result;
+
+	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+		return false;
+
+	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	if (!result)
+		return false;
+
+	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+
+	return true;
 }
 
 void ShaderControllerClass::Set2DShaders()
 {
 	m_vertexFocus = &m_twoDVS;
 	m_pixelFocus = &m_twoDPS;
+}
+
+void ShaderControllerClass::SetTextShaders()
+{
+	m_vertexFocus = &m_textVS;
+	m_pixelFocus = &m_textPS;
 }
 
 void ShaderControllerClass::Set3DTextureShaders()
@@ -162,4 +225,14 @@ void ShaderControllerClass::Set3DMaterialShaders()
 {
 	m_vertexFocus = &m_threeDMaterialVS;
 	m_pixelFocus = &m_threeDMaterialPS;
+}
+
+VertexShaderClass* ShaderControllerClass::GetFocusVertex()
+{
+	return m_vertexFocus;
+}
+
+PixelShaderClass* ShaderControllerClass::GetFocusPixel()
+{
+	return m_pixelFocus;
 }
