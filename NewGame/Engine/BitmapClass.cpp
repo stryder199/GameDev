@@ -4,6 +4,8 @@
 #include "BitmapClass.h"
 #include "D3DClass.h"
 #include "MeshClass.h"
+#include "CameraClass.h"
+#include "PlayerClass.h"
 
 BitmapClass::BitmapClass()
 {
@@ -11,7 +13,7 @@ BitmapClass::BitmapClass()
 	m_lightSource = 0;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(0.03f, 0.03f, 0.03f);
+	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -64,7 +66,10 @@ bool BitmapClass::Render(ShaderControllerClass *shader)
 
 bool BitmapClass::PreProcessing()
 {
-	//bool result;
+	m_rot = CameraClass::getInstance()->getRotation();
+	m_pos = PlayerClass::getInstance()->getPosition();
+
+	ConstrainRotation();
 
 	CalculateWorldMatrix();
 

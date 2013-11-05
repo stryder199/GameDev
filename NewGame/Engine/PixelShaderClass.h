@@ -57,10 +57,10 @@ public:
 
 	bool Initialize(WCHAR* psFilename, ShaderType type);
 	void Shutdown();
-	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
-	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
-	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex, XMFLOAT4 color);
-	bool Render(int, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex);
+	bool Render(TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
+	bool Render(XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
+	bool Render(TextureClass* tex, XMFLOAT4 color);
+	bool Render(TextureClass* tex);
 
 	ShaderType getShaderType();
 private:
@@ -68,11 +68,11 @@ private:
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
-	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
-	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex, XMFLOAT4 color);
-	bool SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, TextureClass* tex);
-	void RenderShader(int);
+	bool SetShaderParameters(TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
+	bool SetShaderParameters(XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
+	bool SetShaderParameters(TextureClass* tex, XMFLOAT4 color);
+	bool SetShaderParameters(TextureClass* tex);
+	void RenderShader();
 
 private:
 	ID3D11PixelShader* m_pixelShader;

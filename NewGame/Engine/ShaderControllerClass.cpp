@@ -131,16 +131,15 @@ bool ShaderControllerClass::Initialize()
 	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-									TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_vertexFocus->Render(indexCount, worldMatrix);
 	if (!result)
 		return false;
 
-	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
+	result = m_pixelFocus->Render(texture, lightDirection, ambientColor, diffuseColor);
 	if (!result)
 		return false;
 
@@ -149,16 +148,15 @@ bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix
 	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_vertexFocus->Render(indexCount, worldMatrix);
 	if (!result)
 		return false;
 
-	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, lightDirection, ambientColor, diffuseColor, color);
+	result = m_pixelFocus->Render(lightDirection, ambientColor, diffuseColor, color);
 	if (!result)
 		return false;
 
@@ -167,16 +165,15 @@ bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix
 	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture, XMFLOAT4 color)
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT4 color)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_vertexFocus->Render(indexCount, worldMatrix);
 	if (!result)
 		return false;
 
-	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture, color);
+	result = m_pixelFocus->Render(texture, color);
 	if (!result)
 		return false;
 
@@ -185,16 +182,15 @@ bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix
 	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture)
+bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture)
 {
 	bool result;
 
-	result = m_vertexFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = m_vertexFocus->Render(indexCount, worldMatrix);
 	if (!result)
 		return false;
 
-	result = m_pixelFocus->Render(indexCount, worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = m_pixelFocus->Render(texture);
 	if (!result)
 		return false;
 

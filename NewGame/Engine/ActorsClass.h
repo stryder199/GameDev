@@ -6,8 +6,6 @@
 // forward declared dependencies
 class MeshClass;
 class ShaderControllerClass;
-class D3DClass;
-class CameraClass;
 class LightClass;
 class TextureClass;
 
@@ -25,10 +23,7 @@ public:
 
 	bool Initialize();
 	bool RenderAll(ShaderControllerClass* shader);
-
-	PlayerClass* getPlayer();
 private:
 	std::vector<ModelClass*> allModels;
-	PlayerClass* m_player;
 
 };

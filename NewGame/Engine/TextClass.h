@@ -26,7 +26,6 @@ private:
 	bool BuildTextMesh(const char* sentence);
 
 	FontClass* m_font;
-	XMFLOAT4 m_color;
 	std::string m_text;
 };
 

@@ -207,9 +207,6 @@ bool ModelClass::InitializeBuffers()
 bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 {
 	bool result;
-	XMFLOAT4X4 projMatrix;
-
-	D3DClass::getInstance()->GetProjectionMatrix(projMatrix);
 
 	// For each object in the mesh
 	std::vector<ObjectMeshClass*>::iterator object;
@@ -263,33 +260,30 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 					(*subMesh)->getMaterial()->getMaterialInfo().Kd_b,
 					1.0f);
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-					m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor(), color);
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, m_lightSource->GetDirection(), 
+					m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor(), color);
 				if (!result)
 					return false;
 			}
 			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
 			{
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-					(*subMesh)->getTexture(), m_lightSource->GetDirection(), m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_lightSource->GetDirection(),
+					m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
 				if (!result)
 					return false;
 			}
 			else if (m_mesh->getMeshType() == MeshClass::TEXT)
 			{
-				XMFLOAT4 color = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-					(*subMesh)->getTexture(), color);
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_color);
 				if (!result)
 					return false;
 			}
 			else if (m_mesh->getMeshType() == MeshClass::TWOD)
 			{
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, *CameraClass::getInstance()->GetViewMatrix(), projMatrix,
-					(*subMesh)->getTexture());
+				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture());
 				if (!result)
 					return false;
 			}
@@ -331,7 +325,6 @@ void ModelClass::ShutdownBuffers()
 			if ((*subMesh)->getColorBuffer())
 			{
 				(*subMesh)->getColorBuffer()->Release();
-
 			}
 		}
 	}

@@ -4,7 +4,6 @@
 
 //=================================
 // forward declared dependencies
-class PlayerClass;
 
 //=================================
 // included dependencies
@@ -17,24 +16,18 @@ public:
 	~CameraClass();
 	static CameraClass* getInstance();
 
-	void SetPosition(float, float, float);
-	void SetRotation(float, float, float);
-
-	XMFLOAT3 GetPosition();
-	XMFLOAT3 GetRotation();
-
-	void Render(PlayerClass* player);
+	void Render();
 	bool Initialize();
 	XMFLOAT4X4* GetViewMatrix();
 
-	void setVelX(float);
-	void setVelY(float);
-	void setVelZ(float);
+	XMFLOAT3 getPosition();
+	XMFLOAT3 getRotation();
+	XMFLOAT3 getScale();
+	XMFLOAT3 getPointPosition();
+	XMFLOAT3 getDirection();
 
-	void setVelRotX(float);
-	void setVelRotY(float);
-	void setVelRotZ(float);
-
+	void ConstrainRotation();
+	void CalculateDirection();
 private:
 	CameraClass();
 	CameraClass(const CameraClass&) {};

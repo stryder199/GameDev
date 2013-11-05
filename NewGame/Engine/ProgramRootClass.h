@@ -7,7 +7,6 @@
 class SoundClass;
 class GraphicsClass;
 class EventClass;
-class CameraClass;
 
 //=================================
 // included dependencies

@@ -6,8 +6,6 @@
 // forward declared dependencies
 class MeshClass;
 class ShaderControllerClass;
-class D3DClass;
-class CameraClass;
 class TextureClass;
 class LightClass;
 class BulletClass;
@@ -23,8 +21,8 @@ using namespace DirectX;
 
 class PlayerClass : public ModelClass{
 public:
-	PlayerClass();
 	~PlayerClass();
+	static PlayerClass* getInstance();
 
 	bool Initialize(MeshClass* mesh);
 	void Shutdown();
@@ -43,6 +41,12 @@ public:
 	void SetRotVelY(float y);
 	void SetRotVelZ(float z);
 private:
+	PlayerClass();
+	PlayerClass(const PlayerClass&);
+	PlayerClass& operator=(PlayerClass& const) {};
+
+	static PlayerClass* m_pInstance;
+
 	virtual bool PreProcessing();
 
 	bool m_isWeaponFiring;

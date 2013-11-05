@@ -9,7 +9,6 @@
 
 ActorsClass::ActorsClass()
 {
-	m_player = 0;
 }
 
 ActorsClass::~ActorsClass(){
@@ -26,12 +25,11 @@ bool ActorsClass::Initialize()
 	if(!result)
 		return false;
 
-	m_player = new PlayerClass();
-	result = m_player->PlayerClass::Initialize(playerMesh);
+	result = PlayerClass::getInstance()->PlayerClass::Initialize(playerMesh);
 	if(!result)
 		return false;
 
-	allModels.push_back(m_player);
+	allModels.push_back(PlayerClass::getInstance());
 
 	return true;
 }
@@ -48,9 +46,4 @@ bool ActorsClass::RenderAll(ShaderControllerClass* shader){
 	}
 
 	return true;
-}
-
-PlayerClass* ActorsClass::getPlayer()
-{
-	return m_player;
 }

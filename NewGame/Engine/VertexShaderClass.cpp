@@ -3,6 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "VertexShaderClass.h"
 #include "D3DClass.h"
+#include "CameraClass.h"
 #include "WindowClass.h"
 
 VertexShaderClass::VertexShaderClass()
@@ -43,12 +44,12 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix, const XMFLOAT4X4 &viewMatrix, const XMFLOAT4X4 &projectionMatrix)
+bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix);
+	result = SetShaderParameters(worldMatrix);
 	if(!result)
 		return false;
 
@@ -181,7 +182,7 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR
 	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix)
+bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
 {
 	HRESULT result;
 	XMFLOAT4X4 transposedWorldFloatMatrix, transposedViewFloatMatrix, transposedProjectionFloatMatrix;
@@ -192,8 +193,20 @@ bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const
 
 	//Transpose the matrices to prepare them for the shader
 	transposedWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix));
-	transposedViewMatrix = XMMatrixTranspose(XMLoadFloat4x4(&viewMatrix));
-	transposedProjectionMatrix = XMMatrixTranspose(XMLoadFloat4x4(&projectionMatrix));
+	transposedViewMatrix = XMMatrixTranspose(XMLoadFloat4x4(CameraClass::getInstance()->GetViewMatrix()));
+
+	if (m_type == THREEDTEXTURE || m_type == THREEDMATERIAL)
+	{
+		transposedProjectionMatrix = XMMatrixTranspose(XMLoadFloat4x4(&D3DClass::getInstance()->GetProjectionMatrix()));
+	}
+	else if (m_type == TWOD || m_type == TEXT)
+	{
+		transposedProjectionMatrix = XMMatrixTranspose(XMLoadFloat4x4(&D3DClass::getInstance()->GetOrthoMatrix()));
+	}
+	else
+	{
+		return false;
+	}
 
 	XMStoreFloat4x4(&transposedWorldFloatMatrix, transposedWorldMatrix);
 	XMStoreFloat4x4(&transposedViewFloatMatrix, transposedViewMatrix);

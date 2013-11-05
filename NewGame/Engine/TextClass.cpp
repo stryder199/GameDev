@@ -3,6 +3,8 @@
 #include "MeshClass.h"
 #include "MeshDataClass.h"
 #include "ObjectMeshClass.h"
+#include "CameraClass.h"
+#include "PlayerClass.h"
 
 TextClass::TextClass()
 {
@@ -10,7 +12,7 @@ TextClass::TextClass()
 	m_lightSource = 0;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	m_scale = XMFLOAT3(10.0f, 10.0f, 10.0f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -58,7 +60,12 @@ bool TextClass::Render(ShaderControllerClass* shader)
 
 bool TextClass::PreProcessing()
 {
-	//bool result;
+	bool result;
+
+	m_rot = CameraClass::getInstance()->getRotation();
+	m_pos = PlayerClass::getInstance()->getPosition();
+
+	ConstrainRotation();
 
 	CalculateWorldMatrix();
 
@@ -70,7 +77,8 @@ bool TextClass::BuildTextMesh(const char* sentence)
 	ObjectMeshClass *textObject = new ObjectMeshClass();
 	MeshDataClass *meshData = new MeshDataClass();
 	int letter;
-	int drawX = 0, drawY = 0;
+	int drawX = 0;
+	float maxY = 15.0f, minY = 0.0f;
 	bool result;
 
 	if (m_mesh)
@@ -90,6 +98,8 @@ bool TextClass::BuildTextMesh(const char* sentence)
 	if (!result)
 		return false;
 
+	textObject->addMesh(meshData);
+
 	// Draw each letter onto a quad.
 	for (int i = 0; i < (int) strlen(sentence); i++)
 	{
@@ -102,73 +112,67 @@ bool TextClass::BuildTextMesh(const char* sentence)
 		}
 		else
 		{
-			MeshDataClass::MeshDataType tri1_v1, tri1_v2, tri1_v3;
+			MeshDataClass::MeshDataType tri_bottomLeft, tri_bottomRight, tri_topLeft, tri_topRight;
 			// First triangle in quad.
-			tri1_v1.x = drawX;
-			tri1_v1.y = drawY;
-			tri1_v1.z = 0.0f;
-			tri1_v1.tu = m_font->GetFont()[letter].left;
-			tri1_v1.tv = 0.0f;
-			tri1_v1.nx = 0.0f;
-			tri1_v1.ny = 0.0f;
-			tri1_v1.nz = 1.0f;
-			meshData->addMeshData(tri1_v1);
+			// Bottom left
+			tri_bottomLeft.x = drawX;
+			tri_bottomLeft.y = minY;
+			tri_bottomLeft.z = 0.0f;
+			tri_bottomLeft.tu = m_font->GetFont()[letter].left;
+			tri_bottomLeft.tv = 1.0f;
+			tri_bottomLeft.nx = 0.0f;
+			tri_bottomLeft.ny = 0.0f;
+			tri_bottomLeft.nz = 1.0f;
+			
+			// Bottom right
+			tri_bottomRight.x = drawX + m_font->GetFont()[letter].size;
+			tri_bottomRight.y = minY;
+			tri_bottomRight.z = 0.0f;
+			tri_bottomRight.tu = m_font->GetFont()[letter].right;
+			tri_bottomRight.tv = 1.0f;
+			tri_bottomRight.nx = 0.0f;
+			tri_bottomRight.ny = 0.0f;
+			tri_bottomRight.nz = 1.0f;
 
-			tri1_v2.x = drawX + m_font->GetFont()[letter].size;
-			tri1_v2.y = drawY - 16;
-			tri1_v2.z = 0.0f;
-			tri1_v2.tu = m_font->GetFont()[letter].right;
-			tri1_v2.tv = 0.0f;
-			tri1_v2.nx = 0.0f;
-			tri1_v2.ny = 0.0f;
-			tri1_v2.nz = 1.0f;
-			meshData->addMeshData(tri1_v2);
+			// Top Left
+			tri_topLeft.x = drawX;
+			tri_topLeft.y = maxY;
+			tri_topLeft.z = 0.0f;
+			tri_topLeft.tu = m_font->GetFont()[letter].left;
+			tri_topLeft.tv = 0.0f;
+			tri_topLeft.nx = 0.0f;
+			tri_topLeft.ny = 0.0f;
+			tri_topLeft.nz = 1.0f;
 
-			tri1_v3.x = drawX;
-			tri1_v3.y = drawY - 16;
-			tri1_v3.z = 0.0f;
-			tri1_v3.tu = m_font->GetFont()[letter].left;
-			tri1_v3.tv = 1.0f;
-			tri1_v3.nx = 0.0f;
-			tri1_v3.ny = 0.0f;
-			tri1_v3.nz = 1.0f;
-			meshData->addMeshData(tri1_v3);
+			// Top right
+			tri_topRight.x = drawX + m_font->GetFont()[letter].size;
+			tri_topRight.y = maxY;
+			tri_topRight.z = 0.0f;
+			tri_topRight.tu = m_font->GetFont()[letter].right;
+			tri_topRight.tv = 0.0f;
+			tri_topRight.nx = 0.0f;
+			tri_topRight.ny = 0.0f;
+			tri_topRight.nz = 1.0f;
 
-			MeshDataClass::MeshDataType tri2_v1, tri2_v2, tri2_v3;
+			// First triangle in quad.
+			// Top left
+			meshData->addMeshData(tri_topLeft);
+
+			// Bottom right
+			meshData->addMeshData(tri_bottomRight);
+
+			// Bottom left
+			meshData->addMeshData(tri_bottomLeft);
 
 			// Second triangle in quad.
 			// Top left
-			tri2_v1.x = drawX;
-			tri2_v1.y = drawY;
-			tri2_v1.z = 0.0f;
-			tri2_v1.tu = m_font->GetFont()[letter].left;
-			tri2_v1.tv = 0.0f;
-			tri2_v1.nx = 0.0f;
-			tri2_v1.ny = 0.0f;
-			tri2_v1.nz = 1.0f;
-			meshData->addMeshData(tri2_v1);
+			meshData->addMeshData(tri_topLeft);
 
 			// Top right
-			tri2_v2.x = drawX + m_font->GetFont()[letter].size;
-			tri2_v2.y = drawY;
-			tri2_v2.z = 0.0f;
-			tri2_v2.tu = m_font->GetFont()[letter].right;
-			tri2_v2.tv = 0.0f;
-			tri2_v2.nx = 0.0f;
-			tri2_v2.ny = 0.0f;
-			tri2_v2.nz = 1.0f;
-			meshData->addMeshData(tri2_v2);
+			meshData->addMeshData(tri_topRight);
 
 			// Bottom right
-			tri2_v3.x = drawX + m_font->GetFont()[letter].size;
-			tri2_v3.y = drawY - 16;
-			tri2_v3.z = 0.0f;
-			tri2_v3.tu = m_font->GetFont()[letter].right;
-			tri2_v3.tv = 1.0f;
-			tri2_v3.nx = 0.0f;
-			tri2_v3.ny = 0.0f;
-			tri2_v3.nz = 1.0f;
-			meshData->addMeshData(tri2_v3);
+			meshData->addMeshData(tri_bottomRight);
 
 			// Update the x location for drawing by the size of the letter and one pixel.
 			drawX = drawX + m_font->GetFont()[letter].size + 1.0f;

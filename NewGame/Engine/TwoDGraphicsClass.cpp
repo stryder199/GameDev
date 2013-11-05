@@ -42,16 +42,16 @@ bool TwoDGraphicsClass::Initialize()
 		return false;
 
 	TextClass *text = new TextClass();
-	result = text->Initialize("Test Test Test.", font, XMFLOAT2(0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f));
+	result = text->Initialize("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", font, XMFLOAT2(0.0f, 0.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	if (!result)
 		return false;
 	m_allText.push_back(text);
 
 	BitmapClass *bitmap = new BitmapClass();
-	result = bitmap->Initialize(seafloor, m_DefaultLightSource, XMFLOAT2(0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	result = bitmap->Initialize(seafloor, m_DefaultLightSource, XMFLOAT2(0.0f, 0.0f), XMFLOAT2(100.0f, 100.0f));
 	if(!result)
 		return false;
-	//m_allBitmaps.push_back(bitmap);
+	m_allBitmaps.push_back(bitmap);
 
 	return true;
 }

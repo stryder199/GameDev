@@ -65,31 +65,31 @@ bool ProgramRootClass::Go()
 
 		if(m_Events->IsWPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetEnginePower(1.0f);
+			PlayerClass::getInstance()->SetEnginePower(1.0f);
 		}
 		else if(m_Events->IsSPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetEnginePower(-1.0f);
+			PlayerClass::getInstance()->SetEnginePower(-1.0f);
 		}
 		else{
-			m_Graphics->getPlayer()->SetEnginePower(0.0f);
+			PlayerClass::getInstance()->SetEnginePower(0.0f);
 		}
 
 		if(m_Events->IsDPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetRotVelY(XM_PI/100);
+			PlayerClass::getInstance()->SetRotVelY(XM_PI / 100);
 		}
 		else if(m_Events->IsAPressed() == true)
 		{
-			m_Graphics->getPlayer()->SetRotVelY(-1.0f * XM_PI / 100);
+			PlayerClass::getInstance()->SetRotVelY(-1.0f * XM_PI / 100);
 		}
 		else{
-			m_Graphics->getPlayer()->SetRotVelY(0.0f);
+			PlayerClass::getInstance()->SetRotVelY(0.0f);
 		}
 
 		if (m_Events->IsSpacePressed())
 		{
-			m_Graphics->getPlayer()->StartWeaponFiring();
+			PlayerClass::getInstance()->StartWeaponFiring();
 		}
 	}
 

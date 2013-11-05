@@ -30,7 +30,7 @@ bool CameraClass::Initialize()
 	return true;
 }
 
-void CameraClass::Render(PlayerClass* player)
+void CameraClass::Render()
 {
 	XMVECTOR up, position, lookAt;
 	XMFLOAT3 playerOrigin;
@@ -38,10 +38,13 @@ void CameraClass::Render(PlayerClass* player)
 	XMMATRIX worldMatrix;
 	XMMATRIX pointTranslationMatrix, translationMatrix;
 
-	playerOrigin = player->getPosition();
+	playerOrigin = PlayerClass::getInstance()->getPosition();
 	
-	m_rot = player->getRotation();
+	m_rot = PlayerClass::getInstance()->getRotation();
 	m_rot.y += XM_PI;
+
+	ConstrainRotation();
+	CalculateDirection();
 
 	positionRotMatrixX = XMMatrixRotationX(m_rot.x);
 	positionRotMatrixY = XMMatrixRotationY(m_rot.y);
@@ -80,4 +83,75 @@ void CameraClass::Render(PlayerClass* player)
 XMFLOAT4X4* CameraClass::GetViewMatrix()
 {
 	return m_viewMatrix;
+}
+
+XMFLOAT3 CameraClass::getPosition()
+{
+	return m_pos;
+}
+
+XMFLOAT3 CameraClass::getRotation()
+{
+	return m_rot;
+}
+
+XMFLOAT3 CameraClass::getScale()
+{
+	return m_scale;
+}
+
+XMFLOAT3 CameraClass::getPointPosition()
+{
+	return m_point_pos;
+}
+
+XMFLOAT3 CameraClass::getDirection()
+{
+	return m_dir;
+}
+
+void CameraClass::ConstrainRotation()
+{
+	if (m_rot.x >= 2 * (float) XM_PI)
+		m_rot.x = m_rot.x - 2 * (float) XM_PI;
+	else if (m_rot.x < 0.0f)
+		m_rot.x = 2 * (float) XM_PI + m_rot.x;
+
+	if (m_rot.y >= 2 * (float) XM_PI)
+		m_rot.y = m_rot.y - 2 * (float) XM_PI;
+	else if (m_rot.y < 0.0f)
+		m_rot.y = 2 * (float) XM_PI + m_rot.y;
+
+	if (m_rot.z >= 2 * (float) XM_PI)
+		m_rot.z = m_rot.z - 2 * (float) XM_PI;
+	else if (m_rot.z < 0.0f)
+		m_rot.z = 2 * (float) XM_PI + m_rot.z;
+}
+
+void CameraClass::CalculateDirection()
+{
+	if (m_rot.y >= 0.0f && m_rot.y < (XM_PI / 2.0f))
+	{
+		m_dir.x = (m_rot.y / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= (XM_PI / 2.0f) && m_rot.y < ((3.0f*XM_PI) / 2.0f))
+	{
+		m_dir.x = ((XM_PI - m_rot.y) / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= ((3.0f*XM_PI) / 2.0f) && m_rot.y < (2 * XM_PI))
+	{
+		m_dir.x = ((m_rot.y - 2 * XM_PI) / (XM_PI / 2.0f));
+	}
+
+	if (m_rot.y >= 0.0f && m_rot.y < XM_PI)
+	{
+		m_dir.z = (((XM_PI / 2.0f) - m_rot.y) / (XM_PI / 2.0f));
+	}
+	else if (m_rot.y >= XM_PI && m_rot.y < (2 * XM_PI))
+	{
+		m_dir.z = ((m_rot.y - ((3.0f*XM_PI) / 2.0f)) / (XM_PI / 2.0f));
+	}
+	XMVECTOR normalizedVector;
+	normalizedVector = XMVector3Normalize(XMLoadFloat3(&m_dir));
+	XMStoreFloat3(&m_dir, normalizedVector);
 }

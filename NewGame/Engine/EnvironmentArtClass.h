@@ -7,7 +7,6 @@
 class StarClass;
 class PlanetClass;
 class ShaderControllerClass;
-class CameraClass;
 class LightClass;
 
 //=================================

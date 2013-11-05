@@ -7,9 +7,7 @@
 class ActorsClass;
 class EnvironmentArtClass;
 class ShaderControllerClass;
-class D3DClass;
 class LightClass;
-class CameraClass;
 
 //=================================
 // included dependencies

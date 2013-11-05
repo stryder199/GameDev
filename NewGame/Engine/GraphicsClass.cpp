@@ -86,8 +86,3 @@ bool GraphicsClass::Render()
 
 	return true;
 }
-
-PlayerClass* GraphicsClass::getPlayer()
-{
-	return m_3DGraphics->getActors()->getPlayer();
-}

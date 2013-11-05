@@ -7,6 +7,8 @@
 #include "ShaderControllerClass.h"
 #include "Timer.h"
 
+PlayerClass* PlayerClass::m_pInstance = NULL;
+
 PlayerClass::PlayerClass(){
 	m_mesh = 0;
 	m_lightSource = 0;
@@ -18,6 +20,14 @@ PlayerClass::PlayerClass(){
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
+PlayerClass* PlayerClass::getInstance()
+{
+	if (!m_pInstance)
+		m_pInstance = new PlayerClass();
+
+	return m_pInstance;
 }
 
 PlayerClass::~PlayerClass(){
@@ -114,7 +124,7 @@ bool PlayerClass::Render(ShaderControllerClass* shader)
 		return false;
 
 	//Generate the view matrix based on the camera's position
-	CameraClass::getInstance()->Render(this);
+	CameraClass::getInstance()->Render();
 
 	vector<BulletClass*>::iterator bullet;
 	int count = 0;

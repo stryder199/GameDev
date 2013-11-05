@@ -45,66 +45,62 @@ void PixelShaderClass::Shutdown()
 	return;
 }
 
-bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-						 TextureClass* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+bool PixelShaderClass::Render(TextureClass* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture, lightDirection, ambientColor, diffuseColor);
+	result = SetShaderParameters(texture, lightDirection, ambientColor, diffuseColor);
 	if(!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(indexCount);
+	RenderShader();
 
 	return true;
 }
 
-bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix, 
-	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+bool PixelShaderClass::Render(XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, lightDirection, ambientColor, diffuseColor, color);
+	result = SetShaderParameters(lightDirection, ambientColor, diffuseColor, color);
 	if (!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(indexCount);
+	RenderShader();
 
 	return true;
 }
 
-bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture, XMFLOAT4 color)
+bool PixelShaderClass::Render(TextureClass* texture, XMFLOAT4 color)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture, color);
+	result = SetShaderParameters(texture, color);
 	if (!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(indexCount);
+	RenderShader();
 
 	return true;
 }
 
-bool PixelShaderClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture)
+bool PixelShaderClass::Render(TextureClass* texture)
 {
 	bool result;
 
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture);
+	result = SetShaderParameters(texture);
 	if (!result)
 		return false;
 
 	//Now render the prepared buffers with the shader.
-	RenderShader(indexCount);
+	RenderShader();
 
 	return true;
 }
@@ -272,8 +268,7 @@ void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR*
 	return;
 }
 
-bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-											TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+bool PixelShaderClass::SetShaderParameters(TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -313,8 +308,7 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 	return true;
 }
 
-bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture, XMFLOAT4 color)
+bool PixelShaderClass::SetShaderParameters(TextureClass* texture, XMFLOAT4 color)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -325,7 +319,7 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 	// Set shader texture resource in the pixel shader.
 	D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);
 
-	//Lock the light constant buffer
+	//Lock the color constant buffer
 	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))
 	{
@@ -350,8 +344,7 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 	return true;
 }
 
-bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	TextureClass* texture)
+bool PixelShaderClass::SetShaderParameters(TextureClass* texture)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -365,8 +358,7 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 }
 
 
-bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const XMFLOAT4X4& viewMatrix, const XMFLOAT4X4& projectionMatrix,
-	XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+bool PixelShaderClass::SetShaderParameters(XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource, mappedResource2;
@@ -423,11 +415,11 @@ bool PixelShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix, const 
 	return true;
 }
 
-void PixelShaderClass::RenderShader(int indexCount)
+void PixelShaderClass::RenderShader()
 {
 	D3DClass::getInstance()->GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
 
-	if (m_type == PixelShaderClass::ShaderType::THREEDTEXTURE || m_type == PixelShaderClass::ShaderType::TWOD)
+	if (m_type == THREEDTEXTURE || m_type == TWOD || m_type == TEXT)
 	{
 		//Set the sampler state in the pixel shader
 		D3DClass::getInstance()->GetDeviceContext()->PSSetSamplers(0, 1, &m_sampleState);

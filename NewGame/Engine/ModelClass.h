@@ -6,9 +6,7 @@
 // forward declared dependencies
 class MeshClass;
 class TextureClass;
-class D3DClass;
 class ShaderControllerClass;
-class CameraClass;
 class LightClass;
 
 //=================================
@@ -62,5 +60,6 @@ protected:
 	MeshClass* m_mesh;
 	LightClass *m_lightSource;
 	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
+	XMFLOAT4 m_color;
 	XMFLOAT4X4 m_worldMatrix;
 };

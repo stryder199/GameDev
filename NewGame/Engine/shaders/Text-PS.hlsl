@@ -33,14 +33,17 @@ float4 MyPixelShader(PixelInputType input) : SV_TARGET
     color = shaderTexture.Sample(SampleType, input.tex);
 
     // Multiply the texture pixel and the final diffuse color to get the final pixel color result.
-    if(color.r==1.0f && color.g==0.0f && color.b==1.0f)
+    if(color.g==0.0f)
 	{
+		color.r = 0.0f;
+		color.g = 0.0f;
+		color.b = 0.0f;
 		color.a = 0.0f;
 	}
 	else
 	{
+		color = pixelColor;
 		color.a = 1.0f;
-		color = color*pixelColor;
 	}
 
     return color;

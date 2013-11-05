@@ -451,26 +451,15 @@ ID3D11DeviceContext* D3DClass::GetDeviceContext()
 }
 
 
-void D3DClass::GetProjectionMatrix(XMFLOAT4X4& projectionMatrix)
+XMFLOAT4X4 D3DClass::GetProjectionMatrix()
 {
-	projectionMatrix = m_projectionMatrix;
-	return;
+	return m_projectionMatrix;
 }
 
-
-void D3DClass::GetWorldMatrix(XMFLOAT4X4& worldMatrix)
+XMFLOAT4X4 D3DClass::GetOrthoMatrix()
 {
-	worldMatrix = m_worldMatrix;
-	return;
+	return m_orthoMatrix;
 }
-
-
-void D3DClass::GetOrthoMatrix(XMFLOAT4X4& orthoMatrix)
-{
-	orthoMatrix = m_orthoMatrix;
-	return;
-}
-
 
 void D3DClass::TurnZBufferOn()
 {
@@ -497,7 +486,7 @@ void D3DClass::TurnOnAlphaBlending()
 	blendFactor[3] = 0.0f;
 	
 	// Turn on the alpha blending.
-	m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xff00ffff);
+	m_deviceContext->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
 
 	return;
 }
@@ -514,7 +503,40 @@ void D3DClass::TurnOffAlphaBlending()
 	blendFactor[3] = 0.0f;
 	
 	// Turn off the alpha blending.
-	m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xff00ffff);
-
+	m_deviceContext->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
 	return;
+}
+
+void D3DClass::TurnOnBackFaceCulling()
+{
+	// variables to hold the current rasterizer state and its description
+	ID3D11RasterizerState * rState;
+	D3D11_RASTERIZER_DESC rDesc;
+
+	// retrieve the current state
+	m_deviceContext->RSGetState(&rState); 
+	rState->GetDesc(&rDesc); 
+	rDesc.CullMode = D3D11_CULL_BACK;
+
+	// create a whole new rasterizer state
+	// d3d is the ID3D11Device
+	m_device->CreateRasterizerState(&rDesc, &rState);
+	m_deviceContext->RSSetState(rState);
+}
+
+void D3DClass::TurnOffBackFaceCulling()
+{
+	// variables to hold the current rasterizer state and its description
+	ID3D11RasterizerState * rState;
+	D3D11_RASTERIZER_DESC rDesc;
+
+	// retrieve the current state
+	m_deviceContext->RSGetState(&rState);
+	rState->GetDesc(&rDesc);
+	rDesc.CullMode = D3D11_CULL_NONE;
+
+	// create a whole new rasterizer state
+	// d3d is the ID3D11Device
+	m_device->CreateRasterizerState(&rDesc, &rState);
+	m_deviceContext->RSSetState(rState);
 }

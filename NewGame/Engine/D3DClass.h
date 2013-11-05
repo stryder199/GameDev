@@ -26,9 +26,9 @@ public:
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
 
-	void GetProjectionMatrix(XMFLOAT4X4&);
-	void GetWorldMatrix(XMFLOAT4X4&);
-	void GetOrthoMatrix(XMFLOAT4X4&);
+	XMFLOAT4X4 GetProjectionMatrix();
+	XMFLOAT4X4 GetWorldMatrix();
+	XMFLOAT4X4 GetOrthoMatrix();
 
 	void BeginScene(float red, float green, float blue, float alpha);
 	void EndScene();
@@ -38,6 +38,9 @@ public:
 
 	void TurnOnAlphaBlending();
 	void TurnOffAlphaBlending();
+
+	void TurnOnBackFaceCulling();
+	void TurnOffBackFaceCulling();
 
 private:
 	D3DClass();

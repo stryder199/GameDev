@@ -52,7 +52,7 @@ public:
 
 	bool Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
 	void Shutdown();
-	bool Render(int, const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&);
+	bool Render(int, const XMFLOAT4X4 &worldMatrix);
 
 	ShaderType getShaderType();
 private:
@@ -60,7 +60,7 @@ private:
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(const XMFLOAT4X4&, const XMFLOAT4X4&, const XMFLOAT4X4&);
+	bool SetShaderParameters(const XMFLOAT4X4 &worldMatrix);
 	void RenderShader(int);
 
 private:
