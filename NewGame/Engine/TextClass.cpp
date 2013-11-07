@@ -12,7 +12,8 @@ TextClass::TextClass()
 	m_lightSource = 0;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(10.0f, 10.0f, 10.0f);
+	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	m_screenPos = XMFLOAT2(0.0f, 0.0f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -22,13 +23,15 @@ TextClass::~TextClass()
 {
 }
 
-bool TextClass::Initialize(std::string initText, FontClass* font, XMFLOAT2 pos, XMFLOAT4 color)
+bool TextClass::Initialize(std::string initText, FontClass* font, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color)
 {
 	bool result;
 
 	m_font = font;
 	m_text = initText;
-	m_pos = XMFLOAT3(pos.x, pos.y, 0.0f);
+	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_screenPos = pos;
+	m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
 	m_color = color;
 
 	result = BuildTextMesh(initText.c_str());
@@ -58,12 +61,27 @@ bool TextClass::Render(ShaderControllerClass* shader)
 	return true;
 }
 
+bool TextClass::UpdateText(std::string newText)
+{
+	bool result;
+	if (m_text.compare(newText) != 0)
+	{
+		m_text = newText;
+		result = BuildTextMesh(m_text.c_str());
+		if (!result)
+			return false;
+	}
+	return true;
+}
+
 bool TextClass::PreProcessing()
 {
 	bool result;
 
 	m_rot = CameraClass::getInstance()->getRotation();
-	m_pos = PlayerClass::getInstance()->getPosition();
+	m_pos.x = PlayerClass::getInstance()->getPosition().x;
+	m_pos.y = PlayerClass::getInstance()->getPosition().y + m_screenPos.y;
+	m_pos.z = PlayerClass::getInstance()->getPosition().z;
 
 	ConstrainRotation();
 

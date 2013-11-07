@@ -25,7 +25,7 @@ public:
 
 	bool Initialize();
 
-	bool RenderAll(ShaderControllerClass* shader);
+	bool RenderAll(ShaderControllerClass* shader, int fps);
 
 private:
 	vector<BitmapClass*> m_allBitmaps;

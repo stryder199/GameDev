@@ -12,6 +12,7 @@ class ThreeDGraphicsClass;
 //=================================
 // included dependencies
 #include <Windows.h>
+#include "Timer.h"
 
 class GraphicsClass{
 
@@ -26,4 +27,6 @@ private:
 	ShaderControllerClass* m_Shader;
 	TwoDGraphicsClass* m_2DGraphics;
 	ThreeDGraphicsClass* m_3DGraphics;
+	Timer m_fpsTimer;
+	int m_fps, m_fpsCount;
 };

@@ -7,12 +7,15 @@
 #include "ThreeDGraphicsClassh.h"
 #include "TwoDGraphicsClass.h"
 #include "ActorsClass.h"
+#include "Timer.h"
 
 GraphicsClass::GraphicsClass()
 {
 	m_Shader = 0;
 	m_2DGraphics = 0;
 	m_3DGraphics = 0;
+	m_fps = 0;
+	m_fpsCount = 0;
 }
 
 GraphicsClass::GraphicsClass(const GraphicsClass& other)
@@ -26,6 +29,8 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 	bool result;
+
+	m_fpsTimer = Timer();
 
 	result = D3DClass::getInstance()->Initialize();
 	if(!result)
@@ -69,6 +74,18 @@ bool GraphicsClass::Render()
 {
 	bool result;
 
+	if (!m_fpsTimer.is_started())
+	{
+		m_fpsTimer.start();
+	}
+
+	if (m_fpsTimer.get_ticks() > 1000.0f)
+	{
+		m_fps = m_fpsCount;
+		m_fpsCount = 0;
+		m_fpsTimer.restart();
+	}
+
 	// Clear the buffers to begin the scene.
 	D3DClass::getInstance()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -77,12 +94,14 @@ bool GraphicsClass::Render()
 	if (!result)
 		return false;
 
-	result = m_2DGraphics->RenderAll(m_Shader);
+	result = m_2DGraphics->RenderAll(m_Shader, m_fps);
 	if (!result)
 		return false;
 
 	// Present the rendered scene to the screen.
 	D3DClass::getInstance()->EndScene();
+
+	m_fpsCount++;
 
 	return true;
 }
