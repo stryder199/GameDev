@@ -26,4 +26,6 @@ public:
 	bool Render(ShaderControllerClass* shader);
 private:
 	bool PreProcessing();
+
+	XMFLOAT2 m_screenPos;
 };

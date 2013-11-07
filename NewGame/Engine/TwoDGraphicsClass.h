@@ -4,6 +4,7 @@
 // INCLUDES //
 #include <d3d11.h>
 #include <vector>
+#include <map>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -30,6 +31,6 @@ public:
 
 private:
 	vector<BitmapClass*> m_allBitmaps;
-	vector<TextClass*> m_allText;
+	map<string, TextClass*> m_allText;
 	LightClass* m_DefaultLightSource;
 };

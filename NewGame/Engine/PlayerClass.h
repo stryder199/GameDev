@@ -29,6 +29,15 @@ public:
 	void FireWeapon();
 	void StartWeaponFiring();
 
+	float GetEnginePower();
+	int GetTotalHealth();
+	int GetHealth();
+	int GetTotalShields();
+	int GetShields();
+	int GetTorpedos();
+	int GetTotalEnergy();
+	int GetEnergy();
+
 	void SetEnginePower(float x);
 	void SetVelX(float x);
 	void SetVelY(float y);
@@ -48,8 +57,12 @@ private:
 	bool m_isWeaponFiring;
 	Timer m_weaponReloadTimer, m_weaponPulseTimer;
 	int m_weaponPulseCount, m_weaponPulseMaxCount;
-	float engine_power;
 	XMFLOAT3 m_vel, m_rotVel;
 	std::vector<BulletClass*> m_allBullets;
 	MeshClass *m_bulletMesh;
+	float m_enginePower;
+	int m_totalHealth, m_health;
+	int m_totalShields, m_shields;
+	int m_torpedos;
+	int m_totalEnergy, m_energy, m_energyCost;
 };

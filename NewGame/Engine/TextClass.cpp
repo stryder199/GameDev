@@ -80,8 +80,11 @@ bool TextClass::PreProcessing()
 
 	m_rot = CameraClass::getInstance()->getRotation();
 	m_pos.x = PlayerClass::getInstance()->getPosition().x;
-	m_pos.y = PlayerClass::getInstance()->getPosition().y + m_screenPos.y;
+	m_pos.y = PlayerClass::getInstance()->getPosition().y;
 	m_pos.z = PlayerClass::getInstance()->getPosition().z;
+
+	m_point_pos.x = m_screenPos.x;
+	m_point_pos.y = m_screenPos.y;
 
 	ConstrainRotation();
 

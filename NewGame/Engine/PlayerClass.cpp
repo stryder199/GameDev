@@ -20,6 +20,15 @@ PlayerClass::PlayerClass(){
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_enginePower = 0.0f;
+	m_totalHealth = 100;
+	m_health = 100;
+	m_totalShields = 100;
+	m_shields = 100;
+	m_torpedos = 50;
+	m_totalEnergy = 100;
+	m_energy = 100;
+	m_energyCost = 2;
 }
 
 PlayerClass* PlayerClass::getInstance()
@@ -44,7 +53,7 @@ bool PlayerClass::Initialize( MeshClass* objMesh )
 	if (!m_lightSource)
 		return false;
 	// Initialize the light object.
-	m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	m_lightSource->SetAmbientColor(0.4f, 0.4f, 0.4f, 1.0f);
 	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
 
@@ -87,6 +96,7 @@ void PlayerClass::SpawnBullet(XMFLOAT3 spawnPos)
 void PlayerClass::FireWeapon()
 {
 	m_isWeaponFiring = true;
+	m_energy -= m_energyCost;
 	vector<XMFLOAT3>::iterator gun;
 	for (gun = m_mesh->getGuns()->begin(); gun != m_mesh->getGuns()->end(); ++gun)
 	{
@@ -108,7 +118,7 @@ void PlayerClass::FireWeapon()
 
 void PlayerClass::StartWeaponFiring()
 {
-	if (!m_weaponReloadTimer.is_started())
+	if (!m_weaponReloadTimer.is_started() && m_energy >= m_energyCost)
 	{
 		FireWeapon();
 	}
@@ -181,13 +191,13 @@ bool PlayerClass::PreProcessing()
 		}
 	}
 
-	if (engine_power == 1.0f || engine_power == -1.0f)
+	if (m_enginePower == 1.0f || m_enginePower == -1.0f)
 	{
 		m_vel.x = m_dir.x * maxThrust;
 		m_vel.y = m_dir.y * maxThrust;
 		m_vel.z = m_dir.z * maxThrust;
 
-		if (engine_power == 1.0f)
+		if (m_enginePower == 1.0f)
 		{
 			m_vel.x *= -1.0f;
 			m_vel.z *= -1.0f;
@@ -237,5 +247,45 @@ void PlayerClass::SetRotVelZ(float z)
 
 void PlayerClass::SetEnginePower(float power)
 {
-	engine_power = power;
+	m_enginePower = power;
+}
+
+float PlayerClass::GetEnginePower()
+{
+	return m_enginePower;
+}
+
+int PlayerClass::GetTotalHealth()
+{
+	return m_totalHealth;
+}
+
+int PlayerClass::GetHealth()
+{
+	return m_health;
+}
+
+int PlayerClass::GetTotalShields()
+{
+	return m_totalShields;
+}
+
+int PlayerClass::GetShields()
+{
+	return m_shields;
+}
+
+int PlayerClass::GetTorpedos()
+{
+	return m_torpedos;
+}
+
+int PlayerClass::GetTotalEnergy()
+{
+	return m_totalEnergy;
+}
+
+int PlayerClass::GetEnergy()
+{
+	return m_energy;
 }

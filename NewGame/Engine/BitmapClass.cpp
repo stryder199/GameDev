@@ -11,6 +11,7 @@ BitmapClass::BitmapClass()
 {
 	m_mesh = 0;
 	m_lightSource = 0;
+	m_screenPos = XMFLOAT2(0.0f, 0.0f);
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
@@ -34,7 +35,7 @@ bool BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 
 
 	m_mesh = mesh;
 	m_lightSource = lightSource;
-	m_pos = XMFLOAT3(pos.x, pos.y, 0.0f);
+	m_screenPos = pos;
 	m_scale = XMFLOAT3(scale.x, scale.y, 0.0f);
 
 	result = ModelClass::InitializeBuffers();
@@ -67,7 +68,13 @@ bool BitmapClass::Render(ShaderControllerClass *shader)
 bool BitmapClass::PreProcessing()
 {
 	m_rot = CameraClass::getInstance()->getRotation();
-	m_pos = PlayerClass::getInstance()->getPosition();
+
+	m_pos.x = PlayerClass::getInstance()->getPosition().x;
+	m_pos.y = PlayerClass::getInstance()->getPosition().y;
+	m_pos.z = PlayerClass::getInstance()->getPosition().z;
+
+	m_point_pos.x = m_screenPos.x;
+	m_point_pos.y = m_screenPos.y;
 
 	ConstrainRotation();
 
