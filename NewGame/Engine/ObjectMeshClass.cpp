@@ -14,7 +14,7 @@ ObjectMeshClass::~ObjectMeshClass()
 
 bool ObjectMeshClass::Initialize(string name)
 {
-	bool result;
+	//bool result;
 
 	m_name = name;
 	m_allMeshData = vector<MeshDataClass*>();

@@ -346,10 +346,6 @@ bool PixelShaderClass::SetShaderParameters(TextureClass* texture, XMFLOAT4 color
 
 bool PixelShaderClass::SetShaderParameters(TextureClass* texture)
 {
-	HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	unsigned int bufferNumber;
-
 	ID3D11ShaderResourceView* textureResource = texture->GetTexture();
 	// Set shader texture resource in the pixel shader.
 	D3DClass::getInstance()->GetDeviceContext()->PSSetShaderResources(0, 1, &textureResource);

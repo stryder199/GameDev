@@ -1,12 +1,8 @@
-//=================================
-// include guard
 #pragma once
 
 ///////////////////////////////
 // PRE-PROCESSING DIRECTIVES //
-///////////////////////////////
 #define DIRECTINPUT_VERSION 0x0800
-
 //constants for mouse buttons (NEW)
 #define DIMOUSE_LEFTBUTTON   0
 #define DIMOUSE_RIGHTBUTTON  1
@@ -17,13 +13,17 @@
 #define DIMOUSE_7BUTTON      6
 #define DIMOUSE_8BUTTON      7
 
-//=================================
-// forward declared dependencies
-
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <dinput.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+
+using namespace std;
 
 class EventClass{
 

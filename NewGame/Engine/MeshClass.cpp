@@ -68,7 +68,7 @@ float readFloat(string::iterator* it)
 	}
 	//Go past the space or \n
 	++*it;
-	return atof(finalString.c_str());
+	return (float)atof(finalString.c_str());
 }
 
 MaterialClass::MaterialInfo readMtlLine(string::iterator* it)
@@ -144,7 +144,7 @@ bool MeshClass::Initialize(char* meshFilename, MeshClass::MeshType type)
 
 bool MeshClass::Initialize(ObjectMeshClass *object, MeshClass::MeshType type)
 {
-	bool result;
+	//bool result;
 
 	m_type = type;
 
@@ -174,7 +174,7 @@ bool MeshClass::LoadModel(char* filename)
 	if (is) {
 		// get length of file:
 		is.seekg(0, is.end);
-		int length = is.tellg();
+		int length = (int)is.tellg();
 		is.seekg(0, is.beg);
 
 		char * buffer = new char[length];

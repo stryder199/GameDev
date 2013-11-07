@@ -1,19 +1,19 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class MeshClass;
-class TextureClass;
-class ShaderControllerClass;
-class LightClass;
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <D3D11.h>
 #include <DirectXMath.h>
 #include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+class MeshClass;
+class ShaderControllerClass;
+class LightClass;
 
 using namespace DirectX;
 

@@ -1,21 +1,17 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class MeshClass;
-class ShaderControllerClass;
-class TextureClass;
-class LightClass;
-class BulletClass;
-class Timer;
+//////////////
+// INCLUDES //
+#include <vector>
 
-//=================================
-// included dependencies
+///////////////////////
+// MY CLASS INCLUDES //
 #include "ModelClass.h"
 #include "Timer.h"
-#include <vector>
+
+/////////////////
+// FORWARD DEC //
+class BulletClass;
 
 using namespace DirectX;
 
@@ -43,7 +39,7 @@ public:
 private:
 	PlayerClass();
 	PlayerClass(const PlayerClass&);
-	PlayerClass& operator=(PlayerClass& const) {};
+	PlayerClass& operator=(const PlayerClass&) {};
 
 	static PlayerClass* m_pInstance;
 

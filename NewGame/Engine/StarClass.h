@@ -1,14 +1,14 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class MeshClass;
+//////////////
+// INCLUDES //
 
-//=================================
-// included dependencies
+///////////////////////
+// MY CLASS INCLUDES //
 #include "ModelClass.h"
+
+/////////////////
+// FORWARD DEC //
 
 class StarClass : ModelClass{
 

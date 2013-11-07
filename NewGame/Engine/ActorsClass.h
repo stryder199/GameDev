@@ -1,19 +1,19 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class MeshClass;
-class ShaderControllerClass;
-class LightClass;
-class TextureClass;
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <vector>
 #include <D3D11.h>
-#include "PlayerClass.h"
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+class ModelClass;
+class ShaderControllerClass;
+
+using namespace std;
 
 class ActorsClass{
 
@@ -24,6 +24,6 @@ public:
 	bool Initialize();
 	bool RenderAll(ShaderControllerClass* shader);
 private:
-	std::vector<ModelClass*> allModels;
+	vector<ModelClass*> allModels;
 
 };

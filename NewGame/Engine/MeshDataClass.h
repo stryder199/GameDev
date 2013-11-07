@@ -1,9 +1,16 @@
 #pragma once
 
+//////////////
+// INCLUDES //
 #include <vector>
 #include <D3D11.h>
 #include <DirectXMath.h>
 
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 class MaterialClass;
 class TextureClass;
 

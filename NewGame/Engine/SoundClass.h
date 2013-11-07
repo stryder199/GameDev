@@ -1,13 +1,13 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
+//////////////
+// INCLUDES //
 
+///////////////////////
+// MY CLASS INCLUDES //
 
-//=================================
-// included dependencies
+/////////////////
+// FORWARD DEC //
 
 class SoundClass{
 

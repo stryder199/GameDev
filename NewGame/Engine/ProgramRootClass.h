@@ -1,16 +1,19 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
+//////////////
+// INCLUDES //
+#include <Windows.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 class SoundClass;
 class GraphicsClass;
 class EventClass;
 
-//=================================
-// included dependencies
-#include <Windows.h>
+using namespace std;
 
 class ProgramRootClass{
 

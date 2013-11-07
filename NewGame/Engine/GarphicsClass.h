@@ -1,18 +1,20 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class WindowClass;
+//////////////
+// INCLUDES //
+#include <Windows.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+#include "Timer.h"
+
+/////////////////
+// FORWARD DEC //
 class ShaderControllerClass;
 class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
 
-//=================================
-// included dependencies
-#include <Windows.h>
-#include "Timer.h"
+using namespace std;
 
 class GraphicsClass{
 

@@ -1,6 +1,14 @@
 #pragma once
 
+//////////////
+// INCLUDES //
+
+///////////////////////
+// MY CLASS INCLUDES //
 #include "ModelClass.h"
+
+/////////////////
+// FORWARD DEC //
 
 class PlanetClass :
 	public ModelClass

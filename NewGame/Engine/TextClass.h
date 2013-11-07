@@ -1,12 +1,17 @@
 #pragma once
 
+//////////////
+// INCLUDES //
 #include <string>
 #include <D3D11.h>
 #include <DirectXMath.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
 #include "ModelClass.h"
 
-class ShaderControllerClass;
-class LightClass;
+/////////////////
+// FORWARD DEC //
 class FontClass;
 
 using namespace DirectX;

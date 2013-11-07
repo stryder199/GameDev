@@ -1,18 +1,19 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-class BitmapClass;
-class TextClass;
-class ShaderControllerClass;
-class LightClass;
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <d3d11.h>
 #include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+class BitmapClass;
+class TextClass;
+class LightClass;
+class ShaderControllerClass;
 
 using namespace std;
 

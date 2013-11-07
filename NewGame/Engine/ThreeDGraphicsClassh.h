@@ -1,18 +1,20 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
+//////////////
+// INCLUDES //
+#include <vector>
+#include <D3D11.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 class ActorsClass;
 class EnvironmentArtClass;
 class ShaderControllerClass;
-class LightClass;
 
-//=================================
-// included dependencies
-#include <vector>
-#include <D3D11.h>
+using namespace std;
 
 class ThreeDGraphicsClass{
 public:

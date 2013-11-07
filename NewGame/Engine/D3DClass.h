@@ -1,17 +1,17 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <d3d11.h>
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <DirectXMath.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 
 using namespace DirectX;
 
@@ -45,7 +45,7 @@ public:
 private:
 	D3DClass();
 	D3DClass(const D3DClass&);
-	D3DClass& operator=(D3DClass& const) {};
+	D3DClass& operator=(const D3DClass&) {};
 
 	static D3DClass* m_pInstance;
 

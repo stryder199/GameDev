@@ -1,17 +1,17 @@
-//=================================
-// include guard
-#ifndef Timer_H_
-#define Timer_H_
+#pragma once
 
-//=================================
-// forward declared dependencies
-
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <Windows.h>
 
-//The timer
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+
+using namespace std;
+
 class Timer
 {
 private:
@@ -43,6 +43,3 @@ public:
 	bool is_started();
 	bool is_paused();
 };
-
-
-#endif /* Timer_H_ */

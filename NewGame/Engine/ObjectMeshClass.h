@@ -1,12 +1,15 @@
 #pragma once
 
-//=================================
-// forward declared dependencies
-class MeshDataClass;
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
+class MeshDataClass;
 
 using namespace std;
 

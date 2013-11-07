@@ -1,13 +1,14 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <DirectXMath.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 
 using namespace DirectX;
 
@@ -31,7 +32,7 @@ public:
 private:
 	CameraClass();
 	CameraClass(const CameraClass&) {};
-	CameraClass& operator=(CameraClass& const) {};
+	CameraClass& operator=(const CameraClass&) {};
 
 	static CameraClass* m_pInstance;
 	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;

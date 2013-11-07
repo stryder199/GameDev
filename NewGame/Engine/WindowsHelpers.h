@@ -1,11 +1,19 @@
 #pragma once
 
+//////////////
+// INCLUDES //
 #include <Windows.h>
 #include <stdlib.h>
 #include <shlobj.h>
 #include <stdio.h>
 #include <string>
 #include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 
 using namespace std;
 

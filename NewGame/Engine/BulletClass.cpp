@@ -24,6 +24,11 @@ bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 {
 	bool result;
 
+	m_lightSource = new LightClass();
+	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
+
 	m_mesh = objMesh;
 	m_pos = pos;
 	m_dir = dir;

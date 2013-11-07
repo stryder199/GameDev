@@ -1,13 +1,14 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 
 using namespace std;
 

@@ -1,17 +1,17 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
+//////////////
+// INCLUDES //
+#include <vector>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 class StarClass;
 class PlanetClass;
 class ShaderControllerClass;
-class LightClass;
-
-//=================================
-// included dependencies
-#include <vector>
 
 using namespace std;
 

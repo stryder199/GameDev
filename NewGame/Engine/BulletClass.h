@@ -1,9 +1,16 @@
 #pragma once
 
-class Timer;
-
+//////////////
+// INCLUDES //
 #include <math.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
 #include "ModelClass.h"
+
+/////////////////
+// FORWARD DEC //
+class Timer;
 
 using namespace DirectX;
 

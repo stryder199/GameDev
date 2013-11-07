@@ -1,14 +1,14 @@
-//=================================
-// include guard
 #pragma once
 
-//=================================
-// forward declared dependencies
-
-
-//=================================
-// included dependencies
+//////////////
+// INCLUDES //
 #include <Windows.h>
+
+///////////////////////
+// MY CLASS INCLUDES //
+
+/////////////////
+// FORWARD DEC //
 
 class WindowClass{
 
@@ -26,7 +26,7 @@ public:
 private:
 	WindowClass();
 	WindowClass(const WindowClass&);
-	WindowClass& operator=(WindowClass& const) {};
+	WindowClass& operator=(const WindowClass&) {};
 
 private:
 	static WindowClass* m_pInstance;

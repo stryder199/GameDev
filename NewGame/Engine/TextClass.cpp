@@ -76,7 +76,7 @@ bool TextClass::UpdateText(std::string newText)
 
 bool TextClass::PreProcessing()
 {
-	bool result;
+	//bool result;
 
 	m_rot = CameraClass::getInstance()->getRotation();
 	m_pos.x = PlayerClass::getInstance()->getPosition().x;
@@ -95,7 +95,7 @@ bool TextClass::BuildTextMesh(const char* sentence)
 	ObjectMeshClass *textObject = new ObjectMeshClass();
 	MeshDataClass *meshData = new MeshDataClass();
 	int letter;
-	int drawX = 0;
+	float drawX = 0.0f;
 	float maxY = 15.0f, minY = 0.0f;
 	bool result;
 
