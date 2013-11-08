@@ -42,11 +42,21 @@ PlayerClass* PlayerClass::getInstance()
 PlayerClass::~PlayerClass(){
 }
 
-bool PlayerClass::Initialize( MeshClass* objMesh )
+bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
 	bool result;
 
 	m_mesh = objMesh;
+	m_pos = pos;
+	m_scale = scale;
+	m_totalHealth = totalHealth;
+	m_health = m_totalHealth;
+	m_totalShields = totalShields;
+	m_shields = m_totalShields;
+	m_totalEnergy = totalEnergy;
+	m_energy = m_totalEnergy;
+	m_torpedos = torpedos;
+	m_energyCost = energyCost;
 
 	// Create the light object.
 	m_lightSource = new LightClass();
@@ -63,11 +73,6 @@ bool PlayerClass::Initialize( MeshClass* objMesh )
 		return false;
 
 	m_allBullets = std::vector<BulletClass*>();
-
-	m_bulletMesh = new MeshClass();
-	result = m_bulletMesh->Initialize("data/bullet.3dmodel", MeshClass::THREED);
-	if (!result)
-		return false;
 
 	m_weaponReloadTimer = Timer();
 	m_weaponPulseTimer = Timer();

@@ -12,7 +12,8 @@
 
 using namespace std;
 
-class ShipClass : public ModelClass
+class ShipClass : 
+	public ModelClass
 {
 public:
 	ShipClass();

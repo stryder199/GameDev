@@ -1,0 +1,13 @@
+mesh bottommenu data/bottommenu.3dmodel TWOD
+font basicfont data/fontdata.txt data/font.dds
+
+text fpsText "FPS 0" basicfont 250.0 250.0 2.0 2.0 1.0 1.0 1.0 1.0
+text playerx "X 0" basicfont 250.0 200.0 2.0 2.0 1.0 1.0 1.0 1.0
+text playerz "Z 0" basicfont 250.0 150.0 2.0 2.0 1.0 1.0 1.0 1.0
+text shields "0/100" basicfont -300.0 -240.0 4.0 4.0 1.0 1.0 1.0 1.0
+text health "100/100" basicfont -600.0 -240.0 4.0 4.0 1.0 1.0 1.0 1.0
+text torpedos "50" basicfont 300.0 -240.0 4.0 4.0 1.0 1.0 1.0 1.0
+text energy "100/100" basicfont 0.0 -240.0 4.0 4.0 1.0 1.0 1.0 1.0
+text thrust "0/100" basicfont 600.0 -240.0 4.0 4.0 1.0 1.0 1.0 1.0
+
+bitmap bottommenu 0.0 -300.0 1.0 1.0

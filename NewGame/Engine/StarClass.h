@@ -10,13 +10,14 @@
 /////////////////
 // FORWARD DEC //
 
-class StarClass : ModelClass{
-
+class StarClass : 
+	public ModelClass
+{
 public:
-	StarClass(float posx, float posy, float posz);
+	StarClass();
 	~StarClass();
 	
-	bool Initialize(MeshClass* mesh);
+	bool Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
 	void Shutdown();
 
 	bool Render(ShaderControllerClass* shader);

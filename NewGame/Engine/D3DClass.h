@@ -44,7 +44,7 @@ public:
 
 private:
 	D3DClass();
-	D3DClass(const D3DClass&);
+	D3DClass(const D3DClass&) {};
 	D3DClass& operator=(const D3DClass&) {};
 
 	static D3DClass* m_pInstance;

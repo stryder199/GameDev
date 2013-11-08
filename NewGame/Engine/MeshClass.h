@@ -30,20 +30,20 @@ public:
 	};
 
 public:
-	MeshClass();
-	MeshClass(const MeshClass&);
-	~MeshClass();
+	friend class MeshControllerClass;
 
-	bool Initialize(char* filename, MeshType type);
-	bool Initialize(ObjectMeshClass *object, MeshType type);
-	void Shutdown();
+	virtual void Shutdown() = 0;
 
 	MeshType getMeshType();
 	vector<ObjectMeshClass*>* getAllObjects();
 	vector<DirectX::XMFLOAT3>* getGuns();
 
 private:
-	bool LoadModel(char* filename);
+	bool Initialize(string filename, MeshType type);
+	bool Initialize(ObjectMeshClass *object, MeshType type);
+	void Shutdown();
+
+	bool LoadModel(string filename);
 	void ReleaseModel();
 
 	vector<ObjectMeshClass*> m_allObjects;

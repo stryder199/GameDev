@@ -9,6 +9,7 @@
 #include "LightClass.h"
 #include "WindowClass.h"
 #include "PlayerClass.h"
+#include "MeshControllerClass.h"
 
 TwoDGraphicsClass::TwoDGraphicsClass()
 {
@@ -25,85 +26,17 @@ TwoDGraphicsClass::~TwoDGraphicsClass()
 
 bool TwoDGraphicsClass::Initialize()
 {
-	bool result;
+	//bool result;
 
 	m_allBitmaps = vector<BitmapClass*>();
 	m_allText = map<string, TextClass*>();
+	m_allFont = map<string, FontClass*>();
 
 	m_DefaultLightSource = new LightClass();
 
 	m_DefaultLightSource->SetAmbientColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDirection(0.0, 0.0, -1.0);
-
-	MeshClass *bottommenu = new MeshClass();
-	result = bottommenu->Initialize("data/bottommenu.3dmodel", MeshClass::TWOD);
-	if (!result)
-		return false;
-
-	FontClass *font = new FontClass();
-	result = font->Initialize("data/fontdata.txt", L"data/font.dds");
-	if (!result)
-		return false;
-
-	float top = WindowClass::getInstance()->getScreenHeight() / 2.0f;
-	float bottom = -1 * top;
-	float right = WindowClass::getInstance()->getScreenWidth() / 2.0f;
-	float left = -1 * right;
-
-	TextClass *fpsText = new TextClass();
-	result = fpsText->Initialize("FPS 0", font, XMFLOAT2(right - 150.0f, top - 50.0f), XMFLOAT2(2.0f, 2.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["fps"] = fpsText;
-
-	TextClass *playerx = new TextClass();
-	result = playerx->Initialize("X 0", font, XMFLOAT2(right - 150.0f, top - 100.0f), XMFLOAT2(2.0f, 2.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["playerx"] = playerx;
-
-	TextClass *playerz = new TextClass();
-	result = playerz->Initialize("Z 0", font, XMFLOAT2(right - 150.0f, top - 150.0f), XMFLOAT2(2.0f, 2.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["playerz"] = playerz;
-
-	TextClass *shields = new TextClass();
-	result = shields->Initialize("0/100", font, XMFLOAT2(-300.0f, bottom + 60.0f), XMFLOAT2(4.0f, 4.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["shields"] = shields;
-
-	TextClass *health = new TextClass();
-	result = health->Initialize("100/100", font, XMFLOAT2(-600.0f, bottom + 60.0f), XMFLOAT2(4.0f, 4.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["health"] = health;
-
-	TextClass *torpedos = new TextClass();
-	result = torpedos->Initialize("50", font, XMFLOAT2(300.0f, bottom + 60.0f), XMFLOAT2(4.0f, 4.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["torpedos"] = torpedos;
-
-	TextClass *energy = new TextClass();
-	result = energy->Initialize("100/100", font, XMFLOAT2(0.0f, bottom + 60.0f), XMFLOAT2(4.0f, 4.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!result)
-		return false;
-	m_allText["energy"] = energy;
-
-	TextClass *thrust = new TextClass();
-	result = thrust->Initialize("0/100", font, XMFLOAT2(600.0f, bottom + 60.0f), XMFLOAT2(4.0f, 4.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	if (!thrust)
-		return false;
-	m_allText["thrust"] = thrust;
-
-	BitmapClass *bottommenu_bitmap = new BitmapClass();
-	result = bottommenu_bitmap->Initialize(bottommenu, m_DefaultLightSource, XMFLOAT2(0.0f, bottom + 100.0f), XMFLOAT2(400.0f, 400.0f));
-	if(!result)
-		return false;
-	m_allBitmaps.push_back(bottommenu_bitmap);
 
 	return true;
 }
@@ -157,6 +90,52 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 
 	//Turn the ZBuffer back on for future 3d rendering
 	D3DClass::getInstance()->TurnZBufferOn();
+
+	return true;
+}
+
+bool TwoDGraphicsClass::AddText(string name, string initText, string fontname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color)
+{
+	bool result;
+	FontClass* font = m_allFont[fontname];
+	if (font == NULL)
+		return false;
+
+	TextClass *newText = new TextClass();
+	result = newText->Initialize(initText, font, pos, scale, color);
+	if (!result)
+		return false;
+
+	m_allText[name] = newText;
+
+	return true;
+}
+
+bool TwoDGraphicsClass::AddBitmap(string meshname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale)
+{
+	bool result;
+	BitmapClass *bitmap = new BitmapClass();
+	MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+	if (mesh == NULL)
+		return false;
+
+	result = bitmap->Initialize(mesh, m_DefaultLightSource, pos, scale);
+	if (!result)
+		return false;
+	m_allBitmaps.push_back(bitmap);
+
+	return true;
+}
+
+bool TwoDGraphicsClass::AddFont(string name, string fontFilename, string textureFilename)
+{
+	bool result;
+	FontClass *newFont = new FontClass();
+	result = newFont->Initialize(fontFilename, textureFilename);
+	if (!result)
+		return false;
+
+	m_allFont[name] = newFont;
 
 	return true;
 }

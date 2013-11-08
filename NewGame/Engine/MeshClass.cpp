@@ -8,18 +8,6 @@
 #include "MeshDataClass.h"
 #include "WindowsHelpers.h"
 
-MeshClass::MeshClass()
-{
-}
-
-MeshClass::MeshClass(const MeshClass& other)
-{
-}
-
-MeshClass::~MeshClass()
-{
-}
-
 string readStringUntilSpace(string::iterator* it)
 {
 	string finalString = "";
@@ -123,7 +111,7 @@ DirectX::XMFLOAT3 readGunLine(string::iterator* it)
 	return newVertex;
 }
 
-bool MeshClass::Initialize(char* meshFilename, MeshClass::MeshType type)
+bool MeshClass::Initialize(string meshFilename, MeshClass::MeshType type)
 {
 	bool result;
 
@@ -163,7 +151,7 @@ void MeshClass::Shutdown()
 	return;
 }
 
-bool MeshClass::LoadModel(char* filename)
+bool MeshClass::LoadModel(string filename)
 {
 	string sinput;
 	bool result;

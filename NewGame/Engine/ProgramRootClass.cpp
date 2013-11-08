@@ -1,6 +1,6 @@
 #include "ProgramRootClass.h"
 #include "EventClass.h"
-#include "GarphicsClass.h"
+#include "GraphicsClass.h"
 #include "SoundClass.h"
 #include "WindowClass.h"
 #include "CameraClass.h"
@@ -23,26 +23,44 @@ ProgramRootClass::~ProgramRootClass()
 
 bool ProgramRootClass::Go()
 {
+	bool result;
+
+	auto gameLoader = async(&GraphicsClass::LoadGameData, m_Graphics);
+
+	auto gameRender = async(&ProgramRootClass::MainRenderLoop, this);
+
+	result = gameLoader.get();
+	if (!result)
+		return false;
+
+	result = gameRender.get();
+	if (!result)
+		return false;
+
+	return true;
+}
+
+bool ProgramRootClass::MainRenderLoop()
+{
 	MSG msg;
 	bool done, result;
 
-
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
-	
+
 	// Loop until there is a quit message from the window or the user.
 	done = false;
-	while(!done)
+	while (!done)
 	{
 		// Handle the windows messages.
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 
 		// If windows signals to end the application then exit out.
-		if(msg.message == WM_QUIT)
+		if (msg.message == WM_QUIT)
 		{
 			done = true;
 		}
@@ -50,7 +68,7 @@ bool ProgramRootClass::Go()
 		{
 			// Otherwise do the frame processing.  If frame processing fails then exit.
 			result = Render();
-			if(!result)
+			if (!result)
 			{
 				MessageBox(WindowClass::getInstance()->gethWnd(), L"Frame Processing Failed", L"Error", MB_OK);
 				done = true;
@@ -58,16 +76,16 @@ bool ProgramRootClass::Go()
 		}
 
 		// Check if the user pressed escape and wants to quit.
-		if(m_Events->IsEscapePressed() == true)
+		if (m_Events->IsEscapePressed() == true)
 		{
 			done = true;
 		}
 
-		if(m_Events->IsWPressed() == true)
+		if (m_Events->IsWPressed() == true)
 		{
 			PlayerClass::getInstance()->SetEnginePower(1.0f);
 		}
-		else if(m_Events->IsSPressed() == true)
+		else if (m_Events->IsSPressed() == true)
 		{
 			PlayerClass::getInstance()->SetEnginePower(-1.0f);
 		}
@@ -75,11 +93,11 @@ bool ProgramRootClass::Go()
 			PlayerClass::getInstance()->SetEnginePower(0.0f);
 		}
 
-		if(m_Events->IsDPressed() == true)
+		if (m_Events->IsDPressed() == true)
 		{
 			PlayerClass::getInstance()->SetRotVelY(XM_PI / 100);
 		}
-		else if(m_Events->IsAPressed() == true)
+		else if (m_Events->IsAPressed() == true)
 		{
 			PlayerClass::getInstance()->SetRotVelY(-1.0f * XM_PI / 100);
 		}

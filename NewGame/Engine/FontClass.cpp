@@ -2,6 +2,7 @@
 // Filename: fontclass.cpp
 ///////////////////////////////////////////////////////////////////////////////
 #include "fontclass.h"
+#include "WindowsHelpers.h"
 
 FontClass::FontClass()
 {
@@ -19,7 +20,7 @@ FontClass::~FontClass()
 {
 }
 
-bool FontClass::Initialize(char* fontFilename, WCHAR* textureFilename)
+bool FontClass::Initialize(string fontFilename, string textureFilename)
 {
 	bool result;
 
@@ -31,8 +32,9 @@ bool FontClass::Initialize(char* fontFilename, WCHAR* textureFilename)
 		return false;
 	}
 
+	m_Texture = new TextureClass();
 	// Load the texture that has the font characters on it.
-	result = LoadTexture(textureFilename);
+	result = m_Texture->Initialize(toWChar(textureFilename));
 	if (!result)
 	{
 		return false;
@@ -44,7 +46,12 @@ bool FontClass::Initialize(char* fontFilename, WCHAR* textureFilename)
 void FontClass::Shutdown()
 {
 	// Release the font texture.
-	ReleaseTexture();
+	if (m_Texture)
+	{
+		m_Texture->Shutdown();
+		delete m_Texture;
+		m_Texture = 0;
+	}
 
 	// Release the font data.
 	ReleaseFontData();
@@ -52,7 +59,7 @@ void FontClass::Shutdown()
 	return;
 }
 
-bool FontClass::LoadFontData(char* filename)
+bool FontClass::LoadFontData(string filename)
 {
 	ifstream fin;
 	int i;
@@ -106,43 +113,6 @@ void FontClass::ReleaseFontData()
 	{
 		delete[] m_Font;
 		m_Font = 0;
-	}
-
-	return;
-}
-
-
-bool FontClass::LoadTexture(WCHAR* filename)
-{
-	bool result;
-
-
-	// Create the texture object.
-	m_Texture = new TextureClass;
-	if (!m_Texture)
-	{
-		return false;
-	}
-
-	// Initialize the texture object.
-	result = m_Texture->Initialize(filename);
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-
-void FontClass::ReleaseTexture()
-{
-	// Release the texture object.
-	if (m_Texture)
-	{
-		m_Texture->Shutdown();
-		delete m_Texture;
-		m_Texture = 0;
 	}
 
 	return;

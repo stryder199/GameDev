@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <Windows.h>
+#include <future>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -27,6 +28,7 @@ public:
 	bool Shutdown();
 	bool Initialize( HINSTANCE hInstance, int iCmdshow );
 	bool Render();
+	bool MainRenderLoop();
 
 private:
 	SoundClass* m_Sounds;

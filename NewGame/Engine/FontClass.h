@@ -29,16 +29,14 @@ public:
 	FontClass(const FontClass&);
 	~FontClass();
 
-	bool Initialize(char* fontPropFilename, WCHAR* textureFilename);
+	bool Initialize(string fontPropFilename, string textureFilename);
 	void Shutdown();
 
 	TextureClass* GetTexture();
 	FontClass::FontType* GetFont();
 private:
-	bool LoadFontData(char*);
+	bool LoadFontData(string filename);
 	void ReleaseFontData();
-	bool LoadTexture(WCHAR*);
-	void ReleaseTexture();
 
 private:
 	FontType* m_Font;

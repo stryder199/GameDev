@@ -9,12 +9,12 @@ PlanetClass::PlanetClass()
 {
 	m_mesh = 0;
 	m_lightSource = 0;
-	m_pos = XMFLOAT3(0.0f, 0.0f, 10.0f);
-	m_rot = XMFLOAT3(0.366519143f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(0.025f, 0.025f, 0.025f);
+	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_rotVel = XMFLOAT3(0.0f, 0.0025f, 0.0f);
+	m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 
@@ -22,11 +22,14 @@ PlanetClass::~PlanetClass()
 {
 }
 
-bool PlanetClass::Initialize(MeshClass* objMesh)
+bool PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
 	bool result;
 
 	m_mesh = objMesh;
+	m_pos = pos;
+	m_scale = scale;
+	m_rotVel = rotVel;
 
 	// Create the light object.
 	m_lightSource = new LightClass();

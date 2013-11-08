@@ -36,7 +36,7 @@ bool BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 
 	m_mesh = mesh;
 	m_lightSource = lightSource;
 	m_screenPos = pos;
-	m_scale = XMFLOAT3(scale.x, scale.y, 0.0f);
+	m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
 
 	result = ModelClass::InitializeBuffers();
 	if (!result)

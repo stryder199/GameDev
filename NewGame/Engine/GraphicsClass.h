@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <Windows.h>
+#include <future>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -25,6 +26,11 @@ public:
 
 	bool Initialize(HINSTANCE, int);
 	bool Render();
+
+	bool LoadGameData();
+	bool LoadMeshData(string filename);
+	bool LoadObjectData(string filename);
+	bool GenerateStars(int starCount);
 private:
 	ShaderControllerClass* m_Shader;
 	TwoDGraphicsClass* m_2DGraphics;

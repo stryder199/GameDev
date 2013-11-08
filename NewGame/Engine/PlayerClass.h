@@ -15,12 +15,14 @@ class BulletClass;
 
 using namespace DirectX;
 
-class PlayerClass : public ModelClass{
+class PlayerClass : 
+	public ModelClass
+{
 public:
 	~PlayerClass();
 	static PlayerClass* getInstance();
 
-	bool Initialize(MeshClass* mesh);
+	bool Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
 	void Shutdown();
 
 	bool Render(ShaderControllerClass* shader);
