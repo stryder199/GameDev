@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <map>
+#include <mutex>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -22,8 +23,7 @@ public:
 
 	static MeshControllerClass* getInstance();
 
-	bool addObjMesh(string filename, string name, MeshClass::MeshType type);
-	bool addPrimitiveMesh(string filename, string name, MeshClass::MeshType type);
+	bool addMesh(string filename, string name, MeshClass::MeshType type);
 	MeshClass* getMesh(string name);
 private:
 	MeshControllerClass();
@@ -31,8 +31,10 @@ private:
 	MeshControllerClass& operator=(const MeshControllerClass&) {};
 
 	static MeshControllerClass* m_pInstance;
+	static mutex instanceMutex;
 
 	// name, mesh
+	mutex meshMutex;
 	map<string, MeshClass*> m_allMeshs;
 };
 

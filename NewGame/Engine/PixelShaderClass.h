@@ -50,8 +50,7 @@ private:
 
 public: 
 	PixelShaderClass();
-	PixelShaderClass(const PixelShaderClass&);
-	~PixelShaderClass();
+	~PixelShaderClass() {};
 
 	bool Initialize(WCHAR* psFilename, ShaderType type);
 	void Shutdown();

@@ -29,22 +29,42 @@ public:
 		NONE = 3
 	};
 
-public:
-	friend class MeshControllerClass;
+	struct VertexTextureType
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT2 texture;
+		DirectX::XMFLOAT3 normals;
+	};
 
-	virtual void Shutdown() = 0;
+	struct VertexMaterialType
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 normals;
+	};
+
+	struct VertexTextType
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT2 texture;
+	};
+
+public:
+	MeshClass() {};
+	~MeshClass() {};
+	bool Initialize(string filename, MeshType type);
+	bool Initialize(ObjectMeshClass *object, MeshType type);
+	void Shutdown();
+
 
 	MeshType getMeshType();
 	vector<ObjectMeshClass*>* getAllObjects();
 	vector<DirectX::XMFLOAT3>* getGuns();
 
 private:
-	bool Initialize(string filename, MeshType type);
-	bool Initialize(ObjectMeshClass *object, MeshType type);
-	void Shutdown();
-
 	bool LoadModel(string filename);
 	void ReleaseModel();
+	bool InitializeBuffers();
+	void ShutdownBuffers();
 
 	vector<ObjectMeshClass*> m_allObjects;
 	vector<DirectX::XMFLOAT3> m_guns;

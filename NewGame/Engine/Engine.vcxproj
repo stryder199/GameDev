@@ -124,7 +124,8 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /E /Q /Y $(ProjectDir)shaders $(TargetDir)shaders\ 
-xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
+xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\
+xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -144,11 +145,9 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClCompile Include="MeshDataClass.cpp" />
     <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="ObjectMeshClass.cpp" />
-    <ClCompile Include="ObjMeshClass.cpp" />
     <ClCompile Include="PixelShaderClass.cpp" />
     <ClCompile Include="PlanetClass.cpp" />
     <ClCompile Include="PlayerClass.cpp" />
-    <ClCompile Include="PrimitiveMeshClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
     <ClCompile Include="ShipClass.cpp" />
     <ClCompile Include="TextClass.cpp" />
@@ -179,11 +178,9 @@ xcopy /E /Q /Y $(ProjectDir)data $(TargetDir)data\</Command>
     <ClInclude Include="MeshDataClass.h" />
     <ClInclude Include="ModelClass.h" />
     <ClInclude Include="ObjectMeshClass.h" />
-    <ClInclude Include="ObjMeshClass.h" />
     <ClInclude Include="PixelShaderClass.h" />
     <ClInclude Include="PlanetClass.h" />
     <ClInclude Include="PlayerClass.h" />
-    <ClInclude Include="PrimitiveMeshClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />
     <ClInclude Include="ShipClass.h" />
     <ClInclude Include="TextClass.h" />

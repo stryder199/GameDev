@@ -106,12 +106,6 @@
     <ClCompile Include="MeshControllerClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PrimitiveMeshClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjMeshClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\ProgramRootClass.h">
@@ -196,12 +190,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshControllerClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PrimitiveMeshClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjMeshClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThreeDGraphicsClass.h">

@@ -2,6 +2,7 @@
 #include "WindowClass.h"
 
 D3DClass* D3DClass::m_pInstance = NULL;
+std::mutex D3DClass::instanceMutex;
 
 D3DClass::D3DClass()
 {
@@ -18,18 +19,16 @@ D3DClass::D3DClass()
 	m_alphaDisableBlendingState = 0;
 }
 
-D3DClass::D3DClass(const D3DClass& other)
-{
-}
-
 D3DClass::~D3DClass()
 {
 }
 
 D3DClass* D3DClass::getInstance()
 {
+	instanceMutex.lock();
 	if (!m_pInstance)
 		m_pInstance = new D3DClass();
+	instanceMutex.unlock();
 
 	return m_pInstance;
 }

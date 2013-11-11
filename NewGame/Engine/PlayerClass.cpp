@@ -6,16 +6,19 @@
 #include "BulletClass.h"
 #include "ShaderControllerClass.h"
 #include "Timer.h"
+#include "MeshControllerClass.h"
 
 PlayerClass* PlayerClass::m_pInstance = NULL;
+std::mutex PlayerClass::instanceMutex;
 
 PlayerClass::PlayerClass(){
 	m_mesh = 0;
+	m_bulletMesh = 0;
 	m_lightSource = 0;
 	m_isWeaponFiring = false;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(0.008f, 0.008f, 0.008f);
+	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -33,8 +36,10 @@ PlayerClass::PlayerClass(){
 
 PlayerClass* PlayerClass::getInstance()
 {
+	instanceMutex.lock();
 	if (!m_pInstance)
 		m_pInstance = new PlayerClass();
+	instanceMutex.unlock();
 
 	return m_pInstance;
 }
@@ -44,7 +49,7 @@ PlayerClass::~PlayerClass(){
 
 bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
-	bool result;
+	//bool result;
 
 	m_mesh = objMesh;
 	m_pos = pos;
@@ -58,19 +63,17 @@ bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, 
 	m_torpedos = torpedos;
 	m_energyCost = energyCost;
 
+	m_bulletMesh = MeshControllerClass::getInstance()->getMesh("bulletMesh");
+
 	// Create the light object.
 	m_lightSource = new LightClass();
 	if (!m_lightSource)
 		return false;
+
 	// Initialize the light object.
 	m_lightSource->SetAmbientColor(0.4f, 0.4f, 0.4f, 1.0f);
 	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
-
-	//Initialize the vertex and index buffers that hold the geometry for the triangle.
-	result = ModelClass::InitializeBuffers();
-	if(!result)
-		return false;
 
 	m_allBullets = std::vector<BulletClass*>();
 
@@ -79,15 +82,11 @@ bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, 
 	m_weaponPulseMaxCount = 3;
 	m_weaponPulseCount = 0;
 
-
 	return true;
 }
 
 void PlayerClass::Shutdown()
 {
-	//Release the vertex and index buffers
-	ModelClass::ShutdownBuffers();
-
 	return;
 }
 

@@ -2,6 +2,7 @@
 #include "PlayerClass.h"
 
 CameraClass* CameraClass::m_pInstance = NULL;
+std::mutex CameraClass::instanceMutex;
 
 CameraClass::CameraClass()
 {
@@ -17,8 +18,10 @@ CameraClass::CameraClass()
 
 CameraClass* CameraClass::getInstance()
 {
+	instanceMutex.lock();
 	if (!m_pInstance)
 		m_pInstance = new CameraClass();
+	instanceMutex.unlock();
 
 	return m_pInstance;
 }

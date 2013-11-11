@@ -17,7 +17,6 @@ class TextureClass
 {
 public:
 	TextureClass();
-	TextureClass(const TextureClass&);
 	~TextureClass();
 
 	bool Initialize(WCHAR*);

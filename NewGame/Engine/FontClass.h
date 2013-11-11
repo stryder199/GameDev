@@ -26,7 +26,6 @@ private:
 
 public:
 	FontClass();
-	FontClass(const FontClass&);
 	~FontClass();
 
 	bool Initialize(string fontPropFilename, string textureFilename);

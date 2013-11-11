@@ -19,35 +19,24 @@ BitmapClass::BitmapClass()
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
-
-BitmapClass::BitmapClass(const BitmapClass& other)
-{
-}
-
-
 BitmapClass::~BitmapClass()
 {
 }
 
 bool BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale)
 {
-	bool result;
+	//bool result;
 
 	m_mesh = mesh;
 	m_lightSource = lightSource;
 	m_screenPos = pos;
 	m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
 
-	result = ModelClass::InitializeBuffers();
-	if (!result)
-		return false;
-
 	return true;
 }
 
 void BitmapClass::Shutdown()
 {
-	ModelClass::ShutdownBuffers();
 	return;
 }
 

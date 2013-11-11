@@ -6,6 +6,7 @@
 #include <dxgi.h>
 #include <d3dcommon.h>
 #include <DirectXMath.h>
+#include <mutex>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -48,6 +49,7 @@ private:
 	D3DClass& operator=(const D3DClass&) {};
 
 	static D3DClass* m_pInstance;
+	static std::mutex instanceMutex;
 
 	bool m_vsync_enabled;
 	

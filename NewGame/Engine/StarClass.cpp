@@ -18,7 +18,7 @@ StarClass::~StarClass(){
 
 bool StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
-	bool result;
+	//bool result;
 
 	m_mesh = objMesh;
 	m_pos = pos;
@@ -33,11 +33,6 @@ bool StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMF
 	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDiffuseColor(0.0f, 0.0f, 0.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, -1.0f);
-
-	//Initialize the vertex and index buffers that hold the geometry for the triangle.
-	result = ModelClass::InitializeBuffers();
-	if (!result)
-		return false;
 
 	return true;
 }

@@ -9,6 +9,9 @@ MeshDataClass::MeshDataClass()
 	m_texture = 0;
 	m_indexCount = 0;
 	m_vertexCount = 0;
+	m_colorBuffer = 0;
+	m_indexBuffer = 0;
+	m_vertexBuffer = 0;
 }
 
 

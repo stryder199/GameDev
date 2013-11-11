@@ -10,12 +10,6 @@ FontClass::FontClass()
 	m_Texture = 0;
 }
 
-
-FontClass::FontClass(const FontClass& other)
-{
-}
-
-
 FontClass::~FontClass()
 {
 }

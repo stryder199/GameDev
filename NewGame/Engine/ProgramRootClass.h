@@ -20,7 +20,6 @@ class ProgramRootClass{
 
 public:
 	ProgramRootClass();
-	ProgramRootClass(const ProgramRootClass&);
 	~ProgramRootClass();
 
 

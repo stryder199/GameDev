@@ -14,15 +14,6 @@ PixelShaderClass::PixelShaderClass()
 	m_sampleState = 0;
 }
 
-
-PixelShaderClass::PixelShaderClass(const PixelShaderClass& other)
-{
-}
-
-PixelShaderClass::~PixelShaderClass()
-{
-}
-
 bool PixelShaderClass::Initialize(WCHAR* psFilename, PixelShaderClass::ShaderType type)
 {
 	bool result;

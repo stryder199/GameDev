@@ -16,10 +16,6 @@ TwoDGraphicsClass::TwoDGraphicsClass()
 	m_DefaultLightSource = 0;
 }
 
-TwoDGraphicsClass::TwoDGraphicsClass(const TwoDGraphicsClass& other)
-{
-}
-
 TwoDGraphicsClass::~TwoDGraphicsClass()
 {
 }
@@ -27,7 +23,6 @@ TwoDGraphicsClass::~TwoDGraphicsClass()
 bool TwoDGraphicsClass::Initialize()
 {
 	//bool result;
-
 	m_allBitmaps = vector<BitmapClass*>();
 	m_allText = map<string, TextClass*>();
 	m_allFont = map<string, FontClass*>();
@@ -51,6 +46,7 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 	D3DClass::getInstance()->TurnZBufferOff();
 	D3DClass::getInstance()->TurnOnAlphaBlending();
 
+	bitmapMutex.lock();
 	vector<BitmapClass*>::iterator bitmap;
 	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
 	{
@@ -58,6 +54,7 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 		if (!result)
 			return false;
 	}
+	bitmapMutex.unlock();
 
 	shader->SetTextShaders();
 
@@ -70,15 +67,49 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 	std::string energy = std::to_string(PlayerClass::getInstance()->GetEnergy()) +"\\" + std::to_string(PlayerClass::getInstance()->GetTotalEnergy());
 	std::string thrust = std::to_string((int)PlayerClass::getInstance()->GetEnginePower()*100) + "\\100";
 
-	m_allText["fps"]->UpdateText(myfps);
-	m_allText["playerx"]->UpdateText(playerx);
-	m_allText["playerz"]->UpdateText(playerz);
-	m_allText["shields"]->UpdateText(sheilds);
-	m_allText["health"]->UpdateText(health);
-	m_allText["torpedos"]->UpdateText(torpedos);
-	m_allText["energy"]->UpdateText(energy);
-	m_allText["thrust"]->UpdateText(thrust);
+	textMutex.lock();
+	if (m_allText.find("fps") != m_allText.end())
+	{
+		m_allText["fps"]->UpdateText(myfps);
+	}
 
+	if (m_allText.find("playerx") != m_allText.end())
+	{
+		m_allText["playerx"]->UpdateText(playerx);
+	}
+
+	if (m_allText.find("playerz") != m_allText.end())
+	{
+		m_allText["playerz"]->UpdateText(playerz);
+	}
+
+	if (m_allText.find("shields") != m_allText.end())
+	{
+		m_allText["shields"]->UpdateText(sheilds);
+	}
+
+	if (m_allText.find("health") != m_allText.end())
+	{
+		m_allText["health"]->UpdateText(health);
+	}
+
+	if (m_allText.find("torpedos") != m_allText.end())
+	{
+		m_allText["torpedos"]->UpdateText(torpedos);
+	}
+
+	if (m_allText.find("energy") != m_allText.end())
+	{
+		m_allText["energy"]->UpdateText(energy);
+	}
+
+	if (m_allText.find("thrust") != m_allText.end())
+	{
+		m_allText["thrust"]->UpdateText(thrust);
+	}
+	textMutex.unlock();
+	
+	textMutex.lock();
 	map<string, TextClass*>::iterator text;
 	for (text = m_allText.begin(); text != m_allText.end(); ++text)
 	{
@@ -86,6 +117,7 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 		if (!result)
 			return false;
 	}
+	textMutex.unlock();
 	D3DClass::getInstance()->TurnOffAlphaBlending();
 
 	//Turn the ZBuffer back on for future 3d rendering
@@ -97,7 +129,9 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 bool TwoDGraphicsClass::AddText(string name, string initText, string fontname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color)
 {
 	bool result;
+	fontMutex.lock();
 	FontClass* font = m_allFont[fontname];
+	fontMutex.unlock();
 	if (font == NULL)
 		return false;
 
@@ -106,7 +140,9 @@ bool TwoDGraphicsClass::AddText(string name, string initText, string fontname, D
 	if (!result)
 		return false;
 
+	textMutex.lock();
 	m_allText[name] = newText;
+	textMutex.unlock();
 
 	return true;
 }
@@ -122,7 +158,9 @@ bool TwoDGraphicsClass::AddBitmap(string meshname, DirectX::XMFLOAT2 pos, Direct
 	result = bitmap->Initialize(mesh, m_DefaultLightSource, pos, scale);
 	if (!result)
 		return false;
+	bitmapMutex.lock();
 	m_allBitmaps.push_back(bitmap);
+	bitmapMutex.unlock();
 
 	return true;
 }
@@ -135,7 +173,9 @@ bool TwoDGraphicsClass::AddFont(string name, string fontFilename, string texture
 	if (!result)
 		return false;
 
+	fontMutex.lock();
 	m_allFont[name] = newFont;
+	fontMutex.unlock();
 
 	return true;
 }

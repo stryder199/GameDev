@@ -202,9 +202,5 @@ bool TextClass::BuildTextMesh(const char* sentence)
 
 	m_mesh->Initialize(textObject, MeshClass::TEXT);
 
-	result = ModelClass::InitializeBuffers();
-	if (!result)
-		return false;
-
 	return true;
 }

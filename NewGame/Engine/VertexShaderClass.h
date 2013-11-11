@@ -44,7 +44,6 @@ private:
 
 public: 
 	VertexShaderClass();
-	VertexShaderClass(const VertexShaderClass&);
 	~VertexShaderClass();
 
 	bool Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);

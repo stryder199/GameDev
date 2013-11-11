@@ -13,11 +13,6 @@ VertexShaderClass::VertexShaderClass()
 	m_matrixBuffer = 0;
 }
 
-
-VertexShaderClass::VertexShaderClass(const VertexShaderClass& other)
-{
-}
-
 VertexShaderClass::~VertexShaderClass()
 {
 }

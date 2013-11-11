@@ -18,7 +18,6 @@ class BitmapClass : public ModelClass
 {
 public:
 	BitmapClass();
-	BitmapClass(const BitmapClass&);
 	~BitmapClass();
 
 	bool Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale);

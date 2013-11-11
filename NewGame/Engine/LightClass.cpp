@@ -8,12 +8,6 @@ LightClass::LightClass()
 {
 }
 
-
-LightClass::LightClass(const LightClass& other)
-{
-}
-
-
 LightClass::~LightClass()
 {
 }

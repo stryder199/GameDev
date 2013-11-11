@@ -18,26 +18,6 @@ class LightClass;
 using namespace DirectX;
 
 class ModelClass{
-protected:
-	struct VertexTextureType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-		XMFLOAT3 normals;
-	};
-
-	struct VertexMaterialType
-	{
-		XMFLOAT3 position;
-		XMFLOAT3 normals;
-	};
-
-	struct VertexTextType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-	};
-
 public:
 	virtual bool Render(ShaderControllerClass* shader) = 0;
 	virtual void Shutdown() = 0;
@@ -49,9 +29,7 @@ public:
 	XMFLOAT3 getDirection();
 
 protected:
-	bool InitializeBuffers();
 	bool RenderBuffers(ShaderControllerClass* shader);
-	void ShutdownBuffers();
 	void CalculateWorldMatrix();
 	void ConstrainRotation();
 	void CalculateDirection();

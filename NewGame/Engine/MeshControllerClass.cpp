@@ -1,9 +1,8 @@
 #include "MeshControllerClass.h"
 #include "MeshClass.h"
-#include "ObjMeshClass.h"
-#include "PrimitiveMeshClass.h"
 
 MeshControllerClass* MeshControllerClass::m_pInstance = NULL;
+std::mutex MeshControllerClass::instanceMutex;
 
 MeshControllerClass::MeshControllerClass()
 {
@@ -16,67 +15,59 @@ MeshControllerClass::~MeshControllerClass()
 
 bool MeshControllerClass::Initialize()
 {
+	//bool result;
+	
 	m_allMeshs = map<string, MeshClass*>();
-}
-
-MeshControllerClass* MeshControllerClass::getInstance()
-{
-	if (!m_pInstance)
-		m_pInstance = new MeshControllerClass();
-
-	return m_pInstance;
-}
-
-bool MeshControllerClass::addPrimitiveMesh(string filename, string name, MeshClass::MeshType type)
-{
-	bool result;
-
-	if (m_allMeshs.find(name) != m_allMeshs.end())
-	{
-		// Already in the list
-		return true;
-	}
-	MeshClass *newMesh = 0;
-	newMesh = new PrimitiveMeshClass();
-	if (!newMesh)
-		return false;
-	result = newMesh->Initialize(filename, type);
-	if (!result)
-		return false;
-
-	m_allMeshs[name] = newMesh;
 
 	return true;
 }
 
-bool MeshControllerClass::addObjMesh(string filename, string name, MeshClass::MeshType type)
+MeshControllerClass* MeshControllerClass::getInstance()
+{
+	instanceMutex.lock();
+	if (!m_pInstance)
+		m_pInstance = new MeshControllerClass();
+	instanceMutex.unlock();
+
+	return m_pInstance;
+}
+
+bool MeshControllerClass::addMesh(string filename, string name, MeshClass::MeshType type)
 {
 	bool result;
 
+	meshMutex.lock();
 	if (m_allMeshs.find(name) != m_allMeshs.end())
 	{
 		// Already in the list
 		return true;
 	}
+	meshMutex.unlock();
+
 	MeshClass *newMesh = 0;
-	newMesh = new ObjMeshClass();
+	newMesh = new MeshClass();
 	if (!newMesh)
 		return false;
 	result = newMesh->Initialize(filename, type);
 	if (!result)
 		return false;
 
+	meshMutex.lock();
 	m_allMeshs[name] = newMesh;
+	meshMutex.unlock();
 
 	return true;
 }
 
 MeshClass* MeshControllerClass::getMesh(string name)
 {
+	meshMutex.lock();
 	if (m_allMeshs.find(name) == m_allMeshs.end())
 	{
 		return NULL;
 	}
-	
-	return m_allMeshs[name];
+
+	MeshClass* myMesh = m_allMeshs[name];
+	meshMutex.unlock();
+	return myMesh;
 }

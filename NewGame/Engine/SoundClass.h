@@ -13,7 +13,6 @@ class SoundClass{
 
 public:
 	SoundClass();
-	SoundClass(const SoundClass&);
 	~SoundClass();
 
 	bool Initialize();

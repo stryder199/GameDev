@@ -3,12 +3,15 @@
 //////////////
 // INCLUDES //
 #include <Windows.h>
+#include <mutex>
 
 ///////////////////////
 // MY CLASS INCLUDES //
 
 /////////////////
 // FORWARD DEC //
+
+using namespace std;
 
 class WindowClass{
 
@@ -30,6 +33,8 @@ private:
 
 private:
 	static WindowClass* m_pInstance;
+	static mutex instanceMutex;
+
 	HINSTANCE m_hInstance;
 	HWND m_hWnd;
 	int SCREEN_WIDTH;

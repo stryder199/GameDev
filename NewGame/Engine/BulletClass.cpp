@@ -22,7 +22,7 @@ BulletClass::~BulletClass()
 
 bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 {
-	bool result;
+	//bool result;
 
 	m_lightSource = new LightClass();
 	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -40,11 +40,6 @@ bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 
 	m_life = new Timer();
 	m_life->start();
-
-	//Initialize the vertex and index buffers that hold the geometry for the triangle.
-	result = ModelClass::InitializeBuffers();
-	if (!result)
-		return false;
 
 	return true;
 }

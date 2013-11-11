@@ -29,7 +29,6 @@ class EventClass{
 
 public:
 	EventClass();
-	EventClass(const EventClass&);
 	~EventClass();
 
 	bool Initialize(HINSTANCE);

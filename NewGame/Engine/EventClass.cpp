@@ -5,14 +5,9 @@ EventClass::EventClass()
 {
 }
 
-EventClass::EventClass(const EventClass& other)
-{
-}
-
 EventClass::~EventClass()
 {
 }
-
 
 bool EventClass::Initialize(HINSTANCE hinstance)
 {

@@ -2,57 +2,70 @@
 <ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ArrayOfArrayOfString>
     <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshControllerClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshControllerClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\GraphicsClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\GraphicsClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\D3DClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\D3DClass.h</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TwoDGraphicsClass.cpp</string>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TwoDGraphicsClass.h</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\WindowsHelpers.h</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TextClass.cpp</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ThreeDGraphicsClass.cpp</string>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ThreeDGraphicsClass.h</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\BitmapClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\BitmapClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshControllerClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshControllerClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TextClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TextClass.h</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshClass.cpp</string>
     </ArrayOfString>
     <ArrayOfString>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\StarClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\StarClass.h</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>d:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xmemory0</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlanetClass.cpp</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\BulletClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\FontClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlanetClass.h</string>
-    </ArrayOfString>
-    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlayerClass.cpp</string>
       <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlayerClass.h</string>
     </ArrayOfString>
     <ArrayOfString>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshClass.cpp</string>
-      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshClass.h</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PixelShaderClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ModelClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\MeshDataClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\EventClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\WindowClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\WindowClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ShaderControllerClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\CameraClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\CameraClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>d:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\vector</string>
     </ArrayOfString>
   </ArrayOfArrayOfString>
 </ArrayOfArrayOfArrayOfString>

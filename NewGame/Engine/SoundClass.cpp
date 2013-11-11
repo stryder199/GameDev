@@ -4,10 +4,6 @@ SoundClass::SoundClass()
 {
 }
 
-SoundClass::SoundClass(const SoundClass& other)
-{
-}
-
 SoundClass::~SoundClass()
 {
 }

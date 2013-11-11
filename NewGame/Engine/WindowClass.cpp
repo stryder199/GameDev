@@ -2,6 +2,7 @@
 #include "ProgramRootClass.h"
 
 WindowClass* WindowClass::m_pInstance = NULL;
+std::mutex WindowClass::instanceMutex;
 
 WindowClass:: WindowClass()
 {
@@ -19,8 +20,10 @@ WindowClass::~WindowClass()
 
 WindowClass* WindowClass::getInstance()
 {
+	instanceMutex.lock();
 	if (!m_pInstance)
 		m_pInstance = new WindowClass();
+	instanceMutex.unlock();
 
 	return m_pInstance;
 }

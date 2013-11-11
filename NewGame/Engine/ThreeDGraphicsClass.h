@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <D3D11.h>
+#include <mutex>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -19,7 +20,6 @@ using namespace std;
 class ThreeDGraphicsClass{
 public:
 	ThreeDGraphicsClass();
-	ThreeDGraphicsClass(const ThreeDGraphicsClass&);
 	~ThreeDGraphicsClass();
 
 	bool Initialize();
@@ -30,5 +30,6 @@ public:
 	bool AddStar(string meshname, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
 	bool AddPlanet(string meshname, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
 private:
+	mutex modelMutex;
 	vector<ModelClass*> m_allModels;
 };

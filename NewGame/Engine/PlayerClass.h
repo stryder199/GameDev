@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <vector>
+#include <mutex>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -53,6 +54,7 @@ private:
 	PlayerClass& operator=(const PlayerClass&) {};
 
 	static PlayerClass* m_pInstance;
+	static mutex instanceMutex;
 
 	virtual bool PreProcessing();
 

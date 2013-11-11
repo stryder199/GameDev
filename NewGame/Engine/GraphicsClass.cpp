@@ -19,10 +19,6 @@ GraphicsClass::GraphicsClass()
 	m_fpsCount = 0;
 }
 
-GraphicsClass::GraphicsClass(const GraphicsClass& other)
-{
-}
-
 GraphicsClass::~GraphicsClass()
 {
 }
@@ -111,10 +107,8 @@ bool GraphicsClass::LoadGameData()
 {
 	bool result;
 
-	auto levelMeshLoader = async(&GraphicsClass::LoadMeshData, this, "config/level1.loader");
-	auto uiMeshLoader = async(&GraphicsClass::LoadMeshData, this, "config/ui.loader");
-	auto threePrimMeshLoader = async(&GraphicsClass::LoadMeshData, this, "config/3dprim.loader");
-	auto twoPrimMeshLoader = async(&GraphicsClass::LoadMeshData, this, "config/2dprim.loader");
+	auto levelMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, "config/level1.loader");
+	auto uiMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, "config/ui.loader");
 
 	result = levelMeshLoader.get();
 	if (!result)
@@ -122,20 +116,18 @@ bool GraphicsClass::LoadGameData()
 	result = uiMeshLoader.get();
 	if (!result)
 		return false;
-	result = threePrimMeshLoader.get();
-	if (!result)
-		return false;
-	result = twoPrimMeshLoader.get();
-	if (!result)
-		return false;
 
-	auto levelLoader = async(&GraphicsClass::LoadObjectData, this, "config/level1.loader");
-	auto uiLoader = async(&GraphicsClass::LoadObjectData, this, "config/ui.loader");
+	auto levelLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, "config/level1.loader");
+	auto uiLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, "config/ui.loader");
+	auto starLoader = async(launch::async, &GraphicsClass::GenerateStars, this, 1000);
 
 	result = levelLoader.get();
 	if (!result)
 		return false;
 	result = uiLoader.get();
+	if (!result)
+		return false;
+	result = starLoader.get();
 	if (!result)
 		return false;
 
@@ -158,7 +150,7 @@ bool GraphicsClass::LoadMeshData(string filename)
 
 	fin >> sinput;
 
-	while (sinput != "")
+	while (!fin.eof())
 	{
 		if (sinput.compare("mesh") == 0)
 		{
@@ -166,11 +158,11 @@ bool GraphicsClass::LoadMeshData(string filename)
 			MeshClass::MeshType realType;
 
 			fin >> name >> filename >> type;
-			if (type.compare("THREED"))
+			if (type.compare("THREED") == 0)
 			{
 				realType = MeshClass::THREED;
 			}
-			else if (type.compare("TWOD"))
+			else if (type.compare("TWOD") == 0)
 			{
 				realType = MeshClass::TWOD;
 			}
@@ -179,16 +171,14 @@ bool GraphicsClass::LoadMeshData(string filename)
 				return false;
 			}
 
-			auto meshResult = async(&MeshControllerClass::addObjMesh, meshController, filename, name, realType);
-			m_allLoaders.push_back(meshResult);
+			m_allLoaders.push_back(async(launch::async, &MeshControllerClass::addMesh, meshController, filename, name, realType));
 		}
 		else if (sinput.compare("font") == 0)
 		{
 			string name, datafilename, texfilename;
 			fin >> name >> datafilename >> texfilename;
 
-			auto fontResult = async(&TwoDGraphicsClass::AddText, meshController, name, datafilename, texfilename);
-			m_allLoaders.push_back(fontResult);
+			m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddFont, m_2DGraphics, name, datafilename, texfilename));
 		}
 		else
 		{
@@ -225,7 +215,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 
 	fin >> sinput;
 
-	while (sinput != "")
+	while (!fin.eof())
 	{
 		if (sinput.compare("player") == 0)
 		{
@@ -236,9 +226,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 			fin >> meshName >> pos.x >> pos.y >> pos.z >> scale.x >> scale.y >> scale.z
 				>> totalHealth >> totalShields >> totalEnergy >> energyCost >> torpedos;
 
-			auto playerResult = async(&ThreeDGraphicsClass::AddPlayer, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields,
-										totalEnergy, energyCost, torpedos);
-			m_allLoaders.push_back(playerResult);
+			m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddPlayer, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
 		}
 		else if (sinput.compare("planet") == 0)
 		{
@@ -248,8 +236,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 			fin >> meshName >> pos.x >> pos.y >> pos.z >> scale.x >> scale.y >> scale.z
 				>> rotVel.x >> rotVel.y >> rotVel.z;
 
-			auto planetResult = async(&ThreeDGraphicsClass::AddPlanet, m_3DGraphics, meshName, pos, scale, rotVel);
-			m_allLoaders.push_back(planetResult);
+			m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddPlanet, m_3DGraphics, meshName, pos, scale, rotVel));
 		}
 		else if (sinput.compare("star") == 0)
 		{
@@ -259,8 +246,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 			fin >> meshName >> pos.x >> pos.y >> pos.z >> scale.x >> scale.y >> scale.z
 				>> rotVel.x >> rotVel.y >> rotVel.z;
 
-			auto starResult = async(&ThreeDGraphicsClass::AddStar, m_3DGraphics, meshName, pos, scale, rotVel);
-			m_allLoaders.push_back(starResult);
+			m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddStar, m_3DGraphics, meshName, pos, scale, rotVel));
 		}
 		else if (sinput.compare("text") == 0)
 		{
@@ -271,8 +257,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 			fin >> name >> initText >> fontname >> pos.x >> pos.y >> scale.x >> scale.y
 				>> color.x >> color.y >> color.z >> color.w;
 
-			auto textResult = async(&TwoDGraphicsClass::AddText, m_2DGraphics, name, initText, fontname, pos, scale, color);
-			m_allLoaders.push_back(textResult);
+			m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddText, m_2DGraphics, name, initText, fontname, pos, scale, color));
 		}
 		else if (sinput.compare("bitmap") == 0)
 		{
@@ -281,8 +266,7 @@ bool GraphicsClass::LoadObjectData(string filename)
 
 			fin >> meshName >> pos.x >> pos.y >> scale.x >> scale.y;
 
-			auto bitmapResult = async(&TwoDGraphicsClass::AddBitmap, m_2DGraphics, meshName, pos, scale);
-			m_allLoaders.push_back(bitmapResult);
+			m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddBitmap, m_2DGraphics, meshName, pos, scale));
 		}
 		else
 		{
@@ -340,7 +324,7 @@ bool GraphicsClass::GenerateStars(int starCount)
 		if (int(posZ) % 2 == 1)
 			posZ *= -1.0f;
 
-		result = m_3DGraphics->AddStar("starMesh", XMFLOAT3(posX, posY, posZ), XMFLOAT3(100.00f, 100.00f, 100.00f), XMFLOAT3(0.0f, 0.0f, 0.0f));
+		result = m_3DGraphics->AddStar("starMesh", XMFLOAT3(posX, posY, posZ), XMFLOAT3(0.15f, 0.15f, 0.15f), XMFLOAT3(0.0f, 0.0f, 0.0f));
 		if (!result)
 			return false;
 	}

@@ -21,7 +21,6 @@ class GraphicsClass{
 
 public:
 	GraphicsClass();
-	GraphicsClass(const GraphicsClass&);
 	~GraphicsClass();
 
 	bool Initialize(HINSTANCE, int);

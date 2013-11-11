@@ -13,10 +13,6 @@ ProgramRootClass::ProgramRootClass()
 	m_Sounds = 0;
 }
 
-ProgramRootClass::ProgramRootClass(const ProgramRootClass& other)
-{
-}
-
 ProgramRootClass::~ProgramRootClass()
 {
 }
@@ -25,9 +21,9 @@ bool ProgramRootClass::Go()
 {
 	bool result;
 
-	auto gameLoader = async(&GraphicsClass::LoadGameData, m_Graphics);
+	auto gameLoader = async(launch::async, &GraphicsClass::LoadGameData, m_Graphics);
 
-	auto gameRender = async(&ProgramRootClass::MainRenderLoop, this);
+	auto gameRender = async(launch::async, &ProgramRootClass::MainRenderLoop, this);
 
 	result = gameLoader.get();
 	if (!result)
