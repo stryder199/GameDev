@@ -27,6 +27,9 @@ public:
 	XMFLOAT3 getScale();
 	XMFLOAT3 getPointPosition();
 	XMFLOAT3 getDirection();
+	float getBasicCollisionCircleRadius();
+
+	static bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2);
 
 protected:
 	bool RenderBuffers(ShaderControllerClass* shader);

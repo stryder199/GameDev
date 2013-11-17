@@ -49,7 +49,9 @@ bool BitmapClass::Render(ShaderControllerClass *shader)
 	if(!result)
 		return false;
 
-	ModelClass::RenderBuffers(shader);
+	result = ModelClass::RenderBuffers(shader);
+	if (!result)
+		return false;
 
 	return true;
 }

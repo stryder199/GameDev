@@ -20,7 +20,7 @@ public:
 
 	void Render();
 	bool Initialize();
-	XMFLOAT4X4* GetViewMatrix();
+	XMFLOAT4X4 GetViewMatrix();
 
 	XMFLOAT3 getPosition();
 	XMFLOAT3 getRotation();

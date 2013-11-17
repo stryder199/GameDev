@@ -151,6 +151,30 @@ XMFLOAT3 ModelClass::getDirection()
 	return m_dir;
 }
 
+float ModelClass::getBasicCollisionCircleRadius()
+{
+	// All models are normalized to be in a 1 by 1 box, thus the scale is the radius of the basic circle
+	return m_scale.x;
+}
+
+bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2)
+{
+	XMVECTOR distance = XMVectorSubtract(XMLoadFloat3(&p1), XMLoadFloat3(&p2));
+	XMVECTOR distanceLengthVec = XMVector3Length(distance);
+	float distanceLength = 0.0f;
+	XMStoreFloat(&distanceLength, distanceLengthVec);
+
+	float sumradius = r1 + r2;
+
+	// If the distance between 2 spheres is less then the sum of the radius's then we have a colision
+	if (distanceLength < sumradius)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void ModelClass::ConstrainRotation()
 {
 	if (m_rot.x >= 2 * (float) XM_PI)

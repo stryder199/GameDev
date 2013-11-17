@@ -83,9 +83,9 @@ void CameraClass::Render()
 	XMStoreFloat4x4(m_viewMatrix, XMMatrixLookAtLH(position, lookAt, up));
 }
 
-XMFLOAT4X4* CameraClass::GetViewMatrix()
+XMFLOAT4X4 CameraClass::GetViewMatrix()
 {
-	return m_viewMatrix;
+	return *m_viewMatrix;
 }
 
 XMFLOAT3 CameraClass::getPosition()

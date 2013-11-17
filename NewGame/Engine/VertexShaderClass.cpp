@@ -186,9 +186,11 @@ bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
+	XMFLOAT4X4 viewMatrix = CameraClass::getInstance()->GetViewMatrix();
+
 	//Transpose the matrices to prepare them for the shader
 	transposedWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&worldMatrix));
-	transposedViewMatrix = XMMatrixTranspose(XMLoadFloat4x4(CameraClass::getInstance()->GetViewMatrix()));
+	transposedViewMatrix = XMMatrixTranspose(XMLoadFloat4x4(&viewMatrix));
 
 	if (m_type == THREEDTEXTURE || m_type == THREEDMATERIAL)
 	{
