@@ -25,7 +25,9 @@ public:
 	bool Initialize();
 
 	bool RenderAll(ShaderControllerClass* shader);
+	
 	void ConstructFrustum();
+	bool CheckSphereAgainstFrustum(DirectX::XMFLOAT3 pos, float radius);
 
 	bool AddPlayer(string meshname, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
 	bool AddStar(string meshname, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
@@ -33,5 +35,5 @@ public:
 private:
 	mutex modelMutex;
 	vector<ModelClass*> m_allModels;
-	XMFLOAT4 m_fulstrumPlanes[6];
+	DirectX::XMFLOAT4 m_fulstrumPlanes[6];
 };

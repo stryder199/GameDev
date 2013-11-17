@@ -28,34 +28,19 @@ bool ThreeDGraphicsClass::Initialize()
 
 bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader){
 	bool result;
+
+	ConstructFrustum();
+
 	modelMutex.lock();
-	std::vector<ModelClass*>::iterator model;
-	std::vector<ModelClass*>::iterator model2;
+	vector<ModelClass*>::iterator model;
 	for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
 	{
-		for (model2 = m_allModels.begin(); model2 != m_allModels.end(); ++model2)
+		if (CheckSphereAgainstFrustum((*model)->getPosition(), (*model)->getBasicCollisionCircleRadius()))
 		{
-			if ((*model) != (*model2))
-			{
-				result = ModelClass::sphereSphereCollision((*model)->getPosition(), (*model)->getBasicCollisionCircleRadius(),
-							(*model2)->getPosition(), (*model)->getBasicCollisionCircleRadius());
-				// If there was a collision
-				if (result)
-				{
-
-				}
-					
-			}
+			result = (*model)->Render(shader);
+			if (!result)
+				return false;
 		}
-	}
-	modelMutex.unlock();
-
-	modelMutex.lock();
-	for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
-	{
-		result = (*model)->Render(shader);
-		if (!result)
-			return false;
 	}
 	modelMutex.unlock();
 
@@ -122,12 +107,12 @@ bool ThreeDGraphicsClass::AddPlanet(string meshname, DirectX::XMFLOAT3 pos, Dire
 void ThreeDGraphicsClass::ConstructFrustum()
 {
 	float zMinimum, r;
-	XMMATRIX matrix;
-	XMFLOAT4X4 matrixFloat;
-	XMVECTOR normalized;
+	DirectX::XMMATRIX matrix;
+	DirectX::XMFLOAT4X4 matrixFloat;
+	DirectX::XMVECTOR normalized;
 
-	XMFLOAT4X4 projectionFloat4x4 = D3DClass::getInstance()->GetProjectionMatrix();
-	XMFLOAT4X4 viewFloat4x4 = CameraClass::getInstance()->GetViewMatrix();
+	DirectX::XMFLOAT4X4 projectionFloat4x4 = D3DClass::getInstance()->GetProjectionMatrix();
+	DirectX::XMFLOAT4X4 viewFloat4x4 = CameraClass::getInstance()->GetViewMatrix();
 	float screenDepth = WindowClass::getInstance()->SCREEN_DEPTH;
 
 	// Calculate the minimum Z distance in the frustum.
@@ -135,68 +120,87 @@ void ThreeDGraphicsClass::ConstructFrustum()
 	r = screenDepth / (screenDepth - zMinimum);
 	projectionFloat4x4._33 = r;
 	projectionFloat4x4._43 = -r * zMinimum;
-
-	XMMATRIX projMat = XMLoadFloat4x4(&projectionFloat4x4);
-	XMMATRIX viewMat = XMLoadFloat4x4(&viewFloat4x4);
+	DirectX::XMMATRIX projMat = DirectX::XMLoadFloat4x4(&projectionFloat4x4);
+	DirectX::XMMATRIX viewMat = DirectX::XMLoadFloat4x4(&viewFloat4x4);
 
 	// Create the frustum matrix from the view matrix and updated projection matrix.
-	matrix = XMMatrixMultiply(viewMat, projMat);
+	matrix = DirectX::XMMatrixMultiply(viewMat, projMat);
 
-	XMStoreFloat4x4(&matrixFloat, matrix);
+	DirectX::XMStoreFloat4x4(&matrixFloat, matrix);
 
 	// Calculate near plane of frustum.
 	m_fulstrumPlanes[0].x = matrixFloat._14 + matrixFloat._13;
 	m_fulstrumPlanes[0].y = matrixFloat._24 + matrixFloat._23;
 	m_fulstrumPlanes[0].z = matrixFloat._34 + matrixFloat._33;
 	m_fulstrumPlanes[0].w = matrixFloat._44 + matrixFloat._43;
-	XMVECTOR plane0 = XMLoadFloat4(&m_fulstrumPlanes[0]);
-	normalized = XMPlaneNormalize(plane0);
-	XMStoreFloat4(&m_fulstrumPlanes[0], normalized);
+	DirectX::XMVECTOR plane0 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[0]);
+	normalized = DirectX::XMPlaneNormalize(plane0);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[0], normalized);
 
 	// Calculate far plane of frustum.
 	m_fulstrumPlanes[1].x = matrixFloat._14 - matrixFloat._13;
 	m_fulstrumPlanes[1].y = matrixFloat._24 - matrixFloat._23;
 	m_fulstrumPlanes[1].z = matrixFloat._34 - matrixFloat._33;
 	m_fulstrumPlanes[1].w = matrixFloat._44 - matrixFloat._43;
-	XMVECTOR plane1 = XMLoadFloat4(&m_fulstrumPlanes[1]);
-	normalized = XMPlaneNormalize(plane1);
-	XMStoreFloat4(&m_fulstrumPlanes[1], normalized);
+	DirectX::XMVECTOR plane1 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[1]);
+	normalized = DirectX::XMPlaneNormalize(plane1);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[1], normalized);
 
 	// Calculate left plane of frustum.
 	m_fulstrumPlanes[2].x = matrixFloat._14 + matrixFloat._11;
 	m_fulstrumPlanes[2].y = matrixFloat._24 + matrixFloat._21;
 	m_fulstrumPlanes[2].z = matrixFloat._34 + matrixFloat._31;
 	m_fulstrumPlanes[2].w = matrixFloat._44 + matrixFloat._41;
-	XMVECTOR plane2 = XMLoadFloat4(&m_fulstrumPlanes[2]);
-	normalized = XMPlaneNormalize(plane2);
-	XMStoreFloat4(&m_fulstrumPlanes[2], normalized);
+	DirectX::XMVECTOR plane2 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[2]);
+	normalized = DirectX::XMPlaneNormalize(plane2);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[2], normalized);
 
 	// Calculate right plane of frustum.
 	m_fulstrumPlanes[3].x = matrixFloat._14 - matrixFloat._11;
 	m_fulstrumPlanes[3].y = matrixFloat._24 - matrixFloat._21;
 	m_fulstrumPlanes[3].z = matrixFloat._34 - matrixFloat._31;
 	m_fulstrumPlanes[3].w = matrixFloat._44 - matrixFloat._41;
-	XMVECTOR plane3 = XMLoadFloat4(&m_fulstrumPlanes[3]);
-	normalized = XMPlaneNormalize(plane3);
-	XMStoreFloat4(&m_fulstrumPlanes[3], normalized);
+	DirectX::XMVECTOR plane3 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[3]);
+	normalized = DirectX::XMPlaneNormalize(plane3);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[3], normalized);
 
 	// Calculate top plane of frustum.
 	m_fulstrumPlanes[4].x = matrixFloat._14 - matrixFloat._12;
 	m_fulstrumPlanes[4].y = matrixFloat._24 - matrixFloat._22;
 	m_fulstrumPlanes[4].z = matrixFloat._34 - matrixFloat._32;
 	m_fulstrumPlanes[4].w = matrixFloat._44 - matrixFloat._42;
-	XMVECTOR plane4 = XMLoadFloat4(&m_fulstrumPlanes[4]);
-	normalized = XMPlaneNormalize(plane4);
-	XMStoreFloat4(&m_fulstrumPlanes[4], normalized);
+	DirectX::XMVECTOR plane4 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[4]);
+	normalized = DirectX::XMPlaneNormalize(plane4);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[4], normalized);
 
 	// Calculate bottom plane of frustum.
 	m_fulstrumPlanes[5].x = matrixFloat._14 + matrixFloat._12;
 	m_fulstrumPlanes[5].y = matrixFloat._24 + matrixFloat._22;
 	m_fulstrumPlanes[5].z = matrixFloat._34 + matrixFloat._32;
 	m_fulstrumPlanes[5].w = matrixFloat._44 + matrixFloat._42;
-	XMVECTOR plane5 = XMLoadFloat4(&m_fulstrumPlanes[5]);
-	normalized = XMPlaneNormalize(plane5);
-	XMStoreFloat4(&m_fulstrumPlanes[5], normalized);
+	DirectX::XMVECTOR plane5 = DirectX::XMLoadFloat4(&m_fulstrumPlanes[5]);
+	normalized = DirectX::XMPlaneNormalize(plane5);
+	DirectX::XMStoreFloat4(&m_fulstrumPlanes[5], normalized);
 
 	return;
+}
+
+bool ThreeDGraphicsClass::CheckSphereAgainstFrustum(DirectX::XMFLOAT3 pos, float radius)
+{
+	int i;
+	DirectX::XMVECTOR posVec = DirectX::XMLoadFloat3(&pos);
+
+	// Check if the radius of the sphere is inside the view frustum.
+	for (i = 0; i<6; i++)
+	{
+		DirectX::XMVECTOR planeVec = DirectX::XMLoadFloat4(&m_fulstrumPlanes[i]);
+		float result = 0.0f;
+		DirectX::XMStoreFloat(&result, DirectX::XMPlaneDotCoord(planeVec, posVec));
+		if (result < -radius)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

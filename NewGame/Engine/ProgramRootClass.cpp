@@ -19,27 +19,11 @@ ProgramRootClass::~ProgramRootClass()
 
 bool ProgramRootClass::Go()
 {
-	bool result;
-
-	auto gameLoader = async(launch::async, &GraphicsClass::LoadGameData, m_Graphics);
-
-	auto gameRender = async(launch::async, &ProgramRootClass::MainRenderLoop, this);
-
-	result = gameLoader.get();
-	if (!result)
-		return false;
-
-	result = gameRender.get();
-	if (!result)
-		return false;
-
-	return true;
-}
-
-bool ProgramRootClass::MainRenderLoop()
-{
 	MSG msg;
 	bool done, result;
+	bool gameLoaderWaiterDone = false;
+
+	auto gameLoader = async(launch::async, &GraphicsClass::LoadGameData, m_Graphics);
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -48,6 +32,15 @@ bool ProgramRootClass::MainRenderLoop()
 	done = false;
 	while (!done)
 	{
+		// Get the result from the game loader
+		if (!gameLoaderWaiterDone && gameLoader.wait_for(chrono::seconds(0)) == future_status::ready)
+		{
+			gameLoaderWaiterDone = true;
+			result = gameLoader.get();
+			if (!result)
+				return false;
+		}
+
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
