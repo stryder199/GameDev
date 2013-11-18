@@ -31,6 +31,47 @@ static LPCTSTR toLTStr(string s)
 	return (LPCTSTR) s.c_str();
 }
 
+static vector<string> listDir(string dirPath)
+{
+	vector<string> dirList;
+	HANDLE dir;
+	WIN32_FIND_DATA file_data;
+
+	string pathWildcard = dirPath + "\\*";
+	std::wstring stemp = std::wstring(pathWildcard.begin(), pathWildcard.end());
+	LPCWSTR lpathWildcard = stemp.c_str();
+
+	if ((dir = FindFirstFile(lpathWildcard, &file_data)) == INVALID_HANDLE_VALUE)
+	return; /* No files found */
+
+	do {
+		WCHAR* wc = file_data.cFileName;
+
+		//convert from wide char to narrow char array
+		char ch[260];
+		char DefChar = ' ';
+		WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, NULL);
+
+		//A std:string  using the char* constructor.
+		std::string filename(ch);
+
+		const string full_file_name = dirPath + "\\" + filename;
+		const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+
+		if (filename[0] == '.')
+			continue;
+
+		if (!is_directory)
+			continue;
+
+		dirList.push_back(full_file_name);
+	} while (FindNextFile(dir, &file_data));
+
+	FindClose(dir);
+
+	return dirList;
+}
+
 static vector<string> listFile(string dirPath, string extension)
 {
 	HANDLE hFind;
