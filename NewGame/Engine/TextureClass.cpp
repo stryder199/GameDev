@@ -20,17 +20,17 @@ bool TextureClass::Initialize(WCHAR* filename)
 	{
 		return false;
 	}
-
+	
 	return true;
 }
 
 void TextureClass::Shutdown()
 {
-	//Release the texture resource
+	// FIX ME WHEN TEXTURE CONTROLLER IS IMP
 	if(m_texture)
 	{
-		m_texture->Release();
-		m_texture = 0;
+		//m_texture->Release();
+		//m_texture = 0;
 	}
 
 	return;

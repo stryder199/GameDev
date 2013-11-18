@@ -16,4 +16,5 @@ public:
 	~SoundClass();
 
 	bool Initialize();
+	void Shutdown();
 };

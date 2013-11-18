@@ -23,6 +23,7 @@ public:
 	static D3DClass* getInstance();
 
 	bool Initialize();
+	void Shutdown();
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -52,6 +53,10 @@ private:
 	static std::mutex instanceMutex;
 
 	bool m_vsync_enabled;
+
+	XMFLOAT4X4 m_projectionMatrix;
+	XMFLOAT4X4 m_worldMatrix;
+	XMFLOAT4X4 m_orthoMatrix;
 	
 	IDXGISwapChain* m_swapChain;
 	ID3D11Device* m_device;
@@ -61,11 +66,6 @@ private:
 	ID3D11DepthStencilState* m_depthStencilState;
 	ID3D11DepthStencilView* m_depthStencilView;
 	ID3D11RasterizerState* m_rasterState;
-
-	XMFLOAT4X4 m_projectionMatrix;
-	XMFLOAT4X4 m_worldMatrix;
-	XMFLOAT4X4 m_orthoMatrix;
-
 	ID3D11DepthStencilState* m_depthDisabledStencilState;
 	ID3D11BlendState* m_alphaEnableBlendingState;
 	ID3D11BlendState* m_alphaDisableBlendingState;

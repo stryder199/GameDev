@@ -1,67 +1,67 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'ghost_ship.blend'
 # Material Count: 11
 
-newmtl FrontColor.006
-Ns 86.274510
+newmtl FrontColor
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.361412 0.361412 0.321255
+Kd 0.564706 0.564706 0.501961
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
 
 newmtl Material1
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.125290 0.125290 0.125290
+Kd 0.195765 0.195765 0.195765
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Ghost_Fighter\Material1.jpg
+map_Kd C:\Users\Mark\Desktop\GameDevHell\3D_Models\OBJ_MTL\Ghost_Fighter\Material1.jpg
 
 newmtl Material3
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.096376 0.096376 0.096376
+Kd 0.150588 0.150588 0.150588
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Ghost_Fighter\Material3.jpg
+map_Kd C:\Users\Mark\Desktop\GameDevHell\3D_Models\OBJ_MTL\Ghost_Fighter\Material3.jpg
 
 newmtl Material4
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.093164 0.091557 0.096376
+Kd 0.145569 0.143058 0.150588
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Ghost_Fighter\Material4.jpg
+map_Kd C:\Users\Mark\Desktop\GameDevHell\3D_Models\OBJ_MTL\Ghost_Fighter\Material4.jpg
 
-newmtl Material5.003
-Ns 86.274510
+newmtl Material5
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.056219 0.054613 0.054613
+Kd 0.087843 0.085333 0.085333
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Ghost_Fighter\Material5.jpg
+map_Kd C:\Users\Mark\Desktop\GameDevHell\3D_Models\OBJ_MTL\Ghost_Fighter\Material5.jpg
 
 newmtl Material7
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.089951 0.081920 0.072283
+Kd 0.140549 0.128000 0.112942
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Ghost_Fighter\Material7.jpg
+map_Kd C:\Users\Mark\Desktop\GameDevHell\3D_Models\OBJ_MTL\Ghost_Fighter\Material7.jpg
 
-newmtl _Black_.002
-Ns 86.274510
+newmtl _Black_
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
 Kd 0.000000 0.000000 0.000000
 Ks 0.165000 0.165000 0.165000
@@ -70,36 +70,36 @@ d 1.000000
 illum 2
 
 newmtl _Blue_
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.000000 0.000000 0.409600
+Kd 0.000000 0.000000 0.640000
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl _Charcoal_.006
-Ns 86.274510
+newmtl _Charcoal_
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.056219 0.056219 0.056219
+Kd 0.087843 0.087843 0.087843
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl _Red_.005
-Ns 86.274510
+newmtl _Red_
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.409600 0.000000 0.000000
+Kd 0.640000 0.000000 0.000000
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000
 illum 2
 
 newmtl _SlateGray_1
-Ns 86.274510
+Ns 92.156863
 Ka 0.000000 0.000000 0.000000
-Kd 0.118865 0.117258 0.138139
+Kd 0.185726 0.183216 0.215843
 Ks 0.165000 0.165000 0.165000
 Ni 1.000000
 d 1.000000

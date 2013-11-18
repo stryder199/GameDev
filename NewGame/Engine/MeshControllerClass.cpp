@@ -22,6 +22,17 @@ bool MeshControllerClass::Initialize()
 	return true;
 }
 
+void MeshControllerClass::Shutdown()
+{
+	map<string, MeshClass*>::iterator mesh;
+	for (mesh = m_allMeshs.begin(); mesh != m_allMeshs.end(); ++mesh)
+	{
+		(*mesh).second->Shutdown();
+		delete (*mesh).second;
+		(*mesh).second = 0;
+	}
+}
+
 MeshControllerClass* MeshControllerClass::getInstance()
 {
 	instanceMutex.lock();

@@ -6,14 +6,12 @@ std::mutex CameraClass::instanceMutex;
 
 CameraClass::CameraClass()
 {
-	m_viewMatrix = 0;
-
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_scale = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_point_pos = XMFLOAT3(0.0f, 0.0f, -0.15f);
+	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_viewMatrix = new XMFLOAT4X4();
+	m_viewMatrix = XMFLOAT4X4(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 CameraClass* CameraClass::getInstance()
@@ -30,7 +28,14 @@ bool CameraClass::Initialize()
 {
 	//bool result; not used
 
+	m_point_pos.z = -0.15;
+
 	return true;
+}
+
+void CameraClass::Shutdown()
+{
+	return;
 }
 
 void CameraClass::Render()
@@ -80,12 +85,12 @@ void CameraClass::Render()
 
 	XMStoreFloat3(&m_pos, position);
 	//Finally create the view matrix from the three updates vectors
-	XMStoreFloat4x4(m_viewMatrix, XMMatrixLookAtLH(position, lookAt, up));
+	XMStoreFloat4x4(&m_viewMatrix, XMMatrixLookAtLH(position, lookAt, up));
 }
 
 XMFLOAT4X4 CameraClass::GetViewMatrix()
 {
-	return *m_viewMatrix;
+	return m_viewMatrix;
 }
 
 XMFLOAT3 CameraClass::getPosition()

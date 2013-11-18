@@ -44,11 +44,6 @@ bool BitmapClass::Render(ShaderControllerClass *shader)
 {
 	bool result;
 
-	//Re-build the dynamic vertex buffer for rendering to possibly a different location on the screen
-	result = PreProcessing();
-	if(!result)
-		return false;
-
 	result = ModelClass::RenderBuffers(shader);
 	if (!result)
 		return false;

@@ -20,6 +20,7 @@ using namespace DirectX;
 class ModelClass{
 public:
 	virtual bool Render(ShaderControllerClass* shader) = 0;
+	virtual bool PreProcessing() = 0;
 	virtual void Shutdown() = 0;
 
 	XMFLOAT3 getPosition();
@@ -36,7 +37,6 @@ protected:
 	void CalculateWorldMatrix();
 	void ConstrainRotation();
 	void CalculateDirection();
-	virtual bool PreProcessing() = 0;
 
 	MeshClass* m_mesh;
 	LightClass *m_lightSource;

@@ -21,12 +21,13 @@ class ProgramRootClass{
 public:
 	ProgramRootClass();
 	~ProgramRootClass();
-
-
-	bool Go();
-	bool Shutdown();
+	
 	bool Initialize( HINSTANCE hInstance, int iCmdshow );
+	void Shutdown();
+
 	bool Render();
+	
+	bool Go();
 
 private:
 	SoundClass* m_Sounds;

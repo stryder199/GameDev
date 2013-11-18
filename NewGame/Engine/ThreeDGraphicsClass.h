@@ -23,6 +23,7 @@ public:
 	~ThreeDGraphicsClass();
 
 	bool Initialize();
+	void Shutdown();
 
 	bool RenderAll(ShaderControllerClass* shader);
 	

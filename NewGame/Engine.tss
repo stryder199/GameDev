@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<ArrayOfArrayOfArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ArrayOfArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ProgramRootClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\BulletClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlayerClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\PlayerClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TextureClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ThreeDGraphicsClass.cpp</string>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\ThreeDGraphicsClass.h</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\GraphicsClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\TwoDGraphicsClass.cpp</string>
+    </ArrayOfString>
+    <ArrayOfString>
+      <string>D:\Users\Mark\Desktop\GameDevHell\NewGame\Engine\VertexShaderClass.cpp</string>
+    </ArrayOfString>
+  </ArrayOfArrayOfString>
+</ArrayOfArrayOfArrayOfString>

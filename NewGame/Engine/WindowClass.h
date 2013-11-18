@@ -20,6 +20,8 @@ public:
 	static WindowClass* getInstance();
 
 	bool Initialize(HINSTANCE hInstance, int nCmdShow);
+	void Shutdown();
+
 	HWND gethWnd();
 	int getScreenHeight();
 	int getScreenWidth();
@@ -31,7 +33,6 @@ private:
 	WindowClass(const WindowClass&);
 	WindowClass& operator=(const WindowClass&) {};
 
-private:
 	static WindowClass* m_pInstance;
 	static mutex instanceMutex;
 

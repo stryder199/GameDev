@@ -27,8 +27,9 @@ public:
 
 	bool UpdateText(std::string newText);
 	bool Render(ShaderControllerClass* shader);
+	virtual bool PreProcessing();
+
 private:
-	bool PreProcessing();
 	bool BuildTextMesh(const char* sentence);
 
 	FontClass* m_font;

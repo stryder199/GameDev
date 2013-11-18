@@ -24,6 +24,8 @@ public:
 	~GraphicsClass();
 
 	bool Initialize(HINSTANCE, int);
+	void Shutdown();
+
 	bool Render();
 
 	bool LoadGameData();

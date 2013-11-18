@@ -346,44 +346,13 @@ bool MeshClass::InitializeBuffers()
 	return true;
 }
 
-void MeshClass::ShutdownBuffers()
-{
-	// For each object in the mesh
-	std::vector<ObjectMeshClass*>::iterator object;
-	for (object = m_allObjects.begin(); object != m_allObjects.end(); ++object)
-	{
-		// For each submesh
-		std::vector<MeshDataClass*>::iterator subMesh;
-		std::vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
-		for (subMesh = allMeshData->begin(); subMesh != allMeshData->end(); ++subMesh)
-		{
-			// Release the index buffer.
-			if ((*subMesh)->getIndexBuffer())
-			{
-				(*subMesh)->getIndexBuffer()->Release();
-			}
-
-			// Release the vertex buffer.
-			if ((*subMesh)->getVertexBuffer())
-			{
-				(*subMesh)->getVertexBuffer()->Release();
-			}
-
-			// Release the color buffer.
-			if ((*subMesh)->getColorBuffer())
-			{
-				(*subMesh)->getColorBuffer()->Release();
-			}
-		}
-	}
-
-	return;
-}
-
 void MeshClass::Shutdown()
 {
-	ShutdownBuffers();
-	ReleaseModel();
+	vector<ObjectMeshClass*>::iterator it;
+	for (it = m_allObjects.begin(); it != m_allObjects.end(); ++it)
+	{
+		(*it)->Shutdown();
+	}
 
 	return;
 }
@@ -544,17 +513,6 @@ vector<ObjectMeshClass*>* MeshClass::getAllObjects()
 vector<DirectX::XMFLOAT3>* MeshClass::getGuns()
 {
 	return &m_guns;
-}
-
-void MeshClass::ReleaseModel()
-{
-	vector<ObjectMeshClass*>::iterator it;
-	for (it = m_allObjects.begin(); it != m_allObjects.end(); ++it)
-	{
-		(*it)->Shutdown();
-	}
-
-	return;
 }
 
 MeshClass::MeshType MeshClass::getMeshType()

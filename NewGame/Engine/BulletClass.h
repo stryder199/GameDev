@@ -25,10 +25,10 @@ public:
 	void Shutdown();
 
 	bool Render(ShaderControllerClass* shader);
+	virtual bool PreProcessing();
 
 	int GetTimeAlive();
 private:
-	virtual bool PreProcessing();
 	Timer* m_life;
 	XMFLOAT3 m_vel;
 };

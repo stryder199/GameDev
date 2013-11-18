@@ -39,16 +39,18 @@ bool StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMF
 
 void StarClass::Shutdown()
 {
+	if (m_lightSource)
+	{
+		delete m_lightSource;
+		m_lightSource = 0;
+	}
+
 	return;
 }
 
 bool StarClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
-
-	result = PreProcessing();
-	if (!result)
-		return false;
 
 	result = ModelClass::RenderBuffers(shader);
 	if (!result)

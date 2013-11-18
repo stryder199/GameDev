@@ -27,6 +27,7 @@ public:
 	~TwoDGraphicsClass();
 
 	bool Initialize();
+	void Shutdown();
 
 	bool RenderAll(ShaderControllerClass* shader, int fps);
 

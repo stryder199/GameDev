@@ -138,9 +138,31 @@ bool ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
 	return true;
 }
 
-bool ProgramRootClass::Shutdown()
+void ProgramRootClass::Shutdown()
 {
-	return true;
+	if (m_Sounds)
+	{
+		m_Sounds->Shutdown();
+		delete m_Sounds;
+		m_Sounds = 0;
+	}
+	
+	if (m_Events)
+	{
+		m_Events->Shutdown();
+		delete m_Events;
+		m_Events = 0;
+	}
+
+	if (m_Graphics)
+	{
+		m_Graphics->Shutdown();
+		delete m_Graphics;
+		m_Graphics = 0;
+	}
+
+	WindowClass::getInstance()->Shutdown();
+	delete WindowClass::getInstance();
 }
 
 bool ProgramRootClass::Render()

@@ -12,3 +12,8 @@ bool SoundClass::Initialize()
 {
 	return true;
 }
+
+void SoundClass::Shutdown()
+{
+	return;
+}

@@ -36,6 +36,39 @@ bool TwoDGraphicsClass::Initialize()
 	return true;
 }
 
+void TwoDGraphicsClass::Shutdown()
+{
+	if (m_DefaultLightSource)
+	{
+		delete m_DefaultLightSource;
+		m_DefaultLightSource = 0;
+	}
+
+	vector<BitmapClass*>::iterator bitmap;
+	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
+	{
+		(*bitmap)->Shutdown();
+		delete (*bitmap);
+		(*bitmap) = 0;
+	}
+
+	map<string, TextClass*>::iterator text;
+	for (text = m_allText.begin(); text != m_allText.end(); ++text)
+	{
+		(*text).second->Shutdown();
+		delete (*text).second;
+		(*text).second = 0;
+	}
+
+	map<string, FontClass*>::iterator font;
+	for (font = m_allFont.begin(); font != m_allFont.end(); ++font)
+	{
+		(*font).second->Shutdown();
+		delete (*font).second;
+		(*font).second = 0;
+	}
+}
+
 bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 {
 	bool result;
@@ -48,6 +81,15 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 
 	bitmapMutex.lock();
 	vector<BitmapClass*>::iterator bitmap;
+	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
+	{
+		result = (*bitmap)->PreProcessing();
+		if (!result)
+			return false;
+	}
+	bitmapMutex.unlock();
+
+	bitmapMutex.lock();
 	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
 	{
 		result = (*bitmap)->Render(shader);
@@ -108,9 +150,18 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 		m_allText["thrust"]->UpdateText(thrust);
 	}
 	textMutex.unlock();
-	
+
 	textMutex.lock();
 	map<string, TextClass*>::iterator text;
+	for (text = m_allText.begin(); text != m_allText.end(); ++text)
+	{
+		result = (*text).second->PreProcessing();
+		if (!result)
+			return false;
+	}
+	textMutex.unlock();
+	
+	textMutex.lock();
 	for (text = m_allText.begin(); text != m_allText.end(); ++text)
 	{
 		result = (*text).second->Render(shader);

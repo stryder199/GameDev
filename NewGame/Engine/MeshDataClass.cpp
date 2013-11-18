@@ -47,6 +47,32 @@ bool MeshDataClass::Initialize(TextureClass* tex)
 
 void MeshDataClass::Shutdown()
 {
+	if (m_material)
+	{
+		m_material->Shutdown();
+		delete m_material;
+		m_material = 0;
+	}
+	if (m_texture)
+	{
+		m_texture->Shutdown();
+	}
+	if (m_colorBuffer)
+	{
+		m_colorBuffer->Release();
+		m_colorBuffer = 0;
+	}
+	if (m_indexBuffer)
+	{
+		m_indexBuffer->Release();
+		m_indexBuffer = 0;
+	}
+	if (m_vertexBuffer)
+	{
+		m_vertexBuffer->Release();
+		m_vertexBuffer = 0;
+	}
+
 	return;
 }
 

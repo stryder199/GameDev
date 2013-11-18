@@ -1,15 +1,21 @@
-#
-## Alias OBJ Material File
-# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+# Blender MTL File: 'None'
+# Material Count: 2
 
 newmtl M_01___Default1
+Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.494118 0.490196 0.486275
-Ks 0.330000 0.330000 0.330000
-map_Kd Battlestar Pegasus/M_01___Default1.jpg
+Kd 0.395294 0.392157 0.389020
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Battlestar Pegasus\M_01___Default1.jpg
 
 newmtl _Gray6_
+Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.376471 0.376471 0.376471
-Ks 0.330000 0.330000 0.330000
-
+Kd 0.301177 0.301177 0.301177
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2

@@ -22,6 +22,8 @@ public:
 	~ShaderControllerClass();
 
 	bool Initialize();
+	void Shutdown();
+
 	bool Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor);
 
 	bool Render(int indexCount, const XMFLOAT4X4& worldMatrix, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color);

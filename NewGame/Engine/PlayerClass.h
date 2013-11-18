@@ -27,6 +27,7 @@ public:
 	void Shutdown();
 
 	bool Render(ShaderControllerClass* shader);
+	virtual bool PreProcessing();
 
 	void SpawnBullet(XMFLOAT3 spawnPos);
 	void FireWeapon();
@@ -55,8 +56,6 @@ private:
 
 	static PlayerClass* m_pInstance;
 	static mutex instanceMutex;
-
-	virtual bool PreProcessing();
 
 	bool m_isWeaponFiring;
 	Timer m_weaponReloadTimer, m_weaponPulseTimer;

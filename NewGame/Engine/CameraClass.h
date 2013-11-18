@@ -15,13 +15,15 @@ using namespace DirectX;
 
 class CameraClass{
 public:
-	~CameraClass();
+	~CameraClass() {};
 	static CameraClass* getInstance();
 
-	void Render();
 	bool Initialize();
-	XMFLOAT4X4 GetViewMatrix();
+	void Shutdown();
+	
+	void Render();
 
+	XMFLOAT4X4 GetViewMatrix();
 	XMFLOAT3 getPosition();
 	XMFLOAT3 getRotation();
 	XMFLOAT3 getScale();
@@ -39,6 +41,6 @@ private:
 	static std::mutex instanceMutex;
 
 	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
-	XMFLOAT4X4 *m_viewMatrix;
+	XMFLOAT4X4 m_viewMatrix;
 
 };

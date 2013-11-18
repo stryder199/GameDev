@@ -400,6 +400,65 @@ bool D3DClass::Initialize()
     return true;
 }
 
+void D3DClass::Shutdown()
+{
+	if (m_swapChain)
+	{
+		m_swapChain->Release();
+		m_swapChain = 0;
+	}
+	if (m_device)
+	{
+		m_device->Release();
+		m_device = 0;
+	}
+	if (m_deviceContext)
+	{
+		m_deviceContext->Release();
+		m_deviceContext = 0;
+	}
+	if (m_renderTargetView)
+	{
+		m_renderTargetView->Release();
+		m_renderTargetView = 0;
+	}
+	if (m_depthStencilBuffer)
+	{
+		m_depthStencilBuffer->Release();
+		m_depthStencilBuffer = 0;
+	}
+	if (m_depthStencilState)
+	{
+		m_depthStencilState->Release();
+		m_depthStencilState = 0;
+	}
+	if (m_depthStencilView)
+	{
+		m_depthStencilView->Release();
+		m_depthStencilView = 0;
+	}
+	if (m_rasterState)
+	{
+		m_rasterState->Release();
+		m_rasterState = 0;
+	}
+	if (m_depthDisabledStencilState)
+	{
+		m_depthDisabledStencilState->Release();
+		m_depthDisabledStencilState = 0;
+	}
+	if (m_alphaEnableBlendingState)
+	{
+		m_alphaEnableBlendingState->Release();
+		m_alphaEnableBlendingState = 0;
+	}
+	if (m_alphaDisableBlendingState)
+	{
+		m_alphaDisableBlendingState->Release();
+		m_alphaDisableBlendingState = 0;
+	}
+}
+
 void D3DClass::BeginScene(float red, float green, float blue, float alpha)
 {
 	float color[4];

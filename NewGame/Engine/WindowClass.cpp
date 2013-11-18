@@ -104,6 +104,11 @@ bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
     return true;
 }
 
+void WindowClass::Shutdown()
+{
+	return;
+}
+
 HWND WindowClass::gethWnd()
 {
 	return m_hWnd;

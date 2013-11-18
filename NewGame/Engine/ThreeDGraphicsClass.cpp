@@ -26,6 +26,17 @@ bool ThreeDGraphicsClass::Initialize()
 	return true;
 }
 
+void ThreeDGraphicsClass::Shutdown()
+{
+	modelMutex.lock();
+	vector<ModelClass*>::iterator model;
+	for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
+	{
+		(*model)->Shutdown();
+	}
+	modelMutex.unlock();
+}
+
 bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader){
 	bool result;
 
@@ -33,6 +44,15 @@ bool ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader){
 
 	modelMutex.lock();
 	vector<ModelClass*>::iterator model;
+	for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
+	{
+		(*model)->PreProcessing();
+	}
+	modelMutex.unlock();
+
+	CameraClass::getInstance()->Render();
+
+	modelMutex.lock();
 	for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
 	{
 		if (CheckSphereAgainstFrustum((*model)->getPosition(), (*model)->getBasicCollisionCircleRadius()))

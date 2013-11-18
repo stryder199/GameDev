@@ -87,6 +87,11 @@ bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, 
 
 void PlayerClass::Shutdown()
 {
+	if (m_lightSource)
+	{
+		delete m_lightSource;
+		m_lightSource = 0;
+	}
 	return;
 }
 
@@ -131,34 +136,13 @@ void PlayerClass::StartWeaponFiring()
 bool PlayerClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
-	vector<int> deadBullets = vector<int>();
-
-	result = PreProcessing();
-	if (!result)
-		return false;
-
-	//Generate the view matrix based on the camera's position
-	CameraClass::getInstance()->Render();
 
 	vector<BulletClass*>::iterator bullet;
-	int count = 0;
 	for (bullet = m_allBullets.begin(); bullet != m_allBullets.end(); ++bullet)
 	{
-		if ((*bullet)->GetTimeAlive() > 10000)
-		{
-			deadBullets.push_back(count);
-		}
-		(*bullet)->Render(shader);
-		count++;
-	}
-	vector<int>::reverse_iterator deadBulletIndex;
-	for (deadBulletIndex = deadBullets.rbegin(); deadBulletIndex != deadBullets.rend(); ++deadBulletIndex)
-	{
-		BulletClass * deadBullet = m_allBullets[(*deadBulletIndex)];
-		m_allBullets.erase(m_allBullets.begin() + (*deadBulletIndex));
-		deadBullet->Shutdown();
-		delete deadBullet;
-		deadBullet = 0;
+		result = (*bullet)->Render(shader);
+		if (!result)
+			return false;
 	}
 
 	result = ModelClass::RenderBuffers(shader);
@@ -170,6 +154,8 @@ bool PlayerClass::Render(ShaderControllerClass* shader)
 
 bool PlayerClass::PreProcessing()
 {
+	vector<int> deadBullets = vector<int>();
+
 	//bool result; not used
 	float maxThrust = 0.01f;
 
@@ -217,6 +203,31 @@ bool PlayerClass::PreProcessing()
 	XMStoreFloat3(&m_pos, result);
 
 	CalculateWorldMatrix();
+
+	vector<BulletClass*>::iterator bullet;
+	int count = 0;
+	for (bullet = m_allBullets.begin(); bullet != m_allBullets.end(); ++bullet)
+	{
+		if ((*bullet)->GetTimeAlive() > 10000)
+		{
+			deadBullets.push_back(count);
+		}
+		else
+		{
+			(*bullet)->PreProcessing();
+		}
+		
+		count++;
+	}
+	vector<int>::reverse_iterator deadBulletIndex;
+	for (deadBulletIndex = deadBullets.rbegin(); deadBulletIndex != deadBullets.rend(); ++deadBulletIndex)
+	{
+		BulletClass * deadBullet = m_allBullets[(*deadBulletIndex)];
+		m_allBullets.erase(m_allBullets.begin() + (*deadBulletIndex));
+		deadBullet->Shutdown();
+		delete deadBullet;
+		deadBullet = 0;
+	}
 	return true;
 }
 

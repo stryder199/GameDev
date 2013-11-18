@@ -6,6 +6,8 @@
 
 ShaderControllerClass::ShaderControllerClass()
 {
+	m_vertexFocus = 0;
+	m_pixelFocus = 0;
 }
 
 ShaderControllerClass::~ShaderControllerClass()
@@ -129,6 +131,22 @@ bool ShaderControllerClass::Initialize()
 		return false;
 
 	return true;
+}
+
+void ShaderControllerClass::Shutdown()
+{
+	m_twoDVS.Shutdown();
+	m_twoDPS.Shutdown();
+
+	m_textVS.Shutdown();
+	m_textPS.Shutdown();
+
+	m_threeDMaterialVS.Shutdown();
+	m_threeDMaterialPS.Shutdown();
+
+	m_threeDTextureVS.Shutdown();
+	m_threeDTexturePS.Shutdown();
+	return;
 }
 
 bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)

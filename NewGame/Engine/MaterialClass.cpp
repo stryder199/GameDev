@@ -20,7 +20,7 @@ bool MaterialClass::Initialize(MaterialClass::MaterialInfo matInfo)
 
 void MaterialClass::Shutdown()
 {
-
+	return;
 }
 
 MaterialClass::MaterialInfo MaterialClass::getMaterialInfo()

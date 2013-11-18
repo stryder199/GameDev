@@ -37,6 +37,10 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 	if(!result)
 		return false;
 
+	result = MeshControllerClass::getInstance()->Initialize();
+	if (!result)
+		return false;
+
 	//Shader Init
 	m_Shader = new ShaderControllerClass();
 	if(!m_Shader)
@@ -65,6 +69,39 @@ bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 		return false;
 
 	return true;
+}
+
+void GraphicsClass::Shutdown()
+{
+	if (m_2DGraphics)
+	{
+		m_2DGraphics->Shutdown();
+		delete m_2DGraphics;
+		m_2DGraphics = 0;
+	}
+
+	if (m_3DGraphics)
+	{
+		m_3DGraphics->Shutdown();
+		delete m_3DGraphics;
+		m_3DGraphics = 0;
+	}
+
+	if (m_Shader)
+	{
+		m_Shader->Shutdown();
+		delete m_Shader;
+		m_Shader = 0;
+	}
+
+	MeshControllerClass::getInstance()->Shutdown();
+	delete MeshControllerClass::getInstance();
+
+	CameraClass::getInstance()->Shutdown();
+	delete CameraClass::getInstance();
+
+	D3DClass::getInstance()->Shutdown();
+	delete D3DClass::getInstance();
 }
 
 bool GraphicsClass::Render()

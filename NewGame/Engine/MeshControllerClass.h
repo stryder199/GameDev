@@ -20,6 +20,7 @@ public:
 	~MeshControllerClass();
 
 	bool Initialize();
+	void Shutdown();
 
 	static MeshControllerClass* getInstance();
 

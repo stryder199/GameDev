@@ -1,15 +1,21 @@
-#
-## Alias OBJ Material File
-# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+# Blender MTL File: 'None'
+# Material Count: 2
 
 newmtl M_01___Default1
+Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.470588 0.470588 0.470588
-Ks 0.330000 0.330000 0.330000
+Kd 0.376470 0.376470 0.376470
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
 
 newmtl M_01___Default4
+Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.556863 0.580392 0.619608
-Ks 0.330000 0.330000 0.330000
-map_Kd CivShip_Pan Galactic/M_01___Default4.jpg
-
+Kd 0.445490 0.464314 0.495686
+Ks 0.165000 0.165000 0.165000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd CivShip_Pan Galactic\M_01___Default4.jpg

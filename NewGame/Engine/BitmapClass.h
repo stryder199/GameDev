@@ -22,9 +22,10 @@ public:
 
 	bool Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale);
 	void Shutdown();
-	bool Render(ShaderControllerClass* shader);
-private:
-	bool PreProcessing();
 
+	bool Render(ShaderControllerClass* shader);
+	virtual bool PreProcessing();
+
+private:
 	XMFLOAT2 m_screenPos;
 };

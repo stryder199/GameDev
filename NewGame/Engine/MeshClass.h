@@ -62,9 +62,7 @@ public:
 
 private:
 	bool LoadModel(string filename);
-	void ReleaseModel();
 	bool InitializeBuffers();
-	void ShutdownBuffers();
 
 	vector<ObjectMeshClass*> m_allObjects;
 	vector<DirectX::XMFLOAT3> m_guns;

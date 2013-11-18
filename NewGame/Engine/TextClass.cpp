@@ -43,16 +43,18 @@ bool TextClass::Initialize(std::string initText, FontClass* font, XMFLOAT2 pos, 
 
 void TextClass::Shutdown()
 {
-
+	if (m_mesh)
+	{
+		m_mesh->Shutdown();
+		delete m_mesh;
+		m_mesh = 0;
+	}
+	return;
 }
 
 bool TextClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
-
-	result = PreProcessing();
-	if (!result)
-		return false;
 
 	result = ModelClass::RenderBuffers(shader);
 	if (!result)

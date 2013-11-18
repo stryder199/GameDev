@@ -10,7 +10,7 @@ BulletClass::BulletClass()
 	m_lightSource = 0;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(0.03f, 0.03f, 0.03f);
+	m_scale = XMFLOAT3(0.003f, 0.003f, 0.003f);
 	m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -58,10 +58,6 @@ void BulletClass::Shutdown()
 bool BulletClass::Render(ShaderControllerClass* shader)
 {
 	bool result;
-
-	result = PreProcessing();
-	if (!result)
-		return false;
 
 	result = ModelClass::RenderBuffers(shader);
 	if (!result)

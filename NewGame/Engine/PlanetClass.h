@@ -21,9 +21,8 @@ public:
 	void Shutdown();
 
 	bool Render(ShaderControllerClass* shader);
-private:
 	virtual bool PreProcessing();
-
+private:
 	XMFLOAT3 m_rotVel;
 };
 

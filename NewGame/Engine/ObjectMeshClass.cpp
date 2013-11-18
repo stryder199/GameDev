@@ -28,6 +28,7 @@ void ObjectMeshClass::Shutdown()
 	for (it = m_allMeshData.begin(); it != m_allMeshData.end(); ++it)
 	{
 		(*it)->Shutdown();
+		delete (*it);
 	}
 
 	return;
