@@ -12,7 +12,7 @@ using namespace std;
 
 static string INPUT_FOLDER = desktopDir() + "\\GameDevHell\\3D_Models\\OBJ_MTL";
 static string OUTPUT_FOLDER = desktopDir() + "\\GameDevHell\\Formatted_3D_Models";
-static string GAME_DATA_FOLDER = desktopDir() + "\\GameDevHell\\Engine\\NewGame\\data";
+static string GAME_DATA_FOLDER = desktopDir() + "\\GameDevHell\\NewGame\\Engine\\data";
 
 class Exporter
 {

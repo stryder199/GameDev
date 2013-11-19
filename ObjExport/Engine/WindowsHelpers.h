@@ -33,7 +33,7 @@ static LPCTSTR toLTStr(string s)
 
 static vector<string> listDir(string dirPath)
 {
-	vector<string> dirList;
+	vector<string> dirList = vector<string>();
 	HANDLE dir;
 	WIN32_FIND_DATA file_data;
 
@@ -42,7 +42,7 @@ static vector<string> listDir(string dirPath)
 	LPCWSTR lpathWildcard = stemp.c_str();
 
 	if ((dir = FindFirstFile(lpathWildcard, &file_data)) == INVALID_HANDLE_VALUE)
-	return; /* No files found */
+	return dirList; /* No files found */
 
 	do {
 		WCHAR* wc = file_data.cFileName;
@@ -55,7 +55,6 @@ static vector<string> listDir(string dirPath)
 		//A std:string  using the char* constructor.
 		std::string filename(ch);
 
-		const string full_file_name = dirPath + "\\" + filename;
 		const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
 		if (filename[0] == '.')
@@ -64,7 +63,7 @@ static vector<string> listDir(string dirPath)
 		if (!is_directory)
 			continue;
 
-		dirList.push_back(full_file_name);
+		dirList.push_back(filename);
 	} while (FindNextFile(dir, &file_data));
 
 	FindClose(dir);

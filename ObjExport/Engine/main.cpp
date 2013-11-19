@@ -98,14 +98,14 @@ int main()
 	}
 	vector<string> dirlist = listDir(INPUT_FOLDER);
 	vector<string>::iterator dir;
-	for (dir = dirlist.begin(); dir != dirlist.end; ++dir)
+	for (dir = dirlist.begin(); dir != dirlist.end(); ++dir)
 	{
-		string command1 = "xcopy /E /Q /Y " + (*dir) + " " + OUTPUT_FOLDER + "\\";
+		string command1 = "xcopy /E /Q /Y /I " + INPUT_FOLDER + "\\" + (*dir) + " " + OUTPUT_FOLDER + "\\" + (*dir);
 		system(command1.c_str());
 	}
 
 	
-	string command2 = "xcopy /E /Q /Y " + OUTPUT_FOLDER + " " + GAME_DATA_FOLDER + "\\";
+	string command2 = "xcopy /E /Q /Y /I " + OUTPUT_FOLDER + "\\* " + GAME_DATA_FOLDER + "\\";
 
 	system(command2.c_str());
 
