@@ -19,6 +19,19 @@ static string desktopDir()
 		return "ERROR";
 }
 
+static string skydriveDir()
+{
+	static char path[MAX_PATH + 1];
+	if (SHGetSpecialFolderPathA(HWND_DESKTOP, path, CSIDL_PROFILE, FALSE))
+	{
+		string s = path;
+		s = s + "\\SkyDrive";
+		return s;
+	}
+	else
+		return "ERROR";
+}
+
 static LPCWSTR toLWideStr(string s)
 {
 	wstring stemp = std::wstring(s.begin(), s.end());

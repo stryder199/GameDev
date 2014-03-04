@@ -10,9 +10,11 @@
 
 using namespace std;
 
-static string INPUT_FOLDER = desktopDir() + "\\GameDevHell\\3D_Models\\OBJ_MTL";
-static string OUTPUT_FOLDER = desktopDir() + "\\GameDevHell\\Formatted_3D_Models";
-static string GAME_DATA_FOLDER = desktopDir() + "\\GameDevHell\\NewGame\\Engine\\data";
+static string INPUT_FOLDER = skydriveDir() + "\\3D_Models\\OBJ_MTL";
+static string OUTPUT_FOLDER = "E:\\Personal\\GameDev\\Formatted_3D_Models";
+static string GAME_DATA_FOLDER = "E:\\Personal\\GameDev\\NewGame\\Engine\\data";
+//static string OUTPUT_FOLDER = desktopDir() + "\\GameDevHell\\Formatted_3D_Models";
+//static string GAME_DATA_FOLDER = desktopDir() + "\\GameDevHell\\NewGame\\Engine\\data";
 
 class Exporter
 {
