@@ -16,16 +16,11 @@ Exporter::~Exporter()
 {
 }
 
-bool Exporter::LoadDataStructures(string filename)
+void Exporter::LoadDataStructures(string filename)
 {
-	bool result;
 	string outputfilename, outputfilepath;
 
-	result = LoadObjFileData(filename);
-	if (!result)
-	{
-		return false;
-	}
+	LoadObjFileData(filename);
 
 	outputfilename = filename;
 
@@ -35,27 +30,16 @@ bool Exporter::LoadDataStructures(string filename)
 
 	outputfilepath = OUTPUT_FOLDER + "\\" + outputfilename;
 
-	result = WriteOutputFile(outputfilepath);
-	if (!result)
-		return false;
-
-	return true;
+	WriteOutputFile(outputfilepath);
 }
 
-bool Exporter::LoadMaterialsFromFile(string mtlFilepath)
+void Exporter::LoadMaterialsFromFile(string mtlFilepath)
 {
 	string sinput = "";
 	ifstream mtlin;
 
 	// Read in the materials in the mtl file
 	mtlin.open(mtlFilepath);
-
-	// Check if it was successful in opening the file.
-	if (mtlin.fail() == true)
-	{
-		cerr << "Could not find file: " + mtlFilepath << endl;
-		return false;
-	}
 
 	while (!mtlin.eof())
 	{
@@ -122,11 +106,9 @@ bool Exporter::LoadMaterialsFromFile(string mtlFilepath)
 
 	// Close the file.
 	mtlin.close();
-
-	return true;
 }
 
-bool Exporter::LoadObjFileData(string filename)
+void Exporter::LoadObjFileData(string filename)
 {
 	string filepath, sinput;
 	ifstream fin;
@@ -143,13 +125,6 @@ bool Exporter::LoadObjFileData(string filename)
 
 	// Open the file.
 	fin.open(filepath);
-
-	// Check if it was successful in opening the file.
-	if (fin.fail() == true)
-	{
-		cerr << "Could not find file: " + filepath << endl;
-		return false;
-	}
 
 	// Read in the vertices, texture coordinates, and normals into the data structures.
 	// Important: Also convert to left hand coordinate system since Maya uses right hand coordinate system.
@@ -234,9 +209,7 @@ bool Exporter::LoadObjFileData(string filename)
 			}
 			string mtlfilepath = INPUT_FOLDER + "\\" + fullFilename;
 
-			result = LoadMaterialsFromFile(mtlfilepath);
-			if (!result)
-				return false;
+			LoadMaterialsFromFile(mtlfilepath);
 		}
 		else if (sinput.compare("o") == 0 || sinput.compare("g") == 0 || sinput.compare("object") == 0)
 		{
@@ -289,33 +262,20 @@ bool Exporter::LoadObjFileData(string filename)
 
 	// Close the file.
 	fin.close();
-
-	return true;
 }
 
-bool Exporter::WriteOutputFile(string filepath)
+void Exporter::WriteOutputFile(string filepath)
 {
 	ofstream fout;
 	int vIndex, tIndex, nIndex;
 
-	if (FileExists(filepath))
+	if (WindowsHelpers::FileExists(filepath))
 	{
-		if (remove(filepath.c_str()) != 0)
-		{
-			cerr << "Error removing " << filepath << endl;
-			return false;
-		}
+        remove(filepath.c_str());
 	}
 
 	// Open the output file.
 	fout.open(filepath);
-
-	// Check if it was successful in opening the file.
-	if (fout.fail() == true)
-	{
-		cerr << "Could not create file: " + filepath << endl;
-		return false;
-	}
 
 	vector<FaceType>::iterator it;
 
@@ -371,6 +331,4 @@ bool Exporter::WriteOutputFile(string filepath)
 
 	// Close the output file.
 	fout.close();
-
-	return true;
 }

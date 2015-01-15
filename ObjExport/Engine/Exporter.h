@@ -6,15 +6,15 @@
 #include <map>
 #include <vector>
 #include <assert.h>
-#include "WindowsHelpers.h"
+#include "..\..\WindowsHelpers\WindowsHelpers.h"
 
 using namespace std;
 
-static string INPUT_FOLDER = skydriveDir() + "\\3D_Models\\OBJ_MTL";
-static string OUTPUT_FOLDER = "E:\\Personal\\GameDev\\Formatted_3D_Models";
-static string GAME_DATA_FOLDER = "E:\\Personal\\GameDev\\NewGame\\Engine\\data";
-//static string OUTPUT_FOLDER = desktopDir() + "\\GameDevHell\\Formatted_3D_Models";
-//static string GAME_DATA_FOLDER = desktopDir() + "\\GameDevHell\\NewGame\\Engine\\data";
+static string GAMEDEV_FOLDER = "D:\\Users\\Mark\\Desktop\\GameDevHell";
+static string SKYDRIVE_FOLDER = "D:\\Users\\Mark\\SkyDrive";
+static string INPUT_FOLDER = SKYDRIVE_FOLDER + "\\3D_Models\\OBJ_MTL";
+static string OUTPUT_FOLDER = GAMEDEV_FOLDER + "\\Formatted_3D_Models";
+static string GAME_DATA_FOLDER = GAMEDEV_FOLDER + "\\NewGame\\Engine\\data";
 
 class Exporter
 {
@@ -47,10 +47,10 @@ public:
 public:
 	Exporter();
 	~Exporter();
-	bool LoadDataStructures(string);
-	bool LoadMaterialsFromFile(string mtlFilepath);
-	bool LoadObjFileData(string filename);
-	bool WriteOutputFile(string filepath);
+	void LoadDataStructures(string);
+    void LoadMaterialsFromFile(string mtlFilepath);
+    void LoadObjFileData(string filename);
+    void WriteOutputFile(string filepath);
 
 private:
 	map<string, ColorType> *m_allMaterials;

@@ -77,12 +77,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\WindowsHelpers\WindowsHelpers.cpp" />
     <ClCompile Include="Exporter.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\WindowsHelpers\WindowsHelpers.h" />
     <ClInclude Include="Exporter.h" />
-    <ClInclude Include="WindowsHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
