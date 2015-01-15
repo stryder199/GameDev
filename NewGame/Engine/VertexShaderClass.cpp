@@ -17,18 +17,12 @@ VertexShaderClass::~VertexShaderClass()
 {
 }
 
-bool VertexShaderClass::Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, VertexShaderClass::ShaderType type)
+void VertexShaderClass::Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, VertexShaderClass::ShaderType type)
 {
-	bool result;
-
 	m_type = type;
 
 	//Initialize the vertex and pixel shaders
-	result = InitializeShader(vsFilename, polygonLayout, layoutCount);
-	if(!result)
-		return false;
-
-	return true;
+	InitializeShader(vsFilename, polygonLayout, layoutCount);
 }
 
 void VertexShaderClass::Shutdown()
@@ -39,22 +33,16 @@ void VertexShaderClass::Shutdown()
 	return;
 }
 
-bool VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix)
+void VertexShaderClass::Render(int indexCount, const XMFLOAT4X4 &worldMatrix)
 {
-	bool result;
-
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(worldMatrix);
-	if(!result)
-		return false;
+	SetShaderParameters(worldMatrix);
 
 	//Now render the prepared buffers with the shader.
 	RenderShader(indexCount);
-
-	return true;
 }
 
-bool VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount)
+void VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -81,20 +69,24 @@ bool VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_
 		{
 			MessageBox(WindowClass::getInstance()->gethWnd(), vsFilename, L"Missing Shader File", MB_OK);
 		}
-		return false;
+		throw new exception
 	}
 
 	//Create the vertex shader from the buffer
 	result = D3DClass::getInstance()->GetDevice()->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
-	if(FAILED(result))
-		return false;
+    if (FAILED(result))
+    {
+        throw new exception
+    }
 
 
 	//Create the vertex input layout
 	result = D3DClass::getInstance()->GetDevice()->CreateInputLayout(polygonLayout, layoutCount, vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(), &m_layout);
 	if(FAILED(result))
-		return false;
+    {
+        throw new exception
+    }
 
 	//Release the vertex shader buffer and pixel shader buffer since they are no longer needed.
 	vertexShaderBuffer->Release();
@@ -111,9 +103,9 @@ bool VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_
 	//Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class
 	result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	if(FAILED(result))
-		return false;
-
-	return true;
+    {
+        throw new exception
+    }
 }
 
 void VertexShaderClass::ShutdownShader()
@@ -146,7 +138,7 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
-	std::ofstream fout;
+	ofstream fout;
 
 
 	// Get a pointer to the error message text buffer.
@@ -173,11 +165,9 @@ void VertexShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR
 
 	// Pop a message up on the screen to notify the user to check the text file for compile errors.
 	MessageBox(WindowClass::getInstance()->gethWnd(), L"Error compiling shader.  Check shader-error.txt for message.", shaderFilename, MB_OK);
-
-	return;
 }
 
-bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
+void VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
 {
 	HRESULT result;
 	XMFLOAT4X4 transposedWorldFloatMatrix, transposedViewFloatMatrix, transposedProjectionFloatMatrix;
@@ -212,7 +202,9 @@ bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
 	//Lock the constant buffer so it can be written to
 	result = D3DClass::getInstance()->GetDeviceContext()->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if(FAILED(result))
-		return false;
+    {
+        throw new exception
+    }
 
 	//Get a pointer to the data in the constant buffer
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
@@ -230,8 +222,6 @@ bool VertexShaderClass::SetShaderParameters(const XMFLOAT4X4& worldMatrix)
 
 	//Finally set the constant buffer in the vertex shader with the updated values
 	D3DClass::getInstance()->GetDeviceContext()->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
-
-	return true;
 }
 
 void VertexShaderClass::RenderShader(int indexCount)
@@ -241,6 +231,4 @@ void VertexShaderClass::RenderShader(int indexCount)
 
 	//Set the vertex and pixel shaders that will be used to render this triangle
 	D3DClass::getInstance()->GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
-
-	return ;
 }

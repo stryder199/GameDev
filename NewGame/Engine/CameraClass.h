@@ -18,7 +18,7 @@ public:
 	~CameraClass() {};
 	static CameraClass* getInstance();
 
-	bool Initialize();
+    void Initialize();
 	void Shutdown();
 	
 	void Render();
@@ -38,7 +38,7 @@ private:
 	CameraClass& operator=(const CameraClass&) {};
 
 	static CameraClass* m_pInstance;
-	static std::mutex instanceMutex;
+	static mutex instanceMutex;
 
 	XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
 	XMFLOAT4X4 m_viewMatrix;

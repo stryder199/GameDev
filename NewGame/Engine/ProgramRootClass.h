@@ -22,12 +22,10 @@ public:
 	ProgramRootClass();
 	~ProgramRootClass();
 	
-	bool Initialize( HINSTANCE hInstance, int iCmdshow );
+	void Initialize( HINSTANCE hInstance, int iCmdshow );
 	void Shutdown();
-
-	bool Render();
-	
-	bool Go();
+    void Render();
+    void Go();
 
 private:
 	SoundClass* m_Sounds;

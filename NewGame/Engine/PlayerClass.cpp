@@ -9,9 +9,10 @@
 #include "MeshControllerClass.h"
 
 PlayerClass* PlayerClass::m_pInstance = NULL;
-std::mutex PlayerClass::instanceMutex;
+mutex PlayerClass::instanceMutex;
 
-PlayerClass::PlayerClass(){
+PlayerClass::PlayerClass()
+{
 	m_mesh = 0;
 	m_bulletMesh = 0;
 	m_lightSource = 0;
@@ -49,8 +50,6 @@ PlayerClass::~PlayerClass(){
 
 bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
-	//bool result;
-
 	m_mesh = objMesh;
 	m_pos = pos;
 	m_scale = scale;
@@ -67,22 +66,17 @@ bool PlayerClass::Initialize( MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, 
 
 	// Create the light object.
 	m_lightSource = new LightClass();
-	if (!m_lightSource)
-		return false;
-
 	// Initialize the light object.
 	m_lightSource->SetAmbientColor(0.4f, 0.4f, 0.4f, 1.0f);
 	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
 
-	m_allBullets = std::vector<BulletClass*>();
+	m_allBullets = vector<BulletClass*>();
 
 	m_weaponReloadTimer = Timer();
 	m_weaponPulseTimer = Timer();
 	m_weaponPulseMaxCount = 3;
 	m_weaponPulseCount = 0;
-
-	return true;
 }
 
 void PlayerClass::Shutdown()
@@ -92,7 +86,6 @@ void PlayerClass::Shutdown()
 		delete m_lightSource;
 		m_lightSource = 0;
 	}
-	return;
 }
 
 void PlayerClass::SpawnBullet(XMFLOAT3 spawnPos)
@@ -133,30 +126,20 @@ void PlayerClass::StartWeaponFiring()
 	}
 }
 
-bool PlayerClass::Render(ShaderControllerClass* shader)
+void PlayerClass::Render(ShaderControllerClass* shader)
 {
-	bool result;
-
 	vector<BulletClass*>::iterator bullet;
 	for (bullet = m_allBullets.begin(); bullet != m_allBullets.end(); ++bullet)
 	{
-		result = (*bullet)->Render(shader);
-		if (!result)
-			return false;
+		(*bullet)->Render(shader);
 	}
 
-	result = ModelClass::RenderBuffers(shader);
-	if(!result)
-		return false;
-
-	return true;
+	ModelClass::RenderBuffers(shader);
 }
 
-bool PlayerClass::PreProcessing()
+void PlayerClass::PreProcessing()
 {
 	vector<int> deadBullets = vector<int>();
-
-	//bool result; not used
 	float maxThrust = 0.01f;
 
 	m_rot.x += m_rotVel.x;
@@ -228,7 +211,6 @@ bool PlayerClass::PreProcessing()
 		delete deadBullet;
 		deadBullet = 0;
 	}
-	return true;
 }
 
 void PlayerClass::SetVelX(float x)

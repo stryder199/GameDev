@@ -17,10 +17,10 @@ ProgramRootClass::~ProgramRootClass()
 {
 }
 
-bool ProgramRootClass::Go()
+void ProgramRootClass::Go()
 {
 	MSG msg;
-	bool done, result;
+	bool done;
 	bool gameLoaderWaiterDone = false;
 
 	auto gameLoader = async(launch::async, &GraphicsClass::LoadGameData, m_Graphics);
@@ -36,9 +36,7 @@ bool ProgramRootClass::Go()
 		if (!gameLoaderWaiterDone && gameLoader.wait_for(chrono::seconds(0)) == future_status::ready)
 		{
 			gameLoaderWaiterDone = true;
-			result = gameLoader.get();
-			if (!result)
-				return false;
+			gameLoader.get();
 		}
 
 		// Handle the windows messages.
@@ -56,12 +54,7 @@ bool ProgramRootClass::Go()
 		else
 		{
 			// Otherwise do the frame processing.  If frame processing fails then exit.
-			result = Render();
-			if (!result)
-			{
-				MessageBox(WindowClass::getInstance()->gethWnd(), L"Frame Processing Failed", L"Error", MB_OK);
-				done = true;
-			}
+			Render();
 		}
 
 		// Check if the user pressed escape and wants to quit.
@@ -90,7 +83,8 @@ bool ProgramRootClass::Go()
 		{
 			PlayerClass::getInstance()->SetRotVelY(-1.0f * XM_PI / 100);
 		}
-		else{
+		else
+        {
 			PlayerClass::getInstance()->SetRotVelY(0.0f);
 		}
 
@@ -99,43 +93,20 @@ bool ProgramRootClass::Go()
 			PlayerClass::getInstance()->StartWeaponFiring();
 		}
 	}
-
-	return true;
 }
 
-bool ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
+void ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
 {
-	bool result;
-
-	result = WindowClass::getInstance()->Initialize(hInstance, iCmdshow);
-	if (!result)
-		return false;
+	WindowClass::getInstance()->Initialize(hInstance, iCmdshow);
 
 	m_Sounds = new SoundClass();
-	if(!m_Sounds)
-		return false;
-
-	result = m_Sounds->Initialize();
-	if(!result)
-		return false;
+	m_Sounds->Initialize();
 	
 	m_Events = new EventClass();
-	if(!m_Events)
-		return false;
-
-	result = m_Events->Initialize( hInstance );
-	if(!result)
-		return false;
+	m_Events->Initialize( hInstance );
 
 	m_Graphics = new GraphicsClass();
-	if (!m_Graphics)
-		return false;
-
-	result = m_Graphics->Initialize(hInstance, iCmdshow);
-	if (!result)
-		return false;
-
-	return true;
+	m_Graphics->Initialize(hInstance, iCmdshow);
 }
 
 void ProgramRootClass::Shutdown()
@@ -165,19 +136,13 @@ void ProgramRootClass::Shutdown()
 	delete WindowClass::getInstance();
 }
 
-bool ProgramRootClass::Render()
+void ProgramRootClass::Render()
 {
-	bool result;
+	m_Events->Render();
 
-	result = m_Events->Render();
-	if(!result)
-		return false;
-
-	result = m_Graphics->Render();
-	if(!result)
-		return false;
-	return true;
+	m_Graphics->Render();
 }
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
 	switch(umsg)

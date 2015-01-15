@@ -8,9 +8,9 @@ SoundClass::~SoundClass()
 {
 }
 
-bool SoundClass::Initialize()
+void SoundClass::Initialize()
 {
-	return true;
+    return;
 }
 
 void SoundClass::Shutdown()

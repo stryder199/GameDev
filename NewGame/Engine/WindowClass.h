@@ -19,7 +19,7 @@ public:
 	~WindowClass();
 	static WindowClass* getInstance();
 
-	bool Initialize(HINSTANCE hInstance, int nCmdShow);
+    void Initialize(HINSTANCE hInstance, int nCmdShow);
 	void Shutdown();
 
 	HWND gethWnd();

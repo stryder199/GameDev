@@ -19,7 +19,7 @@ public:
 	TextureClass();
 	~TextureClass();
 
-	bool Initialize(WCHAR*);
+    void Initialize(WCHAR*);
 	void Shutdown();
 
 	ID3D11ShaderResourceView* GetTexture();

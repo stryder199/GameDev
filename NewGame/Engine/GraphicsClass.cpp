@@ -23,52 +23,25 @@ GraphicsClass::~GraphicsClass()
 {
 }
 
-bool GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
+void GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
 {
-	bool result;
-
 	m_fpsTimer = Timer();
 
-	result = D3DClass::getInstance()->Initialize();
-	if(!result)
-		return false;
-
-	result = CameraClass::getInstance()->Initialize();
-	if(!result)
-		return false;
-
-	result = MeshControllerClass::getInstance()->Initialize();
-	if (!result)
-		return false;
+	D3DClass::getInstance()->Initialize();
+	CameraClass::getInstance()->Initialize();
+	MeshControllerClass::getInstance()->Initialize();
 
 	//Shader Init
 	m_Shader = new ShaderControllerClass();
-	if(!m_Shader)
-		return false;
-
-	result = m_Shader->Initialize();
-	if(!result)
-		return false;
+	m_Shader->Initialize();
 
 	//Init all 2D objects, UI, menus,...
 	m_2DGraphics = new TwoDGraphicsClass();
-	if(!m_2DGraphics)
-		return false;
-
-	result = m_2DGraphics->Initialize();
-	if(!result)
-		return false;
+	m_2DGraphics->Initialize();
 
 	//Init all 3d objects
 	m_3DGraphics = new ThreeDGraphicsClass();
-	if(!m_3DGraphics)
-		return false;
-
-	result = m_3DGraphics->Initialize();
-	if(!result)
-		return false;
-
-	return true;
+	m_3DGraphics->Initialize();
 }
 
 void GraphicsClass::Shutdown()
@@ -106,8 +79,6 @@ void GraphicsClass::Shutdown()
 
 bool GraphicsClass::Render()
 {
-	bool result;
-
 	if (!m_fpsTimer.is_started())
 	{
 		m_fpsTimer.start();
@@ -124,67 +95,40 @@ bool GraphicsClass::Render()
 	D3DClass::getInstance()->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	//Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing
-	result = m_3DGraphics->RenderAll(m_Shader);
-	if (!result)
-		return false;
+	m_3DGraphics->RenderAll(m_Shader);
 
-	result = m_2DGraphics->RenderAll(m_Shader, m_fps);
-	if (!result)
-		return false;
+    m_2DGraphics->RenderAll(m_Shader, m_fps);
 
 	// Present the rendered scene to the screen.
 	D3DClass::getInstance()->EndScene();
 
 	m_fpsCount++;
-
-	return true;
 }
 
-bool GraphicsClass::LoadGameData()
+void GraphicsClass::LoadGameData()
 {
-	bool result;
-
 	auto levelMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, "config/level1.loader");
 	auto uiMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, "config/ui.loader");
 
-	result = levelMeshLoader.get();
-	if (!result)
-		return false;
-	result = uiMeshLoader.get();
-	if (!result)
-		return false;
+	levelMeshLoader.get();
+	uiMeshLoader.get();
 
 	auto levelLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, "config/level1.loader");
 	auto uiLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, "config/ui.loader");
 	auto starLoader = async(launch::async, &GraphicsClass::GenerateStars, this, 1000);
 
-	result = levelLoader.get();
-	if (!result)
-		return false;
-	result = uiLoader.get();
-	if (!result)
-		return false;
-	result = starLoader.get();
-	if (!result)
-		return false;
-
-	return true;
+	levelLoader.get();
+	uiLoader.get();
+	starLoader.get();
 }
 
-bool GraphicsClass::LoadMeshData(string filename)
+void GraphicsClass::LoadMeshData(string filename)
 {
 	MeshControllerClass *meshController = MeshControllerClass::getInstance();
 	string sinput;
 	vector<future<bool>> m_allLoaders = vector<future<bool>>();
-	bool result;
 
 	ifstream fin(filename);
-	if (!fin) 
-	{
-		cerr << "Could not find file: " << filename << endl;
-		return false;
-	}
-
 	fin >> sinput;
 
 	while (!fin.eof())
@@ -203,10 +147,10 @@ bool GraphicsClass::LoadMeshData(string filename)
 			{
 				realType = MeshClass::TWOD;
 			}
-			else
-			{
-				return false;
-			}
+            else
+            {
+                throw new Exception();
+            }
 
 			m_allLoaders.push_back(async(launch::async, &MeshControllerClass::addMesh, meshController, filename, name, realType));
 		}
@@ -230,25 +174,15 @@ bool GraphicsClass::LoadMeshData(string filename)
 	vector<future<bool>>::iterator meshLoader;
 	for (meshLoader = m_allLoaders.begin(); meshLoader != m_allLoaders.end(); ++meshLoader)
 	{
-		result = (*meshLoader).get();
-		if (!result)
-			return false;
+		(*meshLoader).get();
 	}
-
-	return true;
 }
 
-bool GraphicsClass::LoadObjectData(string filename)
+void GraphicsClass::LoadObjectData(string filename)
 {
 	string sinput;
 	ifstream fin(filename);
 	vector<future<bool>> m_allLoaders = vector<future<bool>>();
-	bool result;
-	if (!fin)
-	{
-		cerr << "Could not find file: " << filename << endl;
-		return false;
-	}
 
 	fin >> sinput;
 
@@ -318,17 +252,12 @@ bool GraphicsClass::LoadObjectData(string filename)
 	vector<future<bool>>::iterator loader;
 	for (loader = m_allLoaders.begin(); loader != m_allLoaders.end(); ++loader)
 	{
-		result = (*loader).get();
-		if (!result)
-			return false;
+		(*loader).get();
 	}
-
-	return true;
 }
 
-bool GraphicsClass::GenerateStars(int starCount)
+void GraphicsClass::GenerateStars(int starCount)
 {
-	bool result;
 	float MAX_DISTANCE = 200.0f;
 
 	for (int i = 0; i < starCount; i++)
@@ -361,10 +290,6 @@ bool GraphicsClass::GenerateStars(int starCount)
 		if (int(posZ) % 2 == 1)
 			posZ *= -1.0f;
 
-		result = m_3DGraphics->AddStar("starMesh", XMFLOAT3(posX, posY, posZ), XMFLOAT3(0.15f, 0.15f, 0.15f), XMFLOAT3(0.0f, 0.0f, 0.0f));
-		if (!result)
-			return false;
+		m_3DGraphics->AddStar("starMesh", XMFLOAT3(posX, posY, posZ), XMFLOAT3(0.15f, 0.15f, 0.15f), XMFLOAT3(0.0f, 0.0f, 0.0f));
 	}
-
-	return true;
 }

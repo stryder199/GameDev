@@ -16,10 +16,8 @@ StarClass::StarClass(){
 StarClass::~StarClass(){
 }
 
-bool StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
+void StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
-	//bool result;
-
 	m_mesh = objMesh;
 	m_pos = pos;
 	m_scale = scale;
@@ -27,14 +25,10 @@ bool StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMF
 
 	// Create the light object.
 	m_lightSource = new LightClass();
-	if (!m_lightSource)
-		return false;
 	// Initialize the light object.
 	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDiffuseColor(0.0f, 0.0f, 0.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, -1.0f);
-
-	return true;
 }
 
 void StarClass::Shutdown()
@@ -48,26 +42,17 @@ void StarClass::Shutdown()
 	return;
 }
 
-bool StarClass::Render(ShaderControllerClass* shader)
+void StarClass::Render(ShaderControllerClass* shader)
 {
-	bool result;
-
-	result = ModelClass::RenderBuffers(shader);
-	if (!result)
-		return false;
-
-	return true;
+	ModelClass::RenderBuffers(shader);
 }
 
-bool StarClass::PreProcessing()
+void StarClass::PreProcessing()
 {
-	//bool result; not used
-
 	m_rot.x += m_rotVel.x;
 	m_rot.y += m_rotVel.y;
 	m_rot.z += m_rotVel.z;
 	ConstrainRotation();
 
 	CalculateWorldMatrix();
-	return true;
 }

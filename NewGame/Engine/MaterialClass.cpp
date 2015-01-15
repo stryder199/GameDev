@@ -12,7 +12,6 @@ MaterialClass::~MaterialClass()
 
 bool MaterialClass::Initialize(MaterialClass::MaterialInfo matInfo)
 {
-	//bool result; not used
 	m_materialInfo = matInfo;
 	
 	return true;

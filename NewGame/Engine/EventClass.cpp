@@ -27,63 +27,63 @@ bool EventClass::Initialize(HINSTANCE hinstance)
 	result = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Initialize the direct input interface for the keyboard.
 	result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Set the data format.  In this case since it is a keyboard we can use the predefined data format.
 	result = m_keyboard->SetDataFormat(&c_dfDIKeyboard);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Set the cooperative level of the keyboard to not share with other programs.
 	result = m_keyboard->SetCooperativeLevel(WindowClass::getInstance()->gethWnd(), DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Now acquire the keyboard.
 	result = m_keyboard->Acquire();
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Initialize the direct input interface for the mouse.
 	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Set the data format for the mouse using the pre-defined mouse data format.
 	result = m_mouse->SetDataFormat(&c_dfDIMouse);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Set the cooperative level of the mouse to share with other programs.
 	result = m_mouse->SetCooperativeLevel(WindowClass::getInstance()->gethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	// Acquire the mouse.
 	result = m_mouse->Acquire();
 	if(FAILED(result))
 	{
-		return false;
+        throw new exception()
 	}
 
 	return true;
@@ -118,36 +118,22 @@ void EventClass::Shutdown()
 }
 
 
-bool EventClass::Render()
+void EventClass::Render()
 {
-	bool result;
-
-
 	// Read the current state of the keyboard.
-	result = ReadKeyboard();
-	if(!result)
-	{
-		return false;
-	}
+	ReadKeyboard();
 
 	// Read the current state of the mouse.
-	result = ReadMouse();
-	if(!result)
-	{
-		return false;
-	}
+	ReadMouse();
 
 	// Process the changes in the mouse and keyboard.
 	ProcessInput();
-
-	return true;
 }
 
 
-bool EventClass::ReadKeyboard()
+void EventClass::ReadKeyboard()
 {
 	HRESULT result;
-
 
 	// Read the keyboard device.
 	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
@@ -158,20 +144,13 @@ bool EventClass::ReadKeyboard()
 		{
 			m_keyboard->Acquire();
 		}
-		else
-		{
-			return false;
-		}
 	}
-		
-	return true;
 }
 
 
 bool EventClass::ReadMouse()
 {
 	HRESULT result;
-
 
 	// Read the mouse device.
 	result = m_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&m_mouseState);
@@ -182,13 +161,7 @@ bool EventClass::ReadMouse()
 		{
 			m_mouse->Acquire();
 		}
-		else
-		{
-			return false;
-		}
 	}
-
-	return true;
 }
 
 
@@ -204,8 +177,6 @@ void EventClass::ProcessInput()
 	
 	if(m_mouseX > m_screenWidth)  { m_mouseX = m_screenWidth; }
 	if(m_mouseY > m_screenHeight) { m_mouseY = m_screenHeight; }
-	
-	return;
 }
 
 

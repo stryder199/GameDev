@@ -22,10 +22,8 @@ PlanetClass::~PlanetClass()
 {
 }
 
-bool PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
+void PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
-	//bool result;
-
 	m_mesh = objMesh;
 	m_pos = pos;
 	m_scale = scale;
@@ -33,14 +31,10 @@ bool PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, X
 
 	// Create the light object.
 	m_lightSource = new LightClass();
-	if (!m_lightSource)
-		return false;
 	// Initialize the light object.
 	m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
-
-	return true;
 }
 
 void PlanetClass::Shutdown()
@@ -54,26 +48,17 @@ void PlanetClass::Shutdown()
 	return;
 }
 
-bool PlanetClass::Render(ShaderControllerClass* shader)
+void PlanetClass::Render(ShaderControllerClass* shader)
 {
-	bool result;
-
-	result = ModelClass::RenderBuffers(shader);
-	if (!result)
-		return false;
-
-	return true;
+	ModelClass::RenderBuffers(shader);
 }
 
-bool PlanetClass::PreProcessing()
+void PlanetClass::PreProcessing()
 {
-	//bool result; not used
-
 	m_rot.x += m_rotVel.x;
 	m_rot.y += m_rotVel.y;
 	m_rot.z += m_rotVel.z;
 	ConstrainRotation();
 
 	CalculateWorldMatrix();
-	return true;
 }

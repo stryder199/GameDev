@@ -14,27 +14,14 @@ FontClass::~FontClass()
 {
 }
 
-bool FontClass::Initialize(string fontFilename, string textureFilename)
+void FontClass::Initialize(string fontFilename, string textureFilename)
 {
-	bool result;
-
-
 	// Load in the text file containing the font data.
-	result = LoadFontData(fontFilename);
-	if (!result)
-	{
-		return false;
-	}
+	LoadFontData(fontFilename);
 
 	m_Texture = new TextureClass();
 	// Load the texture that has the font characters on it.
-	result = m_Texture->Initialize(toWChar(textureFilename));
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
+	m_Texture->Initialize(toWChar(textureFilename));
 }
 
 void FontClass::Shutdown()
@@ -53,27 +40,16 @@ void FontClass::Shutdown()
 	return;
 }
 
-bool FontClass::LoadFontData(string filename)
+void FontClass::LoadFontData(string filename)
 {
 	ifstream fin;
 	int i;
 	char temp;
 
-
 	// Create the font spacing buffer.
 	m_Font = new FontType[95];
-	if (!m_Font)
-	{
-		return false;
-	}
-
 	// Read in the font size and spacing between chars.
 	fin.open(filename);
-	if (fin.fail())
-	{
-		return false;
-	}
-
 	// Read in the 95 used ascii characters for text.
 	for (i = 0; i<95; i++)
 	{
@@ -95,8 +71,6 @@ bool FontClass::LoadFontData(string filename)
 
 	// Close the file.
 	fin.close();
-
-	return true;
 }
 
 
@@ -108,8 +82,6 @@ void FontClass::ReleaseFontData()
 		delete[] m_Font;
 		m_Font = 0;
 	}
-
-	return;
 }
 
 TextureClass* FontClass::GetTexture()

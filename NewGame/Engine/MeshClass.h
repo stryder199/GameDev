@@ -31,40 +31,40 @@ public:
 
 	struct VertexTextureType
 	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT2 texture;
-		DirectX::XMFLOAT3 normals;
+		XMFLOAT3 position;
+		XMFLOAT2 texture;
+		XMFLOAT3 normals;
 	};
 
 	struct VertexMaterialType
 	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT3 normals;
+		XMFLOAT3 position;
+		XMFLOAT3 normals;
 	};
 
 	struct VertexTextType
 	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT2 texture;
+		XMFLOAT3 position;
+		XMFLOAT2 texture;
 	};
 
 public:
 	MeshClass() {};
 	~MeshClass() {};
-	bool Initialize(string filename, MeshType type);
-	bool Initialize(ObjectMeshClass *object, MeshType type);
+    void Initialize(string filename, MeshType type);
+    void Initialize(ObjectMeshClass *object, MeshType type);
 	void Shutdown();
 
 
 	MeshType getMeshType();
 	vector<ObjectMeshClass*>* getAllObjects();
-	vector<DirectX::XMFLOAT3>* getGuns();
+	vector<XMFLOAT3>* getGuns();
 
 private:
-	bool LoadModel(string filename);
-	bool InitializeBuffers();
+    void LoadModel(string filename);
+    void InitializeBuffers();
 
 	vector<ObjectMeshClass*> m_allObjects;
-	vector<DirectX::XMFLOAT3> m_guns;
+	vector<XMFLOAT3> m_guns;
 	MeshType m_type;
 };

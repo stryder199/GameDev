@@ -17,11 +17,11 @@ public:
 	StarClass();
 	~StarClass();
 	
-	bool Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
+    void Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader);
-	virtual bool PreProcessing();
+    void Render(ShaderControllerClass* shader);
+    virtual void PreProcessing();
 private:
 	
 

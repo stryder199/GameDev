@@ -29,7 +29,7 @@ public:
 	MaterialClass();
 	~MaterialClass();
 
-	bool Initialize(MaterialInfo matInfo);
+    void Initialize(MaterialInfo matInfo);
 	void Shutdown();
 
 	MaterialInfo getMaterialInfo();

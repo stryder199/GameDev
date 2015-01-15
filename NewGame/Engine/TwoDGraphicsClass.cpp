@@ -20,7 +20,7 @@ TwoDGraphicsClass::~TwoDGraphicsClass()
 {
 }
 
-bool TwoDGraphicsClass::Initialize()
+void TwoDGraphicsClass::Initialize()
 {
 	//bool result;
 	m_allBitmaps = vector<BitmapClass*>();
@@ -32,8 +32,6 @@ bool TwoDGraphicsClass::Initialize()
 	m_DefaultLightSource->SetAmbientColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDiffuseColor(1.0, 1.0, 1.0, 1.0);
 	m_DefaultLightSource->SetDirection(0.0, 0.0, -1.0);
-
-	return true;
 }
 
 void TwoDGraphicsClass::Shutdown()
@@ -69,10 +67,8 @@ void TwoDGraphicsClass::Shutdown()
 	}
 }
 
-bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
+void TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 {
-	bool result;
-
 	shader->Set2DShaders();
 
 	//Turn off the ZBuffer since 2D elements have no Z component
@@ -83,31 +79,27 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 	vector<BitmapClass*>::iterator bitmap;
 	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
 	{
-		result = (*bitmap)->PreProcessing();
-		if (!result)
-			return false;
+		(*bitmap)->PreProcessing();
 	}
 	bitmapMutex.unlock();
 
 	bitmapMutex.lock();
 	for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
 	{
-		result = (*bitmap)->Render(shader);
-		if (!result)
-			return false;
+		(*bitmap)->Render(shader);
 	}
 	bitmapMutex.unlock();
 
 	shader->SetTextShaders();
 
-	std::string myfps = "FPS " + std::to_string(fps);
-	std::string playerx = "X " + std::to_string(PlayerClass::getInstance()->getPosition().x);
-	std::string playerz = "Z " + std::to_string(PlayerClass::getInstance()->getPosition().z);
-	std::string sheilds = std::to_string(PlayerClass::getInstance()->GetShields()) +"\\" + std::to_string(PlayerClass::getInstance()->GetTotalShields());
-	std::string health = std::to_string(PlayerClass::getInstance()->GetHealth()) +"\\" + std::to_string(PlayerClass::getInstance()->GetTotalHealth());
-	std::string torpedos = std::to_string(PlayerClass::getInstance()->GetTorpedos());
-	std::string energy = std::to_string(PlayerClass::getInstance()->GetEnergy()) +"\\" + std::to_string(PlayerClass::getInstance()->GetTotalEnergy());
-	std::string thrust = std::to_string((int)PlayerClass::getInstance()->GetEnginePower()*100) + "\\100";
+	string myfps = "FPS " + to_string(fps);
+	string playerx = "X " + to_string(PlayerClass::getInstance()->getPosition().x);
+	string playerz = "Z " + to_string(PlayerClass::getInstance()->getPosition().z);
+	string sheilds = to_string(PlayerClass::getInstance()->GetShields()) +"\\" + to_string(PlayerClass::getInstance()->GetTotalShields());
+	string health = to_string(PlayerClass::getInstance()->GetHealth()) +"\\" + to_string(PlayerClass::getInstance()->GetTotalHealth());
+	string torpedos = to_string(PlayerClass::getInstance()->GetTorpedos());
+	string energy = to_string(PlayerClass::getInstance()->GetEnergy()) +"\\" + to_string(PlayerClass::getInstance()->GetTotalEnergy());
+	string thrust = to_string((int)PlayerClass::getInstance()->GetEnginePower()*100) + "\\100";
 
 	textMutex.lock();
 	if (m_allText.find("fps") != m_allText.end())
@@ -155,78 +147,53 @@ bool TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
 	map<string, TextClass*>::iterator text;
 	for (text = m_allText.begin(); text != m_allText.end(); ++text)
 	{
-		result = (*text).second->PreProcessing();
-		if (!result)
-			return false;
+		(*text).second->PreProcessing();
 	}
 	textMutex.unlock();
 	
 	textMutex.lock();
 	for (text = m_allText.begin(); text != m_allText.end(); ++text)
 	{
-		result = (*text).second->Render(shader);
-		if (!result)
-			return false;
+		(*text).second->Render(shader);
 	}
 	textMutex.unlock();
 	D3DClass::getInstance()->TurnOffAlphaBlending();
 
 	//Turn the ZBuffer back on for future 3d rendering
 	D3DClass::getInstance()->TurnZBufferOn();
-
-	return true;
 }
 
-bool TwoDGraphicsClass::AddText(string name, string initText, string fontname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color)
+void TwoDGraphicsClass::AddText(string name, string initText, string fontname, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color)
 {
-	bool result;
 	fontMutex.lock();
 	FontClass* font = m_allFont[fontname];
 	fontMutex.unlock();
-	if (font == NULL)
-		return false;
 
 	TextClass *newText = new TextClass();
-	result = newText->Initialize(initText, font, pos, scale, color);
-	if (!result)
-		return false;
+	newText->Initialize(initText, font, pos, scale, color);
 
 	textMutex.lock();
 	m_allText[name] = newText;
 	textMutex.unlock();
-
-	return true;
 }
 
-bool TwoDGraphicsClass::AddBitmap(string meshname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale)
+void TwoDGraphicsClass::AddBitmap(string meshname, XMFLOAT2 pos, XMFLOAT2 scale)
 {
-	bool result;
 	BitmapClass *bitmap = new BitmapClass();
 	MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
-	if (mesh == NULL)
-		return false;
 
-	result = bitmap->Initialize(mesh, m_DefaultLightSource, pos, scale);
-	if (!result)
-		return false;
+	bitmap->Initialize(mesh, m_DefaultLightSource, pos, scale);
 	bitmapMutex.lock();
 	m_allBitmaps.push_back(bitmap);
 	bitmapMutex.unlock();
-
-	return true;
 }
 
-bool TwoDGraphicsClass::AddFont(string name, string fontFilename, string textureFilename)
+void TwoDGraphicsClass::AddFont(string name, string fontFilename, string textureFilename)
 {
-	bool result;
 	FontClass *newFont = new FontClass();
-	result = newFont->Initialize(fontFilename, textureFilename);
-	if (!result)
-		return false;
+	newFont->Initialize(fontFilename, textureFilename);
 
 	fontMutex.lock();
 	m_allFont[name] = newFont;
 	fontMutex.unlock();
-
-	return true;
 }

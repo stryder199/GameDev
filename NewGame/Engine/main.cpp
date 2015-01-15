@@ -5,29 +5,14 @@
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
-{
-	ProgramRootClass* programRoot;
-	bool result;
-	
+{	
 	// Create the system object.
-	programRoot = new ProgramRootClass();
-	if(!programRoot)
-	{
-		return -1;
-	}
+    ProgramRootClass* programRoot = new ProgramRootClass();
 
 	// Initialize and run the system object.
-	result = programRoot->Initialize(hInstance, iCmdshow);
-	if (!result)
-	{
-		return -1;
-	}
+	programRoot->Initialize(hInstance, iCmdshow);
 
-	result = programRoot->Go();
-	if (!result)
-	{
-		return -1;
-	}
+	programRoot->Go();
 
 	// Shutdown and release the system object.
 	programRoot->Shutdown();

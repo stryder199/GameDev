@@ -12,16 +12,14 @@
 
 bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 {
-	bool result;
-
 	// For each object in the mesh
-	std::vector<ObjectMeshClass*>::iterator object;
-	std::vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
+	vector<ObjectMeshClass*>::iterator object;
+	vector<ObjectMeshClass*>* allObject = m_mesh->getAllObjects();
 	for (object = allObject->begin(); object != allObject->end(); ++object)
 	{
 		// For each submesh
-		std::vector<MeshDataClass*>::iterator subMesh;
-		std::vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
+		vector<MeshDataClass*>::iterator subMesh;
+		vector<MeshDataClass*>* allMeshData = (*object)->getAllMeshData();
 		for (subMesh = allMeshData->begin(); subMesh != allMeshData->end(); ++subMesh)
 		{
 			unsigned int vertexstride;
@@ -43,7 +41,7 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 			}
 			else
 			{
-				return false;
+				throw new exception
 			}
 
 			offset = 0;
@@ -66,41 +64,36 @@ bool ModelClass::RenderBuffers(ShaderControllerClass* shader)
 					(*subMesh)->getMaterial()->getMaterialInfo().Kd_b,
 					1.0f);
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, m_lightSource->GetDirection(), 
-					m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor(), color);
-				if (!result)
-					return false;
+				shader->Render(
+                    (*subMesh)->getIndexCount(), 
+                    m_worldMatrix, 
+                    m_lightSource->GetDirection(), 
+					m_lightSource->GetAmbientColor(),
+                    m_lightSource->GetDiffuseColor(), 
+                    color);
 			}
 			else if (m_mesh->getMeshType() == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::TEXTURE)
 			{
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_lightSource->GetDirection(),
+				shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_lightSource->GetDirection(),
 					m_lightSource->GetAmbientColor(), m_lightSource->GetDiffuseColor());
-				if (!result)
-					return false;
 			}
 			else if (m_mesh->getMeshType() == MeshClass::TEXT)
 			{
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_color);
-				if (!result)
-					return false;
+				shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture(), m_color);
 			}
 			else if (m_mesh->getMeshType() == MeshClass::TWOD)
 			{
 				//Render the model using the shader
-				result = shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture());
-				if (!result)
-					return false;
+				shader->Render((*subMesh)->getIndexCount(), m_worldMatrix, (*subMesh)->getTexture());
 			}
 			else
 			{
-				return false;
+				throw new exception
 			}
 		}
 	}
-
-	return true;
 }
 
 void ModelClass::CalculateWorldMatrix()

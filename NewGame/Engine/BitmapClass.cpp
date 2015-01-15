@@ -23,16 +23,12 @@ BitmapClass::~BitmapClass()
 {
 }
 
-bool BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale)
+void BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale)
 {
-	//bool result;
-
 	m_mesh = mesh;
 	m_lightSource = lightSource;
 	m_screenPos = pos;
 	m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
-
-	return true;
 }
 
 void BitmapClass::Shutdown()
@@ -40,18 +36,12 @@ void BitmapClass::Shutdown()
 	return;
 }
 
-bool BitmapClass::Render(ShaderControllerClass *shader)
+void BitmapClass::Render(ShaderControllerClass *shader)
 {
-	bool result;
-
-	result = ModelClass::RenderBuffers(shader);
-	if (!result)
-		return false;
-
-	return true;
+	ModelClass::RenderBuffers(shader);
 }
 
-bool BitmapClass::PreProcessing()
+void BitmapClass::PreProcessing()
 {
 	m_rot = CameraClass::getInstance()->getRotation();
 
@@ -65,6 +55,4 @@ bool BitmapClass::PreProcessing()
 	ConstrainRotation();
 
 	CalculateWorldMatrix();
-
-	return true;
 }

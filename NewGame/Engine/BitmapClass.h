@@ -20,11 +20,11 @@ public:
 	BitmapClass();
 	~BitmapClass();
 
-	bool Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale);
+    void Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader);
-	virtual bool PreProcessing();
+    void Render(ShaderControllerClass* shader);
+    virtual void PreProcessing();
 
 private:
 	XMFLOAT2 m_screenPos;

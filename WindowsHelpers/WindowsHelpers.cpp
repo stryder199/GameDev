@@ -6,8 +6,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 string WindowsHelpers::DesktopDir()
 {
     static char path[MAX_PATH + 1];
@@ -108,7 +106,7 @@ vector<string> WindowsHelpers::ListFile(string dirPath, string extension)
             WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, NULL);
 
             //A std:string  using the char* constructor.
-            std::string ss(ch);
+            string ss(ch);
             if (ss != "." || ss != "..")
             {
                 fileList.push_back(ss);

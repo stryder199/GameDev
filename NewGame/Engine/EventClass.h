@@ -31,9 +31,9 @@ public:
 	EventClass();
 	~EventClass();
 
-	bool Initialize(HINSTANCE);
+    void Initialize(HINSTANCE);
 	void Shutdown();
-	bool Render();
+    void Render();
 
 	bool IsEscapePressed();
 	bool IsUpPressed();
@@ -56,8 +56,8 @@ public:
 	void GetMouseLocation(int&, int&);
 
 private:
-	bool ReadKeyboard();
-	bool ReadMouse();
+    void ReadKeyboard();
+    void ReadMouse();
 	void ProcessInput();
 
 private:

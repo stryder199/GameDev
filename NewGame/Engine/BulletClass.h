@@ -21,11 +21,11 @@ public:
 	BulletClass();
 	~BulletClass();
 
-	bool Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 dir);
+    void Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 dir);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader);
-	virtual bool PreProcessing();
+    void Render(ShaderControllerClass* shader);
+    virtual void PreProcessing();
 
 	int GetTimeAlive();
 private:

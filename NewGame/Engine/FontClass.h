@@ -28,13 +28,13 @@ public:
 	FontClass();
 	~FontClass();
 
-	bool Initialize(string fontPropFilename, string textureFilename);
+    void Initialize(string fontPropFilename, string textureFilename);
 	void Shutdown();
 
 	TextureClass* GetTexture();
 	FontClass::FontType* GetFont();
 private:
-	bool LoadFontData(string filename);
+    void LoadFontData(string filename);
 	void ReleaseFontData();
 
 private:

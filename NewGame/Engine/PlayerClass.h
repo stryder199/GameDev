@@ -23,10 +23,10 @@ public:
 	~PlayerClass();
 	static PlayerClass* getInstance();
 
-	bool Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
+    void Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader);
+    void Render(ShaderControllerClass* shader);
 	virtual bool PreProcessing();
 
 	void SpawnBullet(XMFLOAT3 spawnPos);
@@ -61,7 +61,7 @@ private:
 	Timer m_weaponReloadTimer, m_weaponPulseTimer;
 	int m_weaponPulseCount, m_weaponPulseMaxCount;
 	XMFLOAT3 m_vel, m_rotVel;
-	std::vector<BulletClass*> m_allBullets;
+	vector<BulletClass*> m_allBullets;
 	MeshClass *m_bulletMesh;
 	float m_enginePower;
 	int m_totalHealth, m_health;

@@ -14,9 +14,8 @@ ShaderControllerClass::~ShaderControllerClass()
 {
 }
 
-bool ShaderControllerClass::Initialize()
+void ShaderControllerClass::Initialize()
 {
-	bool result;
 	D3D11_INPUT_ELEMENT_DESC *posTexNorPolygonLayout, *posTexPolygonLayout, *posNorPolygonLayout;
 	int posTexNorLayoutCount, posTexLayoutCount, posNorLayoutCount;
 
@@ -98,39 +97,14 @@ bool ShaderControllerClass::Initialize()
 	posTexPolygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	posTexPolygonLayout[1].InstanceDataStepRate = 0;
 
-	result = m_threeDMaterialPS.Initialize(MaterialPSFilename, PixelShaderClass::ShaderType::THREEDMATERIAL);
-	if (!result)
-		return false;
-
-	result = m_threeDMaterialVS.Initialize(MaterialVSFilename, posNorPolygonLayout, posNorLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
-	if (!result)
-		return false;
-
-	result = m_threeDTexturePS.Initialize(TexturePSFilename, PixelShaderClass::ShaderType::THREEDTEXTURE);
-	if (!result)
-		return false;
-
-	result = m_threeDTextureVS.Initialize(TextureVSFilename, posTexNorPolygonLayout, posTexNorLayoutCount, VertexShaderClass::ShaderType::THREEDTEXTURE);
-	if (!result)
-		return false;
-
-	result = m_twoDPS.Initialize(TwoDPSFilename, PixelShaderClass::ShaderType::TWOD);
-	if (!result)
-		return false;
-
-	result = m_twoDVS.Initialize(TwoDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TWOD);
-	if (!result)
-		return false;
-
-	result = m_textPS.Initialize(TextDPSFilename, PixelShaderClass::ShaderType::TEXT);
-	if (!result)
-		return false;
-
-	result = m_textVS.Initialize(TextDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TEXT);
-	if (!result)
-		return false;
-
-	return true;
+	m_threeDMaterialPS.Initialize(MaterialPSFilename, PixelShaderClass::ShaderType::THREEDMATERIAL);
+	m_threeDMaterialVS.Initialize(MaterialVSFilename, posNorPolygonLayout, posNorLayoutCount, VertexShaderClass::ShaderType::THREEDMATERIAL);
+	m_threeDTexturePS.Initialize(TexturePSFilename, PixelShaderClass::ShaderType::THREEDTEXTURE);
+	m_threeDTextureVS.Initialize(TextureVSFilename, posTexNorPolygonLayout, posTexNorLayoutCount, VertexShaderClass::ShaderType::THREEDTEXTURE);
+	m_twoDPS.Initialize(TwoDPSFilename, PixelShaderClass::ShaderType::TWOD);
+	m_twoDVS.Initialize(TwoDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TWOD);
+	m_textPS.Initialize(TextDPSFilename, PixelShaderClass::ShaderType::TEXT);
+	m_textVS.Initialize(TextDVSFilename, posTexPolygonLayout, posTexLayoutCount, VertexShaderClass::ShaderType::TEXT);
 }
 
 void ShaderControllerClass::Shutdown()
@@ -149,72 +123,36 @@ void ShaderControllerClass::Shutdown()
 	return;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+void ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
-	bool result;
-
-	result = m_vertexFocus->Render(indexCount, worldMatrix);
-	if (!result)
-		return false;
-
-	result = m_pixelFocus->Render(texture, lightDirection, ambientColor, diffuseColor);
-	if (!result)
-		return false;
+	m_vertexFocus->Render(indexCount, worldMatrix);
+	m_pixelFocus->Render(texture, lightDirection, ambientColor, diffuseColor);
 
 	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-
-	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+void ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
 {
-	bool result;
-
-	result = m_vertexFocus->Render(indexCount, worldMatrix);
-	if (!result)
-		return false;
-
-	result = m_pixelFocus->Render(lightDirection, ambientColor, diffuseColor, color);
-	if (!result)
-		return false;
+	m_vertexFocus->Render(indexCount, worldMatrix);
+	m_pixelFocus->Render(lightDirection, ambientColor, diffuseColor, color);
 
 	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-
-	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT4 color)
+void ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT4 color)
 {
-	bool result;
-
-	result = m_vertexFocus->Render(indexCount, worldMatrix);
-	if (!result)
-		return false;
-
-	result = m_pixelFocus->Render(texture, color);
-	if (!result)
-		return false;
+	m_vertexFocus->Render(indexCount, worldMatrix);
+	m_pixelFocus->Render(texture, color);
 
 	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-
-	return true;
 }
 
-bool ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture)
+void ShaderControllerClass::Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture)
 {
-	bool result;
-
-	result = m_vertexFocus->Render(indexCount, worldMatrix);
-	if (!result)
-		return false;
-
-	result = m_pixelFocus->Render(texture);
-	if (!result)
-		return false;
+	m_vertexFocus->Render(indexCount, worldMatrix);
+	m_pixelFocus->Render(texture);
 
 	D3DClass::getInstance()->GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-
-	return true;
 }
 
 void ShaderControllerClass::Set2DShaders()

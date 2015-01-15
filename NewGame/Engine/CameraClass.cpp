@@ -2,7 +2,7 @@
 #include "PlayerClass.h"
 
 CameraClass* CameraClass::m_pInstance = NULL;
-std::mutex CameraClass::instanceMutex;
+mutex CameraClass::instanceMutex;
 
 CameraClass::CameraClass()
 {
@@ -24,13 +24,9 @@ CameraClass* CameraClass::getInstance()
 	return m_pInstance;
 }
 
-bool CameraClass::Initialize()
+void CameraClass::Initialize()
 {
-	//bool result; not used
-
 	m_point_pos.z = -0.15;
-
-	return true;
 }
 
 void CameraClass::Shutdown()

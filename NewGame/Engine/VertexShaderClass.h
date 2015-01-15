@@ -46,17 +46,17 @@ public:
 	VertexShaderClass();
 	~VertexShaderClass();
 
-	bool Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
+    void Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
 	void Shutdown();
-	bool Render(int, const XMFLOAT4X4 &worldMatrix);
+    void Render(int, const XMFLOAT4X4 &worldMatrix);
 
 	ShaderType getShaderType();
 private:
-	bool InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
+    void InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount);
 	void ShutdownShader();
 	void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-	bool SetShaderParameters(const XMFLOAT4X4 &worldMatrix);
+    void SetShaderParameters(const XMFLOAT4X4 &worldMatrix);
 	void RenderShader(int);
 
 private:

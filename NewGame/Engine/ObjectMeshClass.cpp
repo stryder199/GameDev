@@ -12,14 +12,10 @@ ObjectMeshClass::~ObjectMeshClass()
 {
 }
 
-bool ObjectMeshClass::Initialize(string name)
+void ObjectMeshClass::Initialize(string name)
 {
-	//bool result;
-
 	m_name = name;
 	m_allMeshData = vector<MeshDataClass*>();
-
-	return true;
 }
 
 void ObjectMeshClass::Shutdown()

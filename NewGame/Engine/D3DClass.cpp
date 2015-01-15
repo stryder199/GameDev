@@ -2,7 +2,7 @@
 #include "WindowClass.h"
 
 D3DClass* D3DClass::m_pInstance = NULL;
-std::mutex D3DClass::instanceMutex;
+mutex D3DClass::instanceMutex;
 
 D3DClass::D3DClass()
 {

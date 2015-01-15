@@ -19,7 +19,7 @@ public:
 	ObjectMeshClass();
 	~ObjectMeshClass();
 
-	bool Initialize(string name);
+    void Initialize(string name);
 	void Shutdown();
 
 	void addMesh(MeshDataClass* newMesh);

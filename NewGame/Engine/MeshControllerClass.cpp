@@ -2,7 +2,7 @@
 #include "MeshClass.h"
 
 MeshControllerClass* MeshControllerClass::m_pInstance = NULL;
-std::mutex MeshControllerClass::instanceMutex;
+mutex MeshControllerClass::instanceMutex;
 
 MeshControllerClass::MeshControllerClass()
 {
@@ -13,13 +13,9 @@ MeshControllerClass::~MeshControllerClass()
 {
 }
 
-bool MeshControllerClass::Initialize()
+void MeshControllerClass::Initialize()
 {
-	//bool result;
-	
 	m_allMeshs = map<string, MeshClass*>();
-
-	return true;
 }
 
 void MeshControllerClass::Shutdown()
@@ -43,31 +39,23 @@ MeshControllerClass* MeshControllerClass::getInstance()
 	return m_pInstance;
 }
 
-bool MeshControllerClass::addMesh(string filename, string name, MeshClass::MeshType type)
+void MeshControllerClass::addMesh(string filename, string name, MeshClass::MeshType type)
 {
-	bool result;
-
 	meshMutex.lock();
 	if (m_allMeshs.find(name) != m_allMeshs.end())
 	{
 		// Already in the list
-		return true;
+        return;
 	}
 	meshMutex.unlock();
 
 	MeshClass *newMesh = 0;
 	newMesh = new MeshClass();
-	if (!newMesh)
-		return false;
-	result = newMesh->Initialize(filename, type);
-	if (!result)
-		return false;
+	newMesh->Initialize(filename, type);
 
 	meshMutex.lock();
 	m_allMeshs[name] = newMesh;
 	meshMutex.unlock();
-
-	return true;
 }
 
 MeshClass* MeshControllerClass::getMesh(string name)

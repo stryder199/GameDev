@@ -23,15 +23,15 @@ public:
 	GraphicsClass();
 	~GraphicsClass();
 
-	bool Initialize(HINSTANCE, int);
+	void Initialize(HINSTANCE, int);
 	void Shutdown();
 
-	bool Render();
+	void Render();
 
-	bool LoadGameData();
-	bool LoadMeshData(string filename);
-	bool LoadObjectData(string filename);
-	bool GenerateStars(int starCount);
+    void LoadGameData();
+    void LoadMeshData(string filename);
+    void LoadObjectData(string filename);
+    void GenerateStars(int starCount);
 private:
 	ShaderControllerClass* m_Shader;
 	TwoDGraphicsClass* m_2DGraphics;

@@ -10,7 +10,7 @@ TextureClass::~TextureClass()
 {
 }
 
-bool TextureClass::Initialize(WCHAR* filename)
+void TextureClass::Initialize(WCHAR* filename)
 {
 	HRESULT result;
 
@@ -18,10 +18,8 @@ bool TextureClass::Initialize(WCHAR* filename)
 	result = D3DX11CreateShaderResourceViewFromFile(D3DClass::getInstance()->GetDevice(), filename, NULL, NULL, &m_texture, NULL);
 	if(FAILED(result))
 	{
-		return false;
+		throw new exception
 	}
-	
-	return true;
 }
 
 void TextureClass::Shutdown()

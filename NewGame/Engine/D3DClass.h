@@ -50,7 +50,7 @@ private:
 	D3DClass& operator=(const D3DClass&) {};
 
 	static D3DClass* m_pInstance;
-	static std::mutex instanceMutex;
+	static mutex instanceMutex;
 
 	bool m_vsync_enabled;
 

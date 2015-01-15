@@ -42,6 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>11.0.50522.1</_ProjectFileVersion>
+    <NuGetPackageImportStamp>0ab71379</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -129,6 +130,7 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\WindowsHelpers\WindowsHelpers.cpp" />
     <ClCompile Include=".\main.cpp" />
     <ClCompile Include=".\ProgramRootClass.cpp" />
     <ClCompile Include="BitmapClass.cpp" />
@@ -161,6 +163,7 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <ClCompile Include="WindowClass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\WindowsHelpers\WindowsHelpers.h" />
     <ClInclude Include=".\ProgramRootClass.h" />
     <ClInclude Include=".\TwoDGraphicsClass.h" />
     <ClInclude Include="ThreeDGraphicsClass.h" />
@@ -190,9 +193,7 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <ClInclude Include="StarClass.h" />
     <ClInclude Include="TextureClass.h" />
     <ClInclude Include="WindowClass.h" />
-    <ClInclude Include="WindowsHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

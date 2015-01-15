@@ -23,10 +23,8 @@ TextClass::~TextClass()
 {
 }
 
-bool TextClass::Initialize(std::string initText, FontClass* font, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color)
+void TextClass::Initialize(string initText, FontClass* font, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color)
 {
-	bool result;
-
 	m_font = font;
 	m_text = initText;
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -34,11 +32,7 @@ bool TextClass::Initialize(std::string initText, FontClass* font, XMFLOAT2 pos, 
 	m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
 	m_color = color;
 
-	result = BuildTextMesh(initText.c_str());
-	if (!result)
-		return false;
-
-	return true;
+	BuildTextMesh(initText.c_str());
 }
 
 void TextClass::Shutdown()
@@ -52,34 +46,22 @@ void TextClass::Shutdown()
 	return;
 }
 
-bool TextClass::Render(ShaderControllerClass* shader)
+void TextClass::Render(ShaderControllerClass* shader)
 {
-	bool result;
-
-	result = ModelClass::RenderBuffers(shader);
-	if (!result)
-		return false;
-
-	return true;
+    ModelClass::RenderBuffers(shader);
 }
 
-bool TextClass::UpdateText(std::string newText)
+bool TextClass::UpdateText(string newText)
 {
-	bool result;
 	if (m_text.compare(newText) != 0)
 	{
 		m_text = newText;
-		result = BuildTextMesh(m_text.c_str());
-		if (!result)
-			return false;
+		BuildTextMesh(m_text.c_str());
 	}
-	return true;
 }
 
-bool TextClass::PreProcessing()
+void TextClass::PreProcessing()
 {
-	//bool result;
-
 	m_rot = CameraClass::getInstance()->getRotation();
 	m_pos.x = PlayerClass::getInstance()->getPosition().x;
 	m_pos.y = PlayerClass::getInstance()->getPosition().y;
@@ -91,11 +73,9 @@ bool TextClass::PreProcessing()
 	ConstrainRotation();
 
 	CalculateWorldMatrix();
-
-	return true;
 }
 
-bool TextClass::BuildTextMesh(const char* sentence)
+void TextClass::BuildTextMesh(const char* sentence)
 {
 	ObjectMeshClass *textObject = new ObjectMeshClass();
 	MeshDataClass *meshData = new MeshDataClass();
@@ -113,14 +93,8 @@ bool TextClass::BuildTextMesh(const char* sentence)
 
 	m_mesh = new MeshClass();
 
-	result = textObject->Initialize("Text");
-	if (!result)
-		return false;
-
-	result = meshData->Initialize(m_font->GetTexture());
-	if (!result)
-		return false;
-
+	textObject->Initialize("Text");
+	meshData->Initialize(m_font->GetTexture());
 	textObject->addMesh(meshData);
 
 	// Draw each letter onto a quad.
@@ -203,6 +177,4 @@ bool TextClass::BuildTextMesh(const char* sentence)
 	}
 
 	m_mesh->Initialize(textObject, MeshClass::TEXT);
-
-	return true;
 }

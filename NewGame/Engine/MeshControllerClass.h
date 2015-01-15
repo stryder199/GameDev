@@ -19,12 +19,12 @@ class MeshControllerClass
 public:
 	~MeshControllerClass();
 
-	bool Initialize();
+    void Initialize();
 	void Shutdown();
 
 	static MeshControllerClass* getInstance();
 
-	bool addMesh(string filename, string name, MeshClass::MeshType type);
+    void addMesh(string filename, string name, MeshClass::MeshType type);
 	MeshClass* getMesh(string name);
 private:
 	MeshControllerClass();

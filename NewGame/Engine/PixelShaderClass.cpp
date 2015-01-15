@@ -14,18 +14,12 @@ PixelShaderClass::PixelShaderClass()
 	m_sampleState = 0;
 }
 
-bool PixelShaderClass::Initialize(WCHAR* psFilename, PixelShaderClass::ShaderType type)
+void PixelShaderClass::Initialize(WCHAR* psFilename, PixelShaderClass::ShaderType type)
 {
-	bool result;
-
 	m_type = type;
 
 	//Initialize the vertex and pixel shaders
-	result = InitializeShader(psFilename);
-	if(!result)
-		return false;
-
-	return true;
+	InitializeShader(psFilename);
 }
 
 void PixelShaderClass::Shutdown()
@@ -36,67 +30,43 @@ void PixelShaderClass::Shutdown()
 	return;
 }
 
-bool PixelShaderClass::Render(TextureClass* texture,  XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
+void PixelShaderClass::Render(TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor)
 {
-	bool result;
-
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(texture, lightDirection, ambientColor, diffuseColor);
-	if(!result)
-		return false;
+	SetShaderParameters(texture, lightDirection, ambientColor, diffuseColor);
 
 	//Now render the prepared buffers with the shader.
 	RenderShader();
-
-	return true;
 }
 
-bool PixelShaderClass::Render(XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
+void PixelShaderClass::Render(XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color)
 {
-	bool result;
-
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(lightDirection, ambientColor, diffuseColor, color);
-	if (!result)
-		return false;
+	SetShaderParameters(lightDirection, ambientColor, diffuseColor, color);
 
 	//Now render the prepared buffers with the shader.
 	RenderShader();
-
-	return true;
 }
 
-bool PixelShaderClass::Render(TextureClass* texture, XMFLOAT4 color)
+void PixelShaderClass::Render(TextureClass* texture, XMFLOAT4 color)
 {
-	bool result;
-
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(texture, color);
-	if (!result)
-		return false;
+	SetShaderParameters(texture, color);
 
 	//Now render the prepared buffers with the shader.
 	RenderShader();
-
-	return true;
 }
 
-bool PixelShaderClass::Render(TextureClass* texture)
+void PixelShaderClass::Render(TextureClass* texture)
 {
-	bool result;
-
 	//Set the shader parameters that it will use for rendering
-	result = SetShaderParameters(texture);
-	if (!result)
-		return false;
+	SetShaderParameters(texture);
 
 	//Now render the prepared buffers with the shader.
 	RenderShader();
-
-	return true;
 }
 
-bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
+void PixelShaderClass::InitializeShader(WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -125,13 +95,15 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 			MessageBox(WindowClass::getInstance()->gethWnd(), psFilename, L"Missing Shader File", MB_OK);
 		}
 
-		return false;
+		throw new exception
 	}
 
 	//Create the pixel shader from the buffer
 	result = D3DClass::getInstance()->GetDevice()->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
-	if(FAILED(result))
-		return false;
+    if (FAILED(result))
+    {
+        throw new exception
+    }
 
 	pixelShaderBuffer->Release();
 	pixelShaderBuffer = 0;
@@ -157,7 +129,7 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 		result = D3DClass::getInstance()->GetDevice()->CreateSamplerState(&samplerDesc, &m_sampleState);
 		if(FAILED(result))
 		{
-			return false;
+			throw new exception
 		}
 	}
 
@@ -174,8 +146,10 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
-		if (FAILED(result))
-			return false;
+        if (FAILED(result))
+        {
+            throw new exception
+        }
 	}
 
 	if (m_type == TEXT || m_type == THREEDMATERIAL)
@@ -191,11 +165,11 @@ bool PixelShaderClass::InitializeShader(WCHAR* psFilename)
 
 		// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 		result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&colorBufferDesc, NULL, &m_colorBuffer);
-		if (FAILED(result))
-			return false;
+        if (FAILED(result))
+        {
+            throw new exception
+        }
 	}
-
-	return true;
 }
 
 void PixelShaderClass::ShutdownShader()
@@ -228,7 +202,7 @@ void PixelShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, WCHAR*
 {
 	char* compileErrors;
 	unsigned long bufferSize, i;
-	std::ofstream fout;
+	ofstream fout;
 
 
 	// Get a pointer to the error message text buffer.

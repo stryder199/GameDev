@@ -20,10 +20,8 @@ BulletClass::~BulletClass()
 {
 }
 
-bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
+void BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 {
-	//bool result;
-
 	m_lightSource = new LightClass();
 	m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -40,8 +38,6 @@ bool BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir)
 
 	m_life = new Timer();
 	m_life->start();
-
-	return true;
 }
 
 void BulletClass::Shutdown()
@@ -51,24 +47,15 @@ void BulletClass::Shutdown()
 		delete m_life;
 		m_life = 0;
 	}
-
-	return;
 }
 
-bool BulletClass::Render(ShaderControllerClass* shader)
+void BulletClass::Render(ShaderControllerClass* shader)
 {
-	bool result;
-
-	result = ModelClass::RenderBuffers(shader);
-	if (!result)
-		return false;
-
-	return true;
+	ModelClass::RenderBuffers(shader);
 }
 
-bool BulletClass::PreProcessing()
+void BulletClass::PreProcessing()
 {
-	//bool result; not used
 	float bulletSpeed = 0.03f;
 
 	XMVECTOR pos = XMLoadFloat3(&m_pos);
@@ -79,7 +66,6 @@ bool BulletClass::PreProcessing()
 	XMStoreFloat3(&m_pos, result);
 
 	CalculateWorldMatrix();
-	return true;
 }
 
 int BulletClass::GetTimeAlive()

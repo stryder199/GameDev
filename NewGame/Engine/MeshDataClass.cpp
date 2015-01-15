@@ -19,30 +19,22 @@ MeshDataClass::~MeshDataClass()
 {
 }
 
-bool MeshDataClass::Initialize(MaterialClass* mat)
+void MeshDataClass::Initialize(MaterialClass* mat)
 {
-	//bool result; not used
-
 	m_colorType = MATERIAL;
 
 	m_vecMesh = vector<MeshDataType>();
 
 	m_material = mat;
-
-	return true;
 }
 
-bool MeshDataClass::Initialize(TextureClass* tex)
+void MeshDataClass::Initialize(TextureClass* tex)
 {
-	//bool result; not used
-
 	m_colorType = TEXTURE;
 
 	m_vecMesh = vector<MeshDataType>();
 
 	m_texture = tex;
-
-	return true;
 }
 
 void MeshDataClass::Shutdown()
@@ -72,8 +64,6 @@ void MeshDataClass::Shutdown()
 		m_vertexBuffer->Release();
 		m_vertexBuffer = 0;
 	}
-
-	return;
 }
 
 vector<MeshDataClass::MeshDataType>* MeshDataClass::getRawMeshData()

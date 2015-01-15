@@ -100,10 +100,10 @@ MeshDataClass::MeshDataType readVtnLine(string::iterator* it)
 	return newMeshData;
 }
 
-DirectX::XMFLOAT3 readGunLine(string::iterator* it)
+XMFLOAT3 readGunLine(string::iterator* it)
 {
 	//Load vertices until a new object starts
-	DirectX::XMFLOAT3 newVertex = DirectX::XMFLOAT3();
+	XMFLOAT3 newVertex = XMFLOAT3();
 
 	newVertex.x = readFloat(it);
 	newVertex.y = readFloat(it);
@@ -112,56 +112,40 @@ DirectX::XMFLOAT3 readGunLine(string::iterator* it)
 	return newVertex;
 }
 
-bool MeshClass::Initialize(string meshFilename, MeshClass::MeshType type)
+void MeshClass::Initialize(string meshFilename, MeshClass::MeshType type)
 {
-	bool result;
-
 	m_type = type;
 
 	m_allObjects = vector<ObjectMeshClass*>();
-	m_guns = vector<DirectX::XMFLOAT3>();
+	m_guns = vector<XMFLOAT3>();
 
 	// Load in the model data,
-	result = LoadModel(meshFilename);
-	if (!result)
-	{
-		return false;
-	}
+	LoadModel(meshFilename);
 
-	result = InitializeBuffers();
-	if (!result)
-		return false;
-
-	return true;
+	InitializeBuffers();
 }
 
 bool MeshClass::Initialize(ObjectMeshClass *object, MeshClass::MeshType type)
 {
-	bool result;
-
 	m_type = type;
 
 	m_allObjects = vector<ObjectMeshClass*>();
-	m_guns = vector<DirectX::XMFLOAT3>();
+	m_guns = vector<XMFLOAT3>();
 
 	m_allObjects.push_back(object);
 
-	result = InitializeBuffers();
-	if (!result)
-		return false;
-
-	return true;
+	InitializeBuffers();
 }
 
-bool MeshClass::InitializeBuffers()
+void MeshClass::InitializeBuffers()
 {
 	// For each object in the mesh
-	std::vector<ObjectMeshClass*>::iterator object;
+	vector<ObjectMeshClass*>::iterator object;
 	for (object = m_allObjects.begin(); object != m_allObjects.end(); ++object)
 	{
 		// For each submesh
-		std::vector<MeshDataClass*>::iterator subMesh;
-		std::vector<MeshDataClass*>* allSubmeshs = (*object)->getAllMeshData();
+		vector<MeshDataClass*>::iterator subMesh;
+		vector<MeshDataClass*>* allSubmeshs = (*object)->getAllMeshData();
 		for (subMesh = allSubmeshs->begin(); subMesh != allSubmeshs->end(); ++subMesh)
 		{
 			unsigned long* indices;
@@ -175,30 +159,21 @@ bool MeshClass::InitializeBuffers()
 
 			// Create the index array.
 			indices = new unsigned long[(*subMesh)->getIndexCount()];
-			if (!indices)
-			{
-				return false;
-			}
-
 			if (m_type == MeshClass::THREED && (*subMesh)->getMeshColorType() == MeshDataClass::MATERIAL)
 			{
 				// Create the vertex array.
 				matVertices = new VertexMaterialType[(*subMesh)->getVertexCount()];
-				if (!matVertices)
-				{
-					return false;
-				}
 
 				// For each mesh data
-				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
-				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
+				vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
 
 				int count = 0;
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
 				{
-					matVertices[count].position = DirectX::XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
-					matVertices[count].normals = DirectX::XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
+					matVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
+					matVertices[count].normals = XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
 
 					indices[count] = count;
 					count++;
@@ -221,21 +196,16 @@ bool MeshClass::InitializeBuffers()
 			{
 				// Create the vertex array.
 				texVertices = new VertexTextureType[(*subMesh)->getVertexCount()];
-				if (!texVertices)
-				{
-					return false;
-				}
-
 				// For each mesh data
-				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
-				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
+				vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
 				int count = 0;
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
 				{
-					texVertices[count].position = DirectX::XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
-					texVertices[count].texture = DirectX::XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
-					texVertices[count].normals = DirectX::XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
+					texVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
+					texVertices[count].texture = XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
+					texVertices[count].normals = XMFLOAT3((*rawMeshData).nx, (*rawMeshData).ny, (*rawMeshData).nz);
 
 					indices[count] = count;
 					count++;
@@ -258,20 +228,15 @@ bool MeshClass::InitializeBuffers()
 			{
 				// Create the vertex array.
 				textVertices = new VertexTextType[(*subMesh)->getVertexCount()];
-				if (!textVertices)
-				{
-					return false;
-				}
-
 				// For each mesh data
-				std::vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
-				std::vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
+				vector<MeshDataClass::MeshDataType>::iterator rawMeshData;
+				vector<MeshDataClass::MeshDataType>* allMeshData = (*subMesh)->getRawMeshData();
 				int count = 0;
 				// Load the vertex array and index array with data.
 				for (rawMeshData = allMeshData->begin(); rawMeshData != allMeshData->end(); ++rawMeshData)
 				{
-					textVertices[count].position = DirectX::XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
-					textVertices[count].texture = DirectX::XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
+					textVertices[count].position = XMFLOAT3((*rawMeshData).x, (*rawMeshData).y, (*rawMeshData).z);
+					textVertices[count].texture = XMFLOAT2((*rawMeshData).tu, (*rawMeshData).tv);
 
 					indices[count] = count;
 					count++;
@@ -295,7 +260,7 @@ bool MeshClass::InitializeBuffers()
 			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuf);
 			if (FAILED(result))
 			{
-				return false;
+				throw new exception
 			}
 
 			(*subMesh)->setVertexBuffer(vertexBuf);
@@ -317,7 +282,7 @@ bool MeshClass::InitializeBuffers()
 			result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &indexBuf);
 			if (FAILED(result))
 			{
-				return false;
+				throw new exception
 			}
 
 			(*subMesh)->setIndexBuffer(indexBuf);
@@ -342,8 +307,6 @@ bool MeshClass::InitializeBuffers()
 			indices = 0;
 		}
 	}
-
-	return true;
 }
 
 void MeshClass::Shutdown()
@@ -493,7 +456,7 @@ bool MeshClass::LoadModel(string filename)
 		}	
 		else if (sinput.compare("gun") == 0)
 		{
-			DirectX::XMFLOAT3 newGun = readGunLine(&it);
+			XMFLOAT3 newGun = readGunLine(&it);
 			m_guns.push_back(newGun);
 		}
 	}
@@ -510,7 +473,7 @@ vector<ObjectMeshClass*>* MeshClass::getAllObjects()
 	return &m_allObjects;
 }
 
-vector<DirectX::XMFLOAT3>* MeshClass::getGuns()
+vector<XMFLOAT3>* MeshClass::getGuns()
 {
 	return &m_guns;
 }

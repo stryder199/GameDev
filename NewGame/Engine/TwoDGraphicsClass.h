@@ -26,14 +26,14 @@ public:
 	TwoDGraphicsClass();
 	~TwoDGraphicsClass();
 
-	bool Initialize();
+    void Initialize();
 	void Shutdown();
 
 	bool RenderAll(ShaderControllerClass* shader, int fps);
 
-	bool AddFont(string name, string fontFilename, string textureFilename);
-	bool AddText(string name, string initText, string fontname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color);
-	bool AddBitmap(string meshname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale);
+    void AddFont(string name, string fontFilename, string textureFilename);
+    void AddText(string name, string initText, string fontname, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color);
+    void AddBitmap(string meshname, XMFLOAT2 pos, XMFLOAT2 scale);
 private:
 	mutex fontMutex, bitmapMutex, textMutex;
 	map<string, FontClass*> m_allFont;

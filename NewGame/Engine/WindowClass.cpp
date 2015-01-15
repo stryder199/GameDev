@@ -2,7 +2,7 @@
 #include "ProgramRootClass.h"
 
 WindowClass* WindowClass::m_pInstance = NULL;
-std::mutex WindowClass::instanceMutex;
+mutex WindowClass::instanceMutex;
 
 WindowClass:: WindowClass()
 {
@@ -28,7 +28,7 @@ WindowClass* WindowClass::getInstance()
 	return m_pInstance;
 }
 
-bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
+void WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
 {
 	DEVMODE dmScreenSettings;
 	int posX, posY;
@@ -56,8 +56,10 @@ bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = L"NewGame";
     
-    if( !RegisterClassEx( &wcex ) )
-        return false;
+    if (!RegisterClassEx(&wcex))
+    {
+        throw new exception
+    }
 
 	WINDOW_WIDTH  = SCREEN_WIDTH;
 	WINDOW_HEIGHT = SCREEN_HEIGHT;
@@ -94,14 +96,15 @@ bool WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, L"NewGame", L"NewGame", 
 						    WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
 							posX, posY, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, m_hInstance, NULL);
-    if( !m_hWnd )
-        return false;
+
+    if (m_hWnd == NULL)
+    {
+        throw new exception
+    }
 
     ShowWindow( m_hWnd, nCmdShow );
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
-
-    return true;
 }
 
 void WindowClass::Shutdown()

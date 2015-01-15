@@ -17,10 +17,10 @@ public:
 	PlanetClass();
 	~PlanetClass();
 
-	bool Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
+    void Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
 	void Shutdown();
 
-	bool Render(ShaderControllerClass* shader);
+    void Render(ShaderControllerClass* shader);
 	virtual bool PreProcessing();
 private:
 	XMFLOAT3 m_rotVel;

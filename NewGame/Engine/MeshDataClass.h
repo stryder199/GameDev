@@ -36,8 +36,8 @@ public:
 	MeshDataClass();
 	~MeshDataClass();
 
-	bool Initialize(MaterialClass* mat);
-	bool Initialize(TextureClass* tex);
+    void Initialize(MaterialClass* mat);
+    void Initialize(TextureClass* tex);
 	void Shutdown();
 
 	int getIndexCount();
