@@ -1,11 +1,10 @@
 #include "PlanetClass.h"
 #include "ModelClass.h"
-#include "MeshClass.h"
 #include "CameraClass.h"
 #include "LightClass.h"
-#include "ShaderControllerClass.h"
 
 PlanetClass::PlanetClass()
+    : ModelClass()
 {
     m_mesh = 0;
     m_lightSource = 0;
@@ -58,7 +57,4 @@ void PlanetClass::PreProcessing()
     m_rot.x += m_rotVel.x;
     m_rot.y += m_rotVel.y;
     m_rot.z += m_rotVel.z;
-    ConstrainRotation();
-
-    CalculateWorldMatrix();
 }

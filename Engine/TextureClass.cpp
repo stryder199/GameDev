@@ -16,7 +16,7 @@ void TextureClass::Initialize(LPCWSTR filename)
     HRESULT result = S_OK;
 
     //Load the texture
-    result = D3DX11CreateShaderResourceViewFromFile(D3DClass::getInstance()->GetDevice(), filename, NULL, NULL, &m_texture, NULL);
+    result = D3DX11CreateShaderResourceViewFromFile(D3DClass::getInstance()->GetDevice(), filename, nullptr, nullptr, &m_texture, nullptr);
     if(FAILED(result))
     {
         throw GenericException("Failed to create texture.");

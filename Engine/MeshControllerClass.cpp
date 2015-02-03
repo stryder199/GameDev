@@ -1,7 +1,7 @@
 #include "MeshControllerClass.h"
 #include "MeshClass.h"
 
-MeshControllerClass* MeshControllerClass::m_pInstance = NULL;
+MeshControllerClass* MeshControllerClass::m_pInstance = nullptr;
 mutex MeshControllerClass::instanceMutex;
 
 MeshControllerClass::MeshControllerClass()
@@ -63,7 +63,7 @@ MeshClass* MeshControllerClass::getMesh(string name)
     meshMutex.lock();
     if (m_allMeshs.find(name) == m_allMeshs.end())
     {
-        return NULL;
+        return nullptr;
     }
 
     MeshClass* myMesh = m_allMeshs[name];

@@ -1,17 +1,19 @@
 #include "ThreeDGraphicsClass.h"
 #include "D3DClass.h"
 #include "CameraClass.h"
-#include "ShaderControllerClass.h"
-#include "LightClass.h"
 #include "ModelClass.h"
 #include "StarClass.h"
 #include "PlanetClass.h"
-#include "PlayerClass.h"
 #include "MeshControllerClass.h"
 #include "WindowClass.h"
+#include "EventClass.h"
+#include "ShipClass.h"
+#include "GenericException.h"
+#include "VectorHelpers.h"
 
 ThreeDGraphicsClass::ThreeDGraphicsClass()
 {
+    m_player = nullptr;
 }
 
 ThreeDGraphicsClass::~ThreeDGraphicsClass()
@@ -34,26 +36,62 @@ void ThreeDGraphicsClass::Shutdown()
     modelMutex.unlock();
 }
 
-void ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
+void ThreeDGraphicsClass::PreProcessing()
 {
     ConstructFrustum();
 
     modelMutex.lock();
     vector<ModelClass*>::iterator model;
-    for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
+    vector<ShipClass*> ships = vector<ShipClass*>();
+    for (ModelClass* &model : m_allModels)
     {
-        (*model)->PreProcessing();
+        model->ModelPreProcessing();
+
+        if (ShipClass* ship = dynamic_cast<ShipClass*>(model))
+        {
+            ships.push_back(ship);
+        }
     }
     modelMutex.unlock();
 
-    CameraClass::getInstance()->Render();
+    // Make sure each ship has a target
+    for (ShipClass* &ship : ships)
+    {
+        // If the ship doesn't have a target
+        if (ship->GetTargetShip() == nullptr && ship != m_player)
+        {
+            float currentDistance = 0.0;
+            // Search for the closest ship
+            for (ShipClass* &targetShip : ships)
+            {
+                // The ship cant target itself
+                if (targetShip != ship)
+                {
+                    float newDistance = VectorHelpers::Distance(ship->getPosition(), targetShip->getPosition());
+                    // If we don't have a ship already
+                    // Or see if this ship is closer than the currentTarget
+                    if (ship->GetTargetShip() == nullptr || newDistance > currentDistance)
+                    {
+                        ship->SetNewTarget(targetShip);
+                        currentDistance = newDistance;
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
+void ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
+{
+    CameraClass::getInstance()->Render(m_player);
 
     modelMutex.lock();
-    for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
+    for (ModelClass* &model : m_allModels)
     {
-        if (CheckSphereAgainstFrustum((*model)->getPosition(), (*model)->getBasicCollisionCircleRadius()))
+        if (CheckSphereAgainstFrustum(model->getPosition(), model->getBasicCollisionCircleRadius()))
         {
-            (*model)->Render(shader);
+            model->Render(shader);
         }
     }
     modelMutex.unlock();
@@ -61,13 +99,25 @@ void ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 
 void ThreeDGraphicsClass::AddPlayer(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
-    PlayerClass *player = PlayerClass::getInstance();
+    m_player = new ShipClass();
     MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
-    player->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
+    m_player->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
 
     modelMutex.lock();
-    m_allModels.push_back(player);
+    m_allModels.push_back(m_player);
+    modelMutex.unlock();
+}
+
+void ThreeDGraphicsClass::AddShip(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
+{
+    ShipClass *ship = new ShipClass();
+    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+
+    ship->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
+
+    modelMutex.lock();
+    m_allModels.push_back(ship);
     modelMutex.unlock();
 }
 
@@ -93,6 +143,48 @@ void ThreeDGraphicsClass::AddPlanet(string meshname, XMFLOAT3 pos, XMFLOAT3 scal
     modelMutex.lock();
     m_allModels.push_back(planet);
     modelMutex.unlock();
+}
+
+void ThreeDGraphicsClass::HandleEvents(EventClass* events)
+{
+    if (events == nullptr)
+    {
+        throw GenericException("Events cannot be null");
+    }
+
+    if (m_player != nullptr)
+    {
+        if (events->IsWPressed() == true)
+        {
+            m_player->SetEnginePower(CommonEnums::EnginePower::Forward);
+        }
+        else if (events->IsSPressed() == true)
+        {
+            m_player->SetEnginePower(CommonEnums::EnginePower::Reverse);
+        }
+        else
+        {
+            m_player->SetEnginePower(CommonEnums::EnginePower::Stop);
+        }
+
+        if (events->IsDPressed() == true)
+        {
+            m_player->GoRight(true);
+        }
+        else if (events->IsAPressed() == true)
+        {
+            m_player->GoLeft(true);
+        }
+        else
+        {
+            m_player->Stop();
+        }
+
+        if (events->IsSpacePressed())
+        {
+            m_player->StartWeaponFiring();
+        }
+    }
 }
 
 void ThreeDGraphicsClass::ConstructFrustum()

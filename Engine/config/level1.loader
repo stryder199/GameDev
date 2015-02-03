@@ -9,3 +9,9 @@ type	meshname	pos 		  scale				rotvel
 star 	sunMesh		0.0 0.0 -200.0 10.0 10.0 10.0 0.0 0.00025 0.0
 type 	meshname	pos			  scale				t_h	t_s	t_e	ec	t
 player 	playerMesh	0.0 0.0 0.0	  0.08 0.08 0.08 	100	100	100	2	50
+type 	meshname	pos			  scale				t_h	t_s	t_e	ec	t
+ship 	playerMesh	1.0 0.0 0.0 0.08 0.08 0.08 	100	100	100	2	50
+type 	meshname	pos			  scale				t_h	t_s	t_e	ec	t
+ship 	playerMesh	2.0 0.0 0.0 0.08 0.08 0.08 	100	100	100	2	50
+type 	meshname	pos			  scale				t_h	t_s	t_e	ec	t
+ship 	playerMesh	-1.0 0.0 0.0 0.08 0.08 0.08 	100	100	100	2	50

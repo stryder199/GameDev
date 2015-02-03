@@ -69,7 +69,7 @@ vector<string> WindowsHelpers::ListDir(string dirPath)
         //convert from wide char to narrow char array
         char ch[260];
         char DefChar = ' ';
-        WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, NULL);
+        WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, nullptr);
 
         //A std:string  using the char* constructor.
         string filename(ch);
@@ -110,7 +110,7 @@ vector<string> WindowsHelpers::ListFile(string dirPath, string extension)
             //convert from wide char to narrow char array
             char ch[260];
             char DefChar = ' ';
-            WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, NULL);
+            WideCharToMultiByte(CP_ACP, 0, wc, -1, ch, 260, &DefChar, nullptr);
 
             bool is_directory = (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
@@ -168,7 +168,7 @@ void WindowsHelpers::CopyFilesFromDir(string sourceDir, string destDir, bool ove
 
             if (skipNewerFiles)
             {
-                if (WindowsHelpers::CheckForNewerVersion(sourceFile, destFile) == WindowsHelpers::FileTwoIsNewer)
+                if (CheckForNewerVersion(sourceFile, destFile) == FileTwoIsNewer)
                 {
                     cout << "Skipping " << sourceFile << ". A newer version of 3dmodel exists!" << endl;
                     // Skip this file
@@ -215,7 +215,7 @@ void WindowsHelpers::BuildFolderPaths(string path)
         segmentPath = segmentPath + dir + "\\";
         if (!FolderExists(segmentPath))
         {
-            int result = CreateDirectory(ToLWideStr(segmentPath), NULL);
+            int result = CreateDirectory(ToLWideStr(segmentPath), nullptr);
             if (result == 0)
             {
                 throw GenericException("Failed to create dir");
@@ -237,8 +237,8 @@ WindowsHelpers::NewerFile WindowsHelpers::CheckForNewerVersion(string firstFileP
     {
         FILETIME ftCreateOut, ftAccessOut, ftWriteOut, ftCreateIn, ftAccessIn, ftWriteIn;
 
-        HANDLE inFile = CreateFile(ToLWideStr(firstFilePath), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-        HANDLE outFile = CreateFile(ToLWideStr(secondFilePath), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+        HANDLE inFile = CreateFile(ToLWideStr(firstFilePath), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        HANDLE outFile = CreateFile(ToLWideStr(secondFilePath), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
 
         if (!GetFileTime(outFile, &ftCreateOut, &ftAccessOut, &ftWriteOut))
             return NewerFile::FileTwoDoesntExist;

@@ -5,11 +5,9 @@
 #include "BitmapClass.h"
 #include "D3DClass.h"
 #include "ShaderControllerClass.h"
-#include "CameraClass.h"
 #include "LightClass.h"
-#include "WindowClass.h"
-#include "PlayerClass.h"
 #include "MeshControllerClass.h"
+#include "ModelClass.h"
 
 TwoDGraphicsClass::TwoDGraphicsClass()
 {
@@ -78,7 +76,7 @@ void TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
     vector<BitmapClass*>::iterator bitmap;
     for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
     {
-        (*bitmap)->PreProcessing();
+        (*bitmap)->ModelPreProcessing();
     }
     bitmapMutex.unlock();
 
@@ -92,7 +90,7 @@ void TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
     shader->SetTextShaders();
 
     string myfps = "FPS " + to_string(fps);
-    string playerx = "X " + to_string(PlayerClass::getInstance()->getPosition().x);
+    /*string playerx = "X " + to_string(PlayerClass::getInstance()->getPosition().x);
     string playerz = "Z " + to_string(PlayerClass::getInstance()->getPosition().z);
     string sheilds = to_string(PlayerClass::getInstance()->GetShields()) +"\\" + to_string(PlayerClass::getInstance()->GetTotalShields());
     string health = to_string(PlayerClass::getInstance()->GetHealth()) +"\\" + to_string(PlayerClass::getInstance()->GetTotalHealth());
@@ -140,13 +138,13 @@ void TwoDGraphicsClass::RenderAll(ShaderControllerClass* shader, int fps)
     {
         m_allText["thrust"]->UpdateText(thrust);
     }
-    textMutex.unlock();
+    textMutex.unlock();*/
 
     textMutex.lock();
     map<string, TextClass*>::iterator text;
     for (text = m_allText.begin(); text != m_allText.end(); ++text)
     {
-        (*text).second->PreProcessing();
+        (*text).second->ModelPreProcessing();
     }
     textMutex.unlock();
     

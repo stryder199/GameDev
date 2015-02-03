@@ -4,11 +4,8 @@
 #include "MaterialClass.h"
 #include "ObjectMeshClass.h"
 #include "D3DClass.h"
-#include "CameraClass.h"
 #include "LightClass.h"
 #include "ShaderControllerClass.h"
-#include "TextureClass.h"
-#include "PixelShaderClass.h"
 #include "GenericException.h"
 
 void ModelClass::RenderBuffers(ShaderControllerClass* shader)
@@ -118,6 +115,25 @@ void ModelClass::CalculateWorldMatrix()
     worldMatrix *= translationMatrix;
 
     XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
+}
+
+ModelClass::ModelClass()
+{
+    m_mesh = 0;
+    m_lightSource = 0;
+    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
+void ModelClass::ModelPreProcessing()
+{
+    PreProcessing();
+    ConstrainRotation();
+    CalculateDirection();
+    CalculateWorldMatrix();
 }
 
 XMFLOAT3 ModelClass::getPosition()

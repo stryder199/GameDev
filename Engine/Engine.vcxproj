@@ -50,7 +50,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
-    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x86</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\$(PlatformTarget)</LibraryPath>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,7 +151,6 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <ClCompile Include="ObjectMeshClass.cpp" />
     <ClCompile Include="PixelShaderClass.cpp" />
     <ClCompile Include="PlanetClass.cpp" />
-    <ClCompile Include="PlayerClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
     <ClCompile Include="ShipClass.cpp" />
     <ClCompile Include="TextClass.cpp" />
@@ -184,7 +183,6 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <ClInclude Include="ObjectMeshClass.h" />
     <ClInclude Include="PixelShaderClass.h" />
     <ClInclude Include="PlanetClass.h" />
-    <ClInclude Include="PlayerClass.h" />
     <ClInclude Include="ShaderControllerClass.h" />
     <ClInclude Include="ShipClass.h" />
     <ClInclude Include="TextClass.h" />

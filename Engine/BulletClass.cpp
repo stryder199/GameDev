@@ -64,8 +64,6 @@ void BulletClass::PreProcessing()
     vel = XMVectorScale(vel, -1.0f);
     XMVECTOR result = XMVectorAdd(pos, vel);
     XMStoreFloat3(&m_pos, result);
-
-    CalculateWorldMatrix();
 }
 
 int BulletClass::GetTimeAlive()

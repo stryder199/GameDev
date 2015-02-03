@@ -1,7 +1,7 @@
 #include "D3DClass.h"
 #include "WindowClass.h"
 
-D3DClass* D3DClass::m_pInstance = NULL;
+D3DClass* D3DClass::m_pInstance = nullptr;
 mutex D3DClass::instanceMutex;
 
 D3DClass::D3DClass()
@@ -80,7 +80,7 @@ bool D3DClass::Initialize()
     }
 
     // Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
-    result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
+    result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, nullptr);
     if(FAILED(result))
     {
         return false;
@@ -189,8 +189,8 @@ bool D3DClass::Initialize()
     featureLevel = D3D_FEATURE_LEVEL_10_1;
 
     // Create the swap chain, Direct3D device, and Direct3D device context.
-    result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, 
-                                           D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+    result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, &featureLevel, 1, 
+                                           D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, nullptr, &m_deviceContext);
     if(FAILED(result))
     {
         return false;
@@ -204,7 +204,7 @@ bool D3DClass::Initialize()
     }
 
     // Create the render target view with the back buffer pointer.
-    result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
+    result = m_device->CreateRenderTargetView(backBufferPtr, nullptr, &m_renderTargetView);
     if(FAILED(result))
     {
         return false;
@@ -231,7 +231,7 @@ bool D3DClass::Initialize()
     depthBufferDesc.MiscFlags = 0;
 
     // Create the texture for the depth buffer using the filled out description.
-    result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
+    result = m_device->CreateTexture2D(&depthBufferDesc, nullptr, &m_depthStencilBuffer);
     if(FAILED(result))
     {
         return false;

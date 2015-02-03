@@ -1,7 +1,7 @@
 #include "CameraClass.h"
-#include "PlayerClass.h"
+#include "ShipClass.h"
 
-CameraClass* CameraClass::m_pInstance = NULL;
+CameraClass* CameraClass::m_pInstance = nullptr;
 mutex CameraClass::instanceMutex;
 
 CameraClass::CameraClass()
@@ -34,7 +34,7 @@ void CameraClass::Shutdown()
     return;
 }
 
-void CameraClass::Render()
+void CameraClass::Render(ShipClass* player)
 {
     XMVECTOR up, position, lookAt;
     XMFLOAT3 playerOrigin;
@@ -42,10 +42,16 @@ void CameraClass::Render()
     XMMATRIX worldMatrix;
     XMMATRIX pointTranslationMatrix, translationMatrix;
 
-    playerOrigin = PlayerClass::getInstance()->getPosition();
-    
-    m_rot = PlayerClass::getInstance()->getRotation();
-    m_rot.y += XM_PI;
+    if (player != nullptr)
+    {
+        playerOrigin = player->getPosition();
+        m_rot = player->getRotation();
+    }
+    else
+    {
+        playerOrigin = XMFLOAT3(0.0f, 0.0f, 0.0f);
+        m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    }
 
     ConstrainRotation();
     CalculateDirection();

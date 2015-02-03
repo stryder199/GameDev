@@ -25,14 +25,14 @@ void EventClass::Initialize(HINSTANCE hinstance)
     m_mouseY = 0;
 
     // Initialize the main direct input interface.
-    result = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
+    result = DirectInput8Create(hinstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, nullptr);
     if(FAILED(result))
     {
         throw GenericException("Failed to initialize the direct input interface");
     }
 
     // Initialize the direct input interface for the keyboard.
-    result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
+    result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, nullptr);
     if(FAILED(result))
     {
         throw GenericException("Failed to initialize the direct input interface for the keyboard");
@@ -60,7 +60,7 @@ void EventClass::Initialize(HINSTANCE hinstance)
     }
 
     // Initialize the direct input interface for the mouse.
-    result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
+    result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, nullptr);
     if(FAILED(result))
     {
         throw GenericException("Failed to initialize the direct input interface for the mouse.");

@@ -10,6 +10,7 @@
 
 /////////////////
 // FORWARD DEC //
+class ShipClass;
 
 using namespace std;
 using namespace DirectX;
@@ -22,7 +23,7 @@ public:
     void Initialize();
     void Shutdown();
     
-    void Render();
+    void Render(ShipClass* player);
 
     XMFLOAT4X4 GetViewMatrix();
     XMFLOAT3 getPosition();

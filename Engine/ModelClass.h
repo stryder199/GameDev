@@ -19,8 +19,10 @@ using namespace DirectX;
 
 class ModelClass{
 public:
+    ModelClass();
+
     virtual void Render(ShaderControllerClass* shader) = 0;
-    virtual void PreProcessing() = 0;
+    void ModelPreProcessing();
     virtual void Shutdown() = 0;
 
     XMFLOAT3 getPosition();
@@ -33,6 +35,7 @@ public:
     static bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2);
 
 protected:
+    virtual void PreProcessing() = 0;
     void RenderBuffers(ShaderControllerClass* shader);
     void CalculateWorldMatrix();
     void ConstrainRotation();

@@ -3,8 +3,6 @@
 #include "GraphicsClass.h"
 #include "SoundClass.h"
 #include "WindowClass.h"
-#include "CameraClass.h"
-#include "PlayerClass.h"
 
 ProgramRootClass::ProgramRootClass()
 {
@@ -40,7 +38,7 @@ void ProgramRootClass::Go()
     while (!done)
     {
         // Handle the windows messages.
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -53,6 +51,8 @@ void ProgramRootClass::Go()
         }
         else
         {
+            m_Graphics->HandleEvents(m_Events);
+            m_Graphics->PreProcessing();
             // Otherwise do the frame processing.  If frame processing fails then exit.
             Render();
         }
@@ -61,36 +61,6 @@ void ProgramRootClass::Go()
         if (m_Events->IsEscapePressed() == true)
         {
             done = true;
-        }
-
-        if (m_Events->IsWPressed() == true)
-        {
-            PlayerClass::getInstance()->SetEnginePower(1.0f);
-        }
-        else if (m_Events->IsSPressed() == true)
-        {
-            PlayerClass::getInstance()->SetEnginePower(-1.0f);
-        }
-        else{
-            PlayerClass::getInstance()->SetEnginePower(0.0f);
-        }
-
-        if (m_Events->IsDPressed() == true)
-        {
-            PlayerClass::getInstance()->SetRotVelY(XM_PI / 100);
-        }
-        else if (m_Events->IsAPressed() == true)
-        {
-            PlayerClass::getInstance()->SetRotVelY(-1.0f * XM_PI / 100);
-        }
-        else
-        {
-            PlayerClass::getInstance()->SetRotVelY(0.0f);
-        }
-
-        if (m_Events->IsSpacePressed())
-        {
-            PlayerClass::getInstance()->StartWeaponFiring();
         }
     }
 }
@@ -106,7 +76,7 @@ void ProgramRootClass::Initialize( HINSTANCE hInstance, int iCmdshow )
     m_Events->Initialize( hInstance );
 
     m_Graphics = new GraphicsClass();
-    m_Graphics->Initialize(hInstance, iCmdshow);
+    m_Graphics->Initialize(iCmdshow);
 }
 
 void ProgramRootClass::Shutdown()

@@ -2,7 +2,9 @@
 #include "MeshClass.h"
 #include "LightClass.h"
 
-StarClass::StarClass(){
+StarClass::StarClass()
+    : ModelClass()
+{
     m_mesh = 0;
     m_lightSource = 0;
     m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -52,7 +54,4 @@ void StarClass::PreProcessing()
     m_rot.x += m_rotVel.x;
     m_rot.y += m_rotVel.y;
     m_rot.z += m_rotVel.z;
-    ConstrainRotation();
-
-    CalculateWorldMatrix();
 }

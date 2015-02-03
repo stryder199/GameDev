@@ -2,7 +2,7 @@
 #include "ProgramRootClass.h"
 #include "GenericException.h"
 
-WindowClass* WindowClass::m_pInstance = NULL;
+WindowClass* WindowClass::m_pInstance = nullptr;
 mutex WindowClass::instanceMutex;
 
 WindowClass:: WindowClass()
@@ -50,11 +50,11 @@ void WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon( NULL, IDI_WINLOGO );
+    wcex.hIcon = LoadIcon( nullptr, IDI_WINLOGO );
     wcex.hIconSm = wcex.hIcon;
-    wcex.hCursor = LoadCursor( NULL, IDC_ARROW );
+    wcex.hCursor = LoadCursor( nullptr, IDC_ARROW );
     wcex.hbrBackground = ( HBRUSH )GetStockObject(BLACK_BRUSH);
-    wcex.lpszMenuName = NULL;
+    wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = L"NewGame";
     
     if (!RegisterClassEx(&wcex))
@@ -96,9 +96,9 @@ void WindowClass::Initialize(HINSTANCE hInstance, int nCmdShow)
     // Create the window with the screen settings and get the handle to it.
     m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, L"NewGame", L"NewGame", 
                             WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
-                            posX, posY, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, m_hInstance, NULL);
+                            posX, posY, WINDOW_WIDTH, WINDOW_HEIGHT, nullptr, nullptr, m_hInstance, nullptr);
 
-    if (m_hWnd == NULL)
+    if (m_hWnd == nullptr)
     {
         throw GenericException("Failed to create the window.");
     }

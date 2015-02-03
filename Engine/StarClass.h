@@ -18,10 +18,10 @@ public:
     ~StarClass();
     
     void Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
-    void Shutdown();
+    void Shutdown() override;
 
-    void Render(ShaderControllerClass* shader);
-    virtual void PreProcessing();
+    void Render(ShaderControllerClass* shader) override;
+    virtual void PreProcessing() override;
 private:
     
 

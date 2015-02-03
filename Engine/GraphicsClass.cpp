@@ -24,7 +24,7 @@ GraphicsClass::~GraphicsClass()
 {
 }
 
-void GraphicsClass::Initialize(HINSTANCE hInstance, int iCmdShow)
+void GraphicsClass::Initialize(int iCmdShow)
 {
     m_fpsTimer = Timer();
 
@@ -76,6 +76,11 @@ void GraphicsClass::Shutdown()
 
     D3DClass::getInstance()->Shutdown();
     delete D3DClass::getInstance();
+}
+
+void GraphicsClass::PreProcessing()
+{
+    m_3DGraphics->PreProcessing();
 }
 
 void GraphicsClass::Render()
@@ -268,6 +273,23 @@ void GraphicsClass::LoadObjectData(string filename)
             m_3DGraphics->AddPlayer(meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
 #endif
         }
+        else if (sinput.compare("ship") == 0)
+        {
+            string meshName;
+            XMFLOAT3 pos, scale;
+            int totalHealth, totalShields, totalEnergy, energyCost, torpedos;
+
+            fin >> meshName >> pos.x >> pos.y >> pos.z >> scale.x >> scale.y >> scale.z
+                >> totalHealth >> totalShields >> totalEnergy >> energyCost >> torpedos;
+
+#if defined Threaded
+            m_allLoaders.push_back(thread(&ThreeDGraphicsClass::AddShip, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
+#elif defined Async
+            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddShip, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
+#else
+            m_3DGraphics->AddShip(meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
+#endif
+        }
         else if (sinput.compare("planet") == 0)
         {
             string meshName;
@@ -393,4 +415,9 @@ void GraphicsClass::GenerateStars(int starCount)
 
         m_3DGraphics->AddStar("starMesh", XMFLOAT3(posX, posY, posZ), XMFLOAT3(0.15f, 0.15f, 0.15f), XMFLOAT3(0.0f, 0.0f, 0.0f));
     }
+}
+
+void GraphicsClass::HandleEvents(EventClass* events)
+{
+    m_3DGraphics->HandleEvents(events);
 }

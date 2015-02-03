@@ -2,10 +2,7 @@
 // Filename: bitmapclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "BitmapClass.h"
-#include "D3DClass.h"
-#include "MeshClass.h"
 #include "CameraClass.h"
-#include "PlayerClass.h"
 
 BitmapClass::BitmapClass()
 {
@@ -45,14 +42,10 @@ void BitmapClass::PreProcessing()
 {
     m_rot = CameraClass::getInstance()->getRotation();
 
-    m_pos.x = PlayerClass::getInstance()->getPosition().x;
-    m_pos.y = PlayerClass::getInstance()->getPosition().y;
-    m_pos.z = PlayerClass::getInstance()->getPosition().z;
+    m_pos.x = CameraClass::getInstance()->getPosition().x;
+    m_pos.y = CameraClass::getInstance()->getPosition().y;
+    m_pos.z = CameraClass::getInstance()->getPosition().z;
 
     m_point_pos.x = m_screenPos.x;
     m_point_pos.y = m_screenPos.y;
-
-    ConstrainRotation();
-
-    CalculateWorldMatrix();
 }

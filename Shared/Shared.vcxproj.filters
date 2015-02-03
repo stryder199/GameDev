@@ -24,9 +24,18 @@
     <ClInclude Include="GenericException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ISingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowsHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ISingleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

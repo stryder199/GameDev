@@ -17,6 +17,7 @@
 class ShaderControllerClass;
 class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
+class EventClass;
 
 using namespace std;
 
@@ -26,15 +27,17 @@ public:
     GraphicsClass();
     ~GraphicsClass();
 
-    void Initialize(HINSTANCE, int);
+    void Initialize(int);
     void Shutdown();
 
+    void PreProcessing();
     void Render();
 
     void LoadGameData();
     void LoadMeshData(string filename);
     void LoadObjectData(string filename);
     void GenerateStars(int starCount);
+    void HandleEvents(EventClass* events);
 private:
     ShaderControllerClass* m_Shader;
     TwoDGraphicsClass* m_2DGraphics;

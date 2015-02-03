@@ -76,13 +76,13 @@ void PixelShaderClass::InitializeShader(WCHAR* psFilename)
     D3D11_SAMPLER_DESC samplerDesc;
 
 
-    // Initialize the pointers this function will use to null.
+    // Initialize the pointers this function will use to nullptr.
     errorMessage = 0;
     pixelShaderBuffer = 0;
 
     // Compile the pixel shader code.
-    result = D3DX11CompileFromFile(psFilename, NULL, NULL, "MyPixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, 
-                       &pixelShaderBuffer, &errorMessage, NULL);
+    result = D3DX11CompileFromFile(psFilename, nullptr, nullptr, "MyPixelShader", "ps_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, nullptr, 
+                       &pixelShaderBuffer, &errorMessage, nullptr);
     if(FAILED(result))
     {
         // If the shader failed to compile it should have written something to the error message.
@@ -100,7 +100,7 @@ void PixelShaderClass::InitializeShader(WCHAR* psFilename)
     }
 
     //Create the pixel shader from the buffer
-    result = D3DClass::getInstance()->GetDevice()->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
+    result = D3DClass::getInstance()->GetDevice()->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), nullptr, &m_pixelShader);
     if (FAILED(result))
     {
         throw GenericException("Failed to create the pixel shader");
@@ -146,7 +146,7 @@ void PixelShaderClass::InitializeShader(WCHAR* psFilename)
         lightBufferDesc.StructureByteStride = 0;
 
         // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-        result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
+        result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&lightBufferDesc, nullptr, &m_lightBuffer);
         if (FAILED(result))
         {
             throw GenericException("Failed to create the constant buffer.");
@@ -165,7 +165,7 @@ void PixelShaderClass::InitializeShader(WCHAR* psFilename)
         colorBufferDesc.StructureByteStride = 0;
 
         // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-        result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&colorBufferDesc, NULL, &m_colorBuffer);
+        result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&colorBufferDesc, nullptr, &m_colorBuffer);
         if (FAILED(result))
         {
             throw GenericException("Failed to create the constant buffer.");
@@ -375,7 +375,7 @@ void PixelShaderClass::SetShaderParameters(XMFLOAT3 lightDirection, XMFLOAT4 amb
 
 void PixelShaderClass::RenderShader()
 {
-    D3DClass::getInstance()->GetDeviceContext()->PSSetShader(m_pixelShader, NULL, 0);
+    D3DClass::getInstance()->GetDeviceContext()->PSSetShader(m_pixelShader, nullptr, 0);
 
     if (m_type == THREEDTEXTURE || m_type == TWOD || m_type == TEXT)
     {

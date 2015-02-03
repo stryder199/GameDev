@@ -51,13 +51,13 @@ void VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_
     D3D11_BUFFER_DESC matrixBufferDesc;
 
 
-    // Initialize the pointers this function will use to null.
+    // Initialize the pointers this function will use to nullptr.
     errorMessage = 0;
     vertexShaderBuffer = 0;
 
     //Compile the vertex shader code
-    result = D3DX11CompileFromFile(vsFilename, NULL, NULL, "MyVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, 
-                       &vertexShaderBuffer, &errorMessage, NULL);
+    result = D3DX11CompileFromFile(vsFilename, nullptr, nullptr, "MyVertexShader", "vs_4_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, nullptr, 
+                       &vertexShaderBuffer, &errorMessage, nullptr);
 
     if(FAILED(result))
     {
@@ -74,7 +74,7 @@ void VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_
     }
 
     //Create the vertex shader from the buffer
-    result = D3DClass::getInstance()->GetDevice()->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
+    result = D3DClass::getInstance()->GetDevice()->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), nullptr, &m_vertexShader);
     if (FAILED(result))
     {
         throw GenericException("Failed to create the vertex shader.");
@@ -102,7 +102,7 @@ void VertexShaderClass::InitializeShader(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_
     matrixBufferDesc.StructureByteStride = 0;
 
     //Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class
-    result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+    result = D3DClass::getInstance()->GetDevice()->CreateBuffer(&matrixBufferDesc, nullptr, &m_matrixBuffer);
     if(FAILED(result))
     {
         throw GenericException("Failed to create the constant buffer.");
@@ -235,5 +235,5 @@ void VertexShaderClass::RenderShader(int indexCount)
     D3DClass::getInstance()->GetDeviceContext()->IASetInputLayout(m_layout);
 
     //Set the vertex and pixel shaders that will be used to render this triangle
-    D3DClass::getInstance()->GetDeviceContext()->VSSetShader(m_vertexShader, NULL, 0);
+    D3DClass::getInstance()->GetDeviceContext()->VSSetShader(m_vertexShader, nullptr, 0);
 }
