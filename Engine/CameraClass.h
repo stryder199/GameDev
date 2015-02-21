@@ -12,9 +12,6 @@
 // FORWARD DEC //
 class ShipClass;
 
-using namespace std;
-using namespace DirectX;
-
 class CameraClass{
 public:
     ~CameraClass() {};
@@ -25,12 +22,12 @@ public:
     
     void Render(ShipClass* player);
 
-    XMFLOAT4X4 GetViewMatrix();
-    XMFLOAT3 getPosition();
-    XMFLOAT3 getRotation();
-    XMFLOAT3 getScale();
-    XMFLOAT3 getPointPosition();
-    XMFLOAT3 getDirection();
+    DirectX::XMFLOAT4X4 GetViewMatrix();
+    DirectX::XMFLOAT3 getPosition();
+    DirectX::XMFLOAT3 getRotation();
+    DirectX::XMFLOAT3 getScale();
+    DirectX::XMFLOAT3 getPointPosition();
+    DirectX::XMFLOAT3 getDirection();
 
     void ConstrainRotation();
     void CalculateDirection();
@@ -40,9 +37,9 @@ private:
     CameraClass& operator=(const CameraClass&) {};
 
     static CameraClass* m_pInstance;
-    static mutex instanceMutex;
+    static std::mutex instanceMutex;
 
-    XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
-    XMFLOAT4X4 m_viewMatrix;
+    DirectX::XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
+    DirectX::XMFLOAT4X4 m_viewMatrix;
 
 };

@@ -232,5 +232,6 @@
     <None Include="config\ui.loader">
       <Filter>Config Files</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

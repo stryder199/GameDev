@@ -1,6 +1,9 @@
 #include "CameraClass.h"
 #include "ShipClass.h"
 
+using namespace std;
+using namespace DirectX;
+
 CameraClass* CameraClass::m_pInstance = nullptr;
 mutex CameraClass::instanceMutex;
 
@@ -140,26 +143,26 @@ void CameraClass::ConstrainRotation()
 
 void CameraClass::CalculateDirection()
 {
-    if (m_rot.y >= 0.0f && m_rot.y < (XM_PI / 2.0f))
+    if (m_rot.y >= 0.0f && m_rot.y < XM_PIDIV2)
     {
-        m_dir.x = (m_rot.y / (XM_PI / 2.0f));
+        m_dir.x = (m_rot.y / XM_PIDIV2);
     }
-    else if (m_rot.y >= (XM_PI / 2.0f) && m_rot.y < ((3.0f*XM_PI) / 2.0f))
+    else if (m_rot.y >= XM_PIDIV2 && m_rot.y < ((3.0f*XM_PI) / 2.0f))
     {
-        m_dir.x = ((XM_PI - m_rot.y) / (XM_PI / 2.0f));
+        m_dir.x = ((XM_PI - m_rot.y) / XM_PIDIV2);
     }
-    else if (m_rot.y >= ((3.0f*XM_PI) / 2.0f) && m_rot.y < (2 * XM_PI))
+    else if (m_rot.y >= ((3.0f*XM_PI) / 2.0f) && m_rot.y < XM_2PI)
     {
-        m_dir.x = ((m_rot.y - 2 * XM_PI) / (XM_PI / 2.0f));
+        m_dir.x = ((m_rot.y - 2 * XM_PI) / XM_PIDIV2);
     }
 
     if (m_rot.y >= 0.0f && m_rot.y < XM_PI)
     {
-        m_dir.z = (((XM_PI / 2.0f) - m_rot.y) / (XM_PI / 2.0f));
+        m_dir.z = ((XM_PIDIV2 - m_rot.y) / XM_PIDIV2);
     }
-    else if (m_rot.y >= XM_PI && m_rot.y < (2 * XM_PI))
+    else if (m_rot.y >= XM_PI && m_rot.y < XM_2PI)
     {
-        m_dir.z = ((m_rot.y - ((3.0f*XM_PI) / 2.0f)) / (XM_PI / 2.0f));
+        m_dir.z = ((m_rot.y - ((3.0f*XM_PI) / 2.0f)) / XM_PIDIV2);
     }
     XMVECTOR normalizedVector;
     normalizedVector = XMVector3Normalize(XMLoadFloat3(&m_dir));

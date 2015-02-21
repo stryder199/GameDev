@@ -4,7 +4,6 @@
 // INCLUDES //
 #include <d3d11.h>
 #include <dxgi.h>
-#include <d3dcommon.h>
 #include <DirectXMath.h>
 #include <mutex>
 
@@ -13,9 +12,6 @@
 
 /////////////////
 // FORWARD DEC //
-
-using namespace std;
-using namespace DirectX;
 
 class D3DClass{
 
@@ -29,9 +25,9 @@ public:
     ID3D11Device* GetDevice();
     ID3D11DeviceContext* GetDeviceContext();
 
-    XMFLOAT4X4 GetProjectionMatrix();
-    XMFLOAT4X4 GetWorldMatrix();
-    XMFLOAT4X4 GetOrthoMatrix();
+    DirectX::XMFLOAT4X4 GetProjectionMatrix();
+    DirectX::XMFLOAT4X4 GetWorldMatrix();
+    DirectX::XMFLOAT4X4 GetOrthoMatrix();
 
     void BeginScene(float red, float green, float blue, float alpha);
     void EndScene();
@@ -51,13 +47,13 @@ private:
     D3DClass& operator=(const D3DClass&) {};
 
     static D3DClass* m_pInstance;
-    static mutex instanceMutex;
+    static std::mutex instanceMutex;
 
     bool m_vsync_enabled;
 
-    XMFLOAT4X4 m_projectionMatrix;
-    XMFLOAT4X4 m_worldMatrix;
-    XMFLOAT4X4 m_orthoMatrix;
+    DirectX::XMFLOAT4X4 m_projectionMatrix;
+    DirectX::XMFLOAT4X4 m_worldMatrix;
+    DirectX::XMFLOAT4X4 m_orthoMatrix;
     
     IDXGISwapChain* m_swapChain;
     ID3D11Device* m_device;

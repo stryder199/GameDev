@@ -10,8 +10,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace std;
-
 class MaterialClass
 {
 public: 
@@ -22,7 +20,7 @@ public:
         float Kd_r, Kd_g, Kd_b;
         float Ks_r, Ks_g, Ks_b;
         float Ni, d, illum;
-        string map_Kd;
+        std::string map_Kd;
     }MaterialInfo;
 
 public:

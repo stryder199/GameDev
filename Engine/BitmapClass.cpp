@@ -4,16 +4,11 @@
 #include "BitmapClass.h"
 #include "CameraClass.h"
 
+using namespace DirectX;
+
 BitmapClass::BitmapClass()
+    : ModelClass()
 {
-    m_mesh = 0;
-    m_lightSource = 0;
-    m_screenPos = XMFLOAT2(0.0f, 0.0f);
-    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 BitmapClass::~BitmapClass()

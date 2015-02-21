@@ -2,7 +2,6 @@
 
 //////////////
 // INCLUDES //
-#include <math.h>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -12,8 +11,6 @@
 // FORWARD DEC //
 class Timer;
 
-using namespace DirectX;
-
 class BulletClass :
     public ModelClass
 {
@@ -21,7 +18,7 @@ public:
     BulletClass();
     ~BulletClass();
 
-    void Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 dir);
+    void Initialize(MeshClass* mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 dir, DirectX::XMFLOAT3 scale);
     void Shutdown();
 
     void Render(ShaderControllerClass* shader);
@@ -30,6 +27,5 @@ public:
     int GetTimeAlive();
 private:
     Timer* m_life;
-    XMFLOAT3 m_vel;
 };
 

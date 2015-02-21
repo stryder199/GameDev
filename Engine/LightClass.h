@@ -10,8 +10,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace DirectX;
-
 class LightClass
 {
 public:
@@ -22,12 +20,12 @@ public:
     void SetDiffuseColor(float, float, float, float);
     void SetDirection(float, float, float);
 
-    XMFLOAT4 GetAmbientColor();
-    XMFLOAT4 GetDiffuseColor();
-    XMFLOAT3 GetDirection();
+    DirectX::XMFLOAT4 GetAmbientColor();
+    DirectX::XMFLOAT4 GetDiffuseColor();
+    DirectX::XMFLOAT3 GetDirection();
 
 private:
-    XMFLOAT4 m_ambientColor;
-    XMFLOAT4 m_diffuseColor;
-    XMFLOAT3 m_direction;
+    DirectX::XMFLOAT4 m_ambientColor;
+    DirectX::XMFLOAT4 m_diffuseColor;
+    DirectX::XMFLOAT3 m_direction;
 };

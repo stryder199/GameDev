@@ -1,17 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: VertexShaderClass.cpp
-////////////////////////////////////////////////////////////////////////////////
 #include "VertexShaderClass.h"
 #include "D3DClass.h"
 #include "CameraClass.h"
 #include "WindowClass.h"
 #include "GenericException.h"
+#include "D3DX11.h"
+#include <fstream>
+
+using namespace std;
+using namespace DirectX;
 
 VertexShaderClass::VertexShaderClass()
 {
-    m_vertexShader = 0;
-    m_layout = 0;
-    m_matrixBuffer = 0;
+    m_vertexShader = nullptr;
+    m_layout = nullptr;
+    m_matrixBuffer = nullptr;
 }
 
 VertexShaderClass::~VertexShaderClass()

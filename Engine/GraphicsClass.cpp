@@ -1,5 +1,4 @@
 #include "GraphicsClass.h"
-#include "WindowClass.h"
 #include "D3DClass.h"
 #include "CameraClass.h"
 #include "ShaderControllerClass.h"
@@ -10,12 +9,17 @@
 #include "MeshControllerClass.h"
 #include "WindowsHelpers.h"
 #include "GenericException.h"
+#include <fstream>
+#include <string>
+
+using namespace std;
+using namespace DirectX;
 
 GraphicsClass::GraphicsClass()
 {
-    m_Shader = 0;
-    m_2DGraphics = 0;
-    m_3DGraphics = 0;
+    m_Shader = nullptr;
+    m_2DGraphics = nullptr;
+    m_3DGraphics = nullptr;
     m_fps = 0;
     m_fpsCount = 0;
 }

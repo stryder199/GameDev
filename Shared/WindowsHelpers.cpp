@@ -3,15 +3,16 @@
 #include <shlobj.h>
 #include <stdio.h>
 #include <string>
-#include <iostream>
 #include <vector>
 #include "GenericException.h"
 #include "boost\algorithm\string.hpp"
 #include "boost\filesystem\operations.hpp"
 #include "boost\filesystem\path.hpp"
+#include <iostream>
 
 using namespace boost;
 using namespace boost::filesystem;
+using namespace std;
 
 string WindowsHelpers::DesktopDir()
 {

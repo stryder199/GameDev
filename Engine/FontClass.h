@@ -2,18 +2,14 @@
 
 //////////////
 // INCLUDES //
-#include <d3d11.h>
-#include <d3dx10math.h>
-#include <fstream>
+#include <string>
 
 ///////////////////////
 // MY CLASS INCLUDES //
-#include "textureclass.h"
 
 /////////////////
-// FORWARD DEC //
-
-using namespace std;
+// FORWARD DEC //]
+class TextureClass;
 
 class FontClass
 {
@@ -28,13 +24,13 @@ public:
     FontClass();
     ~FontClass();
 
-    void Initialize(string fontPropFilename, string textureFilename);
+    void Initialize(std::string fontPropFilename, std::string textureFilename);
     void Shutdown();
 
     TextureClass* GetTexture();
-    FontClass::FontType* GetFont();
+    FontType* GetFont();
 private:
-    void LoadFontData(string filename);
+    void LoadFontData(std::string filename);
     void ReleaseFontData();
 
 private:

@@ -110,7 +110,7 @@ void Exporter::LoadMaterialsFromFile(string mtlFilepath)
                 {
                     vector<string> SplitVec;
                     split(SplitVec, fullFilename, is_any_of("\\"), token_compress_on);
-                    fullFilename = SplitVec[SplitVec.size() - 2] + SplitVec[SplitVec.size() - 1];
+                    fullFilename = SplitVec[SplitVec.size() - 2] + "\\" + SplitVec[SplitVec.size() - 1];
                 }
 
                 newColor.map_Kd = fullFilename;

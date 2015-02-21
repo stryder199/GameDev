@@ -14,8 +14,6 @@
 // FORWARD DEC //
 class BulletClass;
 
-using namespace DirectX;
-
 class ShipClass :
     public ModelClass
 {
@@ -23,13 +21,13 @@ public:
     ShipClass();
     ~ShipClass();
 
-    void Initialize(MeshClass* mesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
+    void Initialize(MeshClass* mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
     void Shutdown();
 
     void Render(ShaderControllerClass* shader);
     virtual void PreProcessing();
 
-    void SpawnBullet(XMFLOAT3 spawnPos);
+    void SpawnBullet(DirectX::XMFLOAT3 spawnPos);
     void FireWeapon();
     void StartWeaponFiring();
     void FlyTowardsTarget();
@@ -55,8 +53,7 @@ private:
     bool m_isWeaponFiring;
     Timer m_weaponReloadTimer, m_weaponPulseTimer;
     int m_weaponPulseCount, m_weaponPulseMaxCount;
-    XMFLOAT3 m_vel, m_rotVel;
-    vector<BulletClass*> m_allBullets;
+    std::vector<BulletClass*> m_allBullets;
     MeshClass *m_bulletMesh;
     ShipClass *m_targetShip;
     CommonEnums::EnginePower m_enginePower;

@@ -17,13 +17,9 @@ public:
     StarClass();
     ~StarClass();
     
-    void Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel);
+    void Initialize(MeshClass* objMesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
     void Shutdown() override;
 
     void Render(ShaderControllerClass* shader) override;
     virtual void PreProcessing() override;
-private:
-    
-
-    XMFLOAT3 m_rotVel;
 };

@@ -7,14 +7,15 @@
 #include "MeshControllerClass.h"
 #include "VectorHelpers.h"
 
+using namespace std;
+using namespace DirectX;
+
 ShipClass::ShipClass()
     : ModelClass()
 {
-    m_targetShip = 0;
-    m_bulletMesh = 0;
+    m_targetShip = nullptr;
+    m_bulletMesh = nullptr;
     m_isWeaponFiring = false;
-    m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
     m_enginePower = CommonEnums::EnginePower::Stop;
     m_totalHealth = 100;
     m_health = 100;
@@ -73,7 +74,7 @@ void ShipClass::Shutdown()
 void ShipClass::SpawnBullet(XMFLOAT3 spawnPos)
 {
     BulletClass* bullet = new BulletClass();
-    bullet->Initialize(m_bulletMesh, spawnPos, m_dir);
+    bullet->Initialize(m_bulletMesh, spawnPos, m_dir, XMFLOAT3(0.003f, 0.003f, 0.003f));
     m_allBullets.push_back(bullet);
 }
 
@@ -176,10 +177,6 @@ void ShipClass::PreProcessing()
     vector<int> deadBullets = vector<int>();
     float maxThrust = 0.01f;
 
-    m_rot.x += m_rotVel.x;
-    m_rot.y += m_rotVel.y;
-    m_rot.z += m_rotVel.z;
-
     if (m_isWeaponFiring)
     {
         if (m_weaponReloadTimer.get_ticks() > 1000)
@@ -194,6 +191,11 @@ void ShipClass::PreProcessing()
             FireWeapon();
         }
     }
+    
+    m_dir.x += m_rotVel.y;
+    m_dir.y += m_rotVel.z;
+    m_dir.z += m_rotVel.y;
+    XMStoreFloat3(&m_dir, XMPlaneNormalize(XMLoadFloat3(&m_dir)));
 
     if (m_enginePower == CommonEnums::EnginePower::Forward || m_enginePower == CommonEnums::EnginePower::Reverse)
     {
@@ -211,10 +213,7 @@ void ShipClass::PreProcessing()
     else
     {
         m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    }
-
-    XMVECTOR result = XMVectorAdd(XMLoadFloat3(&m_pos), XMLoadFloat3(&m_vel));
-    XMStoreFloat3(&m_pos, result);
+    }    
 
     vector<BulletClass*>::iterator bullet;
     int count = 0;

@@ -16,8 +16,6 @@ class SoundClass;
 class GraphicsClass;
 class EventClass;
 
-using namespace std;
-
 class ProgramRootClass{
 
 public:

@@ -3,7 +3,6 @@
 //////////////
 // INCLUDES //
 #include <DirectXMath.h>
-#include <d3d11.h>
 #include <vector>
 #include <map>
 #include <mutex>
@@ -19,9 +18,6 @@ class LightClass;
 class ShaderControllerClass;
 class FontClass;
 
-using namespace std;
-using namespace DirectX;
-
 class TwoDGraphicsClass{
 public:
     TwoDGraphicsClass();
@@ -32,13 +28,13 @@ public:
 
     void RenderAll(ShaderControllerClass* shader, int fps);
 
-    void AddFont(string name, string fontFilename, string textureFilename);
-    void AddText(string name, string initText, string fontname, XMFLOAT2 pos, XMFLOAT2 scale, XMFLOAT4 color);
-    void AddBitmap(string meshname, XMFLOAT2 pos, XMFLOAT2 scale);
+    void AddFont(std::string name, std::string fontFilename, std::string textureFilename);
+    void AddText(std::string name, std::string initText, std::string fontname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color);
+    void AddBitmap(std::string meshname, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale);
 private:
-    mutex fontMutex, bitmapMutex, textMutex;
-    map<string, FontClass*> m_allFont;
-    vector<BitmapClass*> m_allBitmaps;
-    map<string, TextClass*> m_allText;
+    std::mutex fontMutex, bitmapMutex, textMutex;
+    std::map<std::string, FontClass*> m_allFont;
+    std::vector<BitmapClass*> m_allBitmaps;
+    std::map<std::string, TextClass*> m_allText;
     LightClass* m_DefaultLightSource;
 };

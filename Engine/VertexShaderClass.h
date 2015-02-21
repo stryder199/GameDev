@@ -3,17 +3,13 @@
 //////////////
 // INCLUDES //
 #include <d3d11.h>
-#include <d3dx11async.h>
 #include <DirectXMath.h>
-#include <fstream>
 
 ///////////////////////
 // MY CLASS INCLUDES //
 
 /////////////////
 // FORWARD DEC //
-
-using namespace DirectX;
 
 class VertexShaderClass
 {
@@ -29,16 +25,16 @@ public:
 private:
     struct MatrixBufferType
     {
-        XMFLOAT4X4 world;
-        XMFLOAT4X4 view;
-        XMFLOAT4X4 projection;
+        DirectX::XMFLOAT4X4 world;
+        DirectX::XMFLOAT4X4 view;
+        DirectX::XMFLOAT4X4 projection;
     };
 
     struct LightBufferType
     {
-        XMFLOAT4 ambientColor;
-        XMFLOAT4 diffuseColor;
-        XMFLOAT3 lightDirection;
+        DirectX::XMFLOAT4 ambientColor;
+        DirectX::XMFLOAT4 diffuseColor;
+        DirectX::XMFLOAT3 lightDirection;
         float padding;
     };
 
@@ -48,7 +44,7 @@ public:
 
     void Initialize(WCHAR* vsFilename, D3D11_INPUT_ELEMENT_DESC* polygonLayout, int layoutCount, ShaderType type);
     void Shutdown();
-    void Render(int, const XMFLOAT4X4 &worldMatrix);
+    void Render(int, const DirectX::XMFLOAT4X4 &worldMatrix);
 
     ShaderType getShaderType();
 private:
@@ -56,7 +52,7 @@ private:
     void ShutdownShader();
     void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-    void SetShaderParameters(const XMFLOAT4X4 &worldMatrix);
+    void SetShaderParameters(const DirectX::XMFLOAT4X4 &worldMatrix);
     void RenderShader(int);
 
 private:

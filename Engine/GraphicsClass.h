@@ -2,7 +2,6 @@
 
 //////////////
 // INCLUDES //
-#include <Windows.h>
 #include <future>
 
 ///////////////////////
@@ -10,7 +9,6 @@
 #include "Timer.h"
 
 #define Async
-
 
 /////////////////
 // FORWARD DEC //
@@ -34,8 +32,8 @@ public:
     void Render();
 
     void LoadGameData();
-    void LoadMeshData(string filename);
-    void LoadObjectData(string filename);
+    void LoadMeshData(std::string filename);
+    void LoadObjectData(std::string filename);
     void GenerateStars(int starCount);
     void HandleEvents(EventClass* events);
 private:

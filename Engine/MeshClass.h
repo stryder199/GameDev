@@ -3,10 +3,7 @@
 //////////////
 // INCLUDES //
 //////////////
-#include <fstream>
 #include <vector>
-#include <string>
-#include <iostream>
 #include <DirectXMath.h>
 
 ///////////////////////
@@ -15,9 +12,6 @@
 /////////////////
 // FORWARD DEC //
 class ObjectMeshClass;
-
-using namespace std;
-using namespace DirectX;
 
 class MeshClass
 {
@@ -32,40 +26,40 @@ public:
 
     struct VertexTextureType
     {
-        XMFLOAT3 position;
-        XMFLOAT2 texture;
-        XMFLOAT3 normals;
+        DirectX::XMFLOAT3 position;
+        DirectX::XMFLOAT2 texture;
+        DirectX::XMFLOAT3 normals;
     };
 
     struct VertexMaterialType
     {
-        XMFLOAT3 position;
-        XMFLOAT3 normals;
+        DirectX::XMFLOAT3 position;
+        DirectX::XMFLOAT3 normals;
     };
 
     struct VertexTextType
     {
-        XMFLOAT3 position;
-        XMFLOAT2 texture;
+        DirectX::XMFLOAT3 position;
+        DirectX::XMFLOAT2 texture;
     };
 
 public:
     MeshClass() {};
     ~MeshClass() {};
-    void Initialize(string filename, MeshType type);
+    void Initialize(std::string filename, MeshType type);
     void Initialize(ObjectMeshClass *object, MeshType type);
     void Shutdown();
 
 
     MeshType getMeshType();
-    vector<ObjectMeshClass*>* getAllObjects();
-    vector<XMFLOAT3>* getGuns();
+    std::vector<ObjectMeshClass*>* getAllObjects();
+    std::vector<DirectX::XMFLOAT3>* getGuns();
 
 private:
-    void LoadModel(string filename);
+    void LoadModel(std::string filename);
     void InitializeBuffers();
 
-    vector<ObjectMeshClass*> m_allObjects;
-    vector<XMFLOAT3> m_guns;
+    std::vector<ObjectMeshClass*> m_allObjects;
+    std::vector<DirectX::XMFLOAT3> m_guns;
     MeshType m_type;
 };

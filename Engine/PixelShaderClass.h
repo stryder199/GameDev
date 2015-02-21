@@ -3,9 +3,7 @@
 //////////////
 // INCLUDES //
 #include <d3d11.h>
-#include <d3dx11async.h>
 #include <DirectXMath.h>
-#include <fstream>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -13,8 +11,6 @@
 /////////////////
 // FORWARD DEC //
 class TextureClass;
-
-using namespace DirectX;
 
 class PixelShaderClass
 {
@@ -30,22 +26,22 @@ public:
 private:
     struct MatrixBufferType
     {
-        XMFLOAT4X4 world;
-        XMFLOAT4X4 view;
-        XMFLOAT4X4 projection;
+        DirectX::XMFLOAT4X4 world;
+        DirectX::XMFLOAT4X4 view;
+        DirectX::XMFLOAT4X4 projection;
     };
 
     struct LightBufferType
     {
-        XMFLOAT4 ambientColor;
-        XMFLOAT4 diffuseColor;
-        XMFLOAT3 lightDirection;
+        DirectX::XMFLOAT4 ambientColor;
+        DirectX::XMFLOAT4 diffuseColor;
+        DirectX::XMFLOAT3 lightDirection;
         float padding;
     };
 
     struct ColorBufferType
     {
-        XMFLOAT4 color;
+        DirectX::XMFLOAT4 color;
     };
 
 public: 
@@ -54,9 +50,9 @@ public:
 
     void Initialize(WCHAR* psFilename, ShaderType type);
     void Shutdown();
-    void Render(TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
-    void Render(XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
-    void Render(TextureClass* tex, XMFLOAT4 color);
+    void Render(TextureClass* tex, DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4 ambient, DirectX::XMFLOAT4 diffuse);
+    void Render(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4 ambient, DirectX::XMFLOAT4 diffuse, DirectX::XMFLOAT4 color);
+    void Render(TextureClass* tex, DirectX::XMFLOAT4 color);
     void Render(TextureClass* tex);
 
     ShaderType getShaderType();
@@ -65,9 +61,9 @@ private:
     void ShutdownShader();
     void OutputShaderErrorMessage(ID3D10Blob*, WCHAR*);
 
-    void SetShaderParameters(TextureClass* tex, XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse);
-    void SetShaderParameters(XMFLOAT3 lightDir, XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 color);
-    void SetShaderParameters(TextureClass* tex, XMFLOAT4 color);
+    void SetShaderParameters(TextureClass* tex, DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4 ambient, DirectX::XMFLOAT4 diffuse);
+    void SetShaderParameters(DirectX::XMFLOAT3 lightDir, DirectX::XMFLOAT4 ambient, DirectX::XMFLOAT4 diffuse, DirectX::XMFLOAT4 color);
+    void SetShaderParameters(TextureClass* tex, DirectX::XMFLOAT4 color);
     void SetShaderParameters(TextureClass* tex);
     void RenderShader();
 

@@ -14,8 +14,6 @@
 class MaterialClass;
 class TextureClass;
 
-using namespace std;
-
 class MeshDataClass
 {
 public:
@@ -45,7 +43,7 @@ public:
     MeshColorType getMeshColorType();
     MaterialClass* getMaterial();
     TextureClass* getTexture();
-    vector<MeshDataType>* getRawMeshData();
+    std::vector<MeshDataType>* getRawMeshData();
     ID3D11Buffer* getVertexBuffer();
     ID3D11Buffer* getIndexBuffer();
     ID3D11Buffer* getColorBuffer();
@@ -58,7 +56,7 @@ public:
 
 private:
     int m_vertexCount, m_indexCount;
-    vector<MeshDataType> m_vecMesh;
+    std::vector<MeshDataType> m_vecMesh;
     ID3D11Buffer *m_vertexBuffer, *m_indexBuffer, *m_colorBuffer;
 
     MaterialClass* m_material;

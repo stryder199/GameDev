@@ -10,7 +10,7 @@ MaterialClass::~MaterialClass()
 {
 }
 
-void MaterialClass::Initialize(MaterialClass::MaterialInfo matInfo)
+void MaterialClass::Initialize(MaterialInfo matInfo)
 {
     m_materialInfo = matInfo;
 }

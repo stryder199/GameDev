@@ -11,6 +11,9 @@
 #include "GenericException.h"
 #include "VectorHelpers.h"
 
+using namespace std;
+using namespace DirectX;
+
 ThreeDGraphicsClass::ThreeDGraphicsClass()
 {
     m_player = nullptr;

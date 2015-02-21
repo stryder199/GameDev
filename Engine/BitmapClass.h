@@ -2,7 +2,6 @@
 
 //////////////
 // INCLUDES //
-#include <d3d11.h>
 #include <DirectXMath.h>
 
 ///////////////////////
@@ -12,20 +11,19 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace DirectX;
-
-class BitmapClass : public ModelClass
+class BitmapClass 
+    : public ModelClass
 {
 public:
     BitmapClass();
     ~BitmapClass();
 
-    void Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale);
+    void Initialize(MeshClass* mesh, LightClass *lightSource, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale);
     void Shutdown();
 
     void Render(ShaderControllerClass* shader);
     virtual void PreProcessing();
 
 private:
-    XMFLOAT2 m_screenPos;
+    DirectX::XMFLOAT2 m_screenPos;
 };

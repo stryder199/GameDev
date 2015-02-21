@@ -2,15 +2,12 @@
 
 //////////////
 // INCLUDES //
-#include <Windows.h>
 
 ///////////////////////
 // MY CLASS INCLUDES //
 
 /////////////////
 // FORWARD DEC //
-
-using namespace std;
 
 class Timer
 {

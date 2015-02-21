@@ -5,18 +5,12 @@
 #include "ObjectMeshClass.h"
 #include "CameraClass.h"
 
+using namespace DirectX;
+using namespace std;
+
 TextClass::TextClass()
 {
-    m_mesh = 0;
-    m_lightSource = 0;
-    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-    m_screenPos = XMFLOAT2(0.0f, 0.0f);
-    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
-
 
 TextClass::~TextClass()
 {
@@ -47,7 +41,7 @@ void TextClass::Shutdown()
 
 void TextClass::Render(ShaderControllerClass* shader)
 {
-    ModelClass::RenderBuffers(shader);
+    RenderBuffers(shader);
 }
 
 void TextClass::UpdateText(string newText)

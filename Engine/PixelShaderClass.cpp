@@ -1,18 +1,20 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: PixelShaderClass.cpp
-////////////////////////////////////////////////////////////////////////////////
 #include "PixelShaderClass.h"
 #include "D3DClass.h"
 #include "WindowClass.h"
 #include "TextureClass.h"
 #include "GenericException.h"
+#include <fstream>
+#include "D3DX11.h"
+
+using namespace std;
+using namespace DirectX;
 
 PixelShaderClass::PixelShaderClass()
 {
-    m_pixelShader = 0;
-    m_lightBuffer = 0;
-    m_colorBuffer = 0;
-    m_sampleState = 0;
+    m_pixelShader = nullptr;
+    m_lightBuffer = nullptr;
+    m_colorBuffer = nullptr;
+    m_sampleState = nullptr;
 }
 
 void PixelShaderClass::Initialize(WCHAR* psFilename, PixelShaderClass::ShaderType type)

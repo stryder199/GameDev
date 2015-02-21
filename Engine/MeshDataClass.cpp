@@ -2,16 +2,17 @@
 #include "MaterialClass.h"
 #include "TextureClass.h"
 
+using namespace std;
 
 MeshDataClass::MeshDataClass()
 {
-    m_material = 0;
-    m_texture = 0;
+    m_material = nullptr;
+    m_texture = nullptr;
     m_indexCount = 0;
     m_vertexCount = 0;
-    m_colorBuffer = 0;
-    m_indexBuffer = 0;
-    m_vertexBuffer = 0;
+    m_colorBuffer = nullptr;
+    m_indexBuffer = nullptr;
+    m_vertexBuffer = nullptr;
 }
 
 

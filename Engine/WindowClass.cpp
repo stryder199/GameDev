@@ -2,13 +2,15 @@
 #include "ProgramRootClass.h"
 #include "GenericException.h"
 
+using namespace std;
+
 WindowClass* WindowClass::m_pInstance = nullptr;
 mutex WindowClass::instanceMutex;
 
 WindowClass:: WindowClass()
 {
-    m_hWnd = 0;
-    m_hInstance = 0;
+    m_hWnd = nullptr;
+    m_hInstance = nullptr;
 }
 
 WindowClass::WindowClass(const WindowClass& other)

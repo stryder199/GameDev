@@ -2,17 +2,12 @@
 #include "MeshClass.h"
 #include "LightClass.h"
 
+using namespace std;
+using namespace DirectX;
+
 StarClass::StarClass()
     : ModelClass()
 {
-    m_mesh = 0;
-    m_lightSource = 0;
-    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 StarClass::~StarClass(){
@@ -46,12 +41,9 @@ void StarClass::Shutdown()
 
 void StarClass::Render(ShaderControllerClass* shader)
 {
-    ModelClass::RenderBuffers(shader);
+    RenderBuffers(shader);
 }
 
 void StarClass::PreProcessing()
 {
-    m_rot.x += m_rotVel.x;
-    m_rot.y += m_rotVel.y;
-    m_rot.z += m_rotVel.z;
 }

@@ -2,7 +2,7 @@ mesh earthMesh data\earth.3dmodel THREED
 mesh sunMesh data\sun.3dmodel THREED
 mesh starMesh data\star.3dmodel THREED
 mesh bulletMesh data\bullet.3dmodel THREED
-mesh playerMesh data\Ghost_Fighter.3dmodel THREED
+mesh playerMesh data\ghost_ship.3dmodel THREED
 type 	meshname	pos           scale          	rotvel
 planet 	earthMesh	0.0 0.0 10.0  5.0 5.0 5.0 	0.0 0.00025 0.0
 type	meshname	pos 		  scale				rotvel

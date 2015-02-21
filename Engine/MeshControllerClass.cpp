@@ -1,6 +1,8 @@
 #include "MeshControllerClass.h"
 #include "MeshClass.h"
 
+using namespace std;
+
 MeshControllerClass* MeshControllerClass::m_pInstance = nullptr;
 mutex MeshControllerClass::instanceMutex;
 

@@ -1,6 +1,8 @@
 #include "ObjectMeshClass.h"
 #include "MeshDataClass.h"
 
+using namespace std;
+
 
 ObjectMeshClass::ObjectMeshClass()
 {

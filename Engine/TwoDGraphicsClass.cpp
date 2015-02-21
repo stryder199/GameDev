@@ -8,10 +8,14 @@
 #include "LightClass.h"
 #include "MeshControllerClass.h"
 #include "ModelClass.h"
+#include <string>
+
+using namespace std;
+using namespace DirectX;
 
 TwoDGraphicsClass::TwoDGraphicsClass()
 {
-    m_DefaultLightSource = 0;
+    m_DefaultLightSource = nullptr;
 }
 
 TwoDGraphicsClass::~TwoDGraphicsClass()

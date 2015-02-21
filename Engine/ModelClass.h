@@ -2,9 +2,7 @@
 
 //////////////
 // INCLUDES //
-#include <D3D11.h>
 #include <DirectXMath.h>
-#include <vector>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -15,8 +13,6 @@ class MeshClass;
 class ShaderControllerClass;
 class LightClass;
 
-using namespace DirectX;
-
 class ModelClass{
 public:
     ModelClass();
@@ -25,25 +21,24 @@ public:
     void ModelPreProcessing();
     virtual void Shutdown() = 0;
 
-    XMFLOAT3 getPosition();
-    XMFLOAT3 getRotation();
-    XMFLOAT3 getScale();
-    XMFLOAT3 getPointPosition();
-    XMFLOAT3 getDirection();
+    DirectX::XMFLOAT3 getPosition();
+    DirectX::XMFLOAT3 getRotation();
+    DirectX::XMFLOAT3 getScale();
+    DirectX::XMFLOAT3 getPointPosition();
+    DirectX::XMFLOAT3 getDirection();
     float getBasicCollisionCircleRadius();
 
-    static bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2);
+    static bool sphereSphereCollision(DirectX::XMFLOAT3 p1, float r1, DirectX::XMFLOAT3 p2, float r2);
 
 protected:
     virtual void PreProcessing() = 0;
     void RenderBuffers(ShaderControllerClass* shader);
     void CalculateWorldMatrix();
     void ConstrainRotation();
-    void CalculateDirection();
 
-    MeshClass* m_mesh;
+    MeshClass *m_mesh;
     LightClass *m_lightSource;
-    XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir;
-    XMFLOAT4 m_color;
-    XMFLOAT4X4 m_worldMatrix;
+    DirectX::XMFLOAT3 m_pos, m_point_pos, m_rot, m_scale, m_dir, m_vel, m_rotVel;
+    DirectX::XMFLOAT4 m_color;
+    DirectX::XMFLOAT4X4 m_worldMatrix;
 };

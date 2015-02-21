@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-// Filename: fontclass.cpp
-///////////////////////////////////////////////////////////////////////////////
 #include "fontclass.h"
 #include "WindowsHelpers.h"
 #include "GenericException.h"
+#include "TextureClass.h"
+#include <fstream>
+
+using namespace std;
 
 FontClass::FontClass()
 {
-    m_Font = 0;
-    m_Texture = 0;
+    m_Font = nullptr;
+    m_Texture = nullptr;
 }
 
 FontClass::~FontClass()

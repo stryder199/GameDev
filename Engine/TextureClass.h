@@ -3,15 +3,12 @@
 //////////////
 // INCLUDES //
 #include <d3d11.h>
-#include <d3dx11tex.h>
 
 ///////////////////////
 // MY CLASS INCLUDES //
 
 /////////////////
 // FORWARD DEC //
-
-using namespace std;
 
 class TextureClass
 {
@@ -26,5 +23,4 @@ public:
 
 private:
     ID3D11ShaderResourceView* m_texture;
-    
 };

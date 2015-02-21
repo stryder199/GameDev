@@ -1,6 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: MeshClass.cpp
-////////////////////////////////////////////////////////////////////////////////
 #include "MeshClass.h"
 #include "MaterialClass.h"
 #include "TextureClass.h"
@@ -9,6 +6,10 @@
 #include "WindowsHelpers.h"
 #include "D3DClass.h"
 #include "GenericException.h"
+#include <fstream>
+
+using namespace std;
+using namespace DirectX;
 
 string readStringUntilSpace(string::iterator* it)
 {

@@ -1,10 +1,14 @@
 #include "TextureClass.h"
 #include "D3DClass.h"
 #include "GenericException.h"
+#include "D3DX11.h"
+
+using namespace std;
+using namespace DirectX;
 
 TextureClass::TextureClass()
 {
-    m_texture = 0;
+    m_texture = nullptr;
 }
 
 TextureClass::~TextureClass()

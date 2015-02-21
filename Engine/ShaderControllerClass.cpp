@@ -4,10 +4,13 @@
 #include "WindowClass.h"
 #include "D3DClass.h"
 
+using namespace std;
+using namespace DirectX;
+
 ShaderControllerClass::ShaderControllerClass()
 {
-    m_vertexFocus = 0;
-    m_pixelFocus = 0;
+    m_vertexFocus = nullptr;
+    m_pixelFocus = nullptr;
 }
 
 ShaderControllerClass::~ShaderControllerClass()

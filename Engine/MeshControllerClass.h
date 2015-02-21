@@ -12,8 +12,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace std;
-
 class MeshControllerClass
 {
 public:
@@ -24,18 +22,18 @@ public:
 
     static MeshControllerClass* getInstance();
 
-    void addMesh(string filename, string name, MeshClass::MeshType type);
-    MeshClass* getMesh(string name);
+    void addMesh(std::string filename, std::string name, MeshClass::MeshType type);
+    MeshClass* getMesh(std::string name);
 private:
     MeshControllerClass();
     MeshControllerClass(const MeshControllerClass&) {};
     MeshControllerClass& operator=(const MeshControllerClass&) {};
 
     static MeshControllerClass* m_pInstance;
-    static mutex instanceMutex;
+    static std::mutex instanceMutex;
 
     // name, mesh
-    mutex meshMutex;
-    map<string, MeshClass*> m_allMeshs;
+    std::mutex meshMutex;
+    std::map<std::string, MeshClass*> m_allMeshs;
 };
 

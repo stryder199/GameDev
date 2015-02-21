@@ -8,6 +8,22 @@
 #include "ShaderControllerClass.h"
 #include "GenericException.h"
 
+using namespace std;
+using namespace DirectX;
+
+ModelClass::ModelClass()
+{
+    m_mesh = nullptr;
+    m_lightSource = nullptr;
+    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_dir = XMFLOAT3(0.0f, 0.0f, 1.0f);
+    m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
+}
+
 void ModelClass::RenderBuffers(ShaderControllerClass* shader)
 {
     // For each object in the mesh
@@ -96,6 +112,11 @@ void ModelClass::RenderBuffers(ShaderControllerClass* shader)
 
 void ModelClass::CalculateWorldMatrix()
 {
+    // Add velocity and rot velocity
+    XMStoreFloat3(&m_pos, XMVectorAdd(XMLoadFloat3(&m_pos), XMLoadFloat3(&m_vel)));
+    XMStoreFloat3(&m_rot, XMVectorAdd(XMLoadFloat3(&m_rot), XMLoadFloat3(&m_rotVel)));
+    
+
     XMMATRIX worldMatrix = XMMatrixIdentity();
 
     // Move the model to the location it should be rendered at.
@@ -117,22 +138,10 @@ void ModelClass::CalculateWorldMatrix()
     XMStoreFloat4x4(&m_worldMatrix, worldMatrix);
 }
 
-ModelClass::ModelClass()
-{
-    m_mesh = 0;
-    m_lightSource = 0;
-    m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-    m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    m_dir = XMFLOAT3(0.0f, 0.0f, 0.0f);
-}
-
 void ModelClass::ModelPreProcessing()
 {
     PreProcessing();
     ConstrainRotation();
-    CalculateDirection();
     CalculateWorldMatrix();
 }
 
@@ -187,46 +196,18 @@ bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2)
 
 void ModelClass::ConstrainRotation()
 {
-    if (m_rot.x >= 2 * (float) XM_PI)
-        m_rot.x = m_rot.x - 2 * (float) XM_PI;
+    if (m_rot.x >= 2 * XM_PI)
+        m_rot.x = m_rot.x - 2 * XM_PI;
     else if (m_rot.x < 0.0f)
-        m_rot.x = 2 * (float) XM_PI + m_rot.x;
+        m_rot.x = 2 * XM_PI + m_rot.x;
 
-    if (m_rot.y >= 2 * (float) XM_PI)
-        m_rot.y = m_rot.y - 2 * (float) XM_PI;
+    if (m_rot.y >= 2 * XM_PI)
+        m_rot.y = m_rot.y - 2 * XM_PI;
     else if (m_rot.y < 0.0f)
-        m_rot.y = 2 * (float) XM_PI + m_rot.y;
+        m_rot.y = 2 * XM_PI + m_rot.y;
 
-    if (m_rot.z >= 2 * (float) XM_PI)
-        m_rot.z = m_rot.z - 2 * (float) XM_PI;
+    if (m_rot.z >= 2 * XM_PI)
+        m_rot.z = m_rot.z - 2 * XM_PI;
     else if (m_rot.z < 0.0f)
-        m_rot.z = 2 * (float) XM_PI + m_rot.z;
-}
-
-void ModelClass::CalculateDirection()
-{
-    if (m_rot.y >= 0.0f && m_rot.y < (XM_PI / 2.0f))
-    {
-        m_dir.x = (m_rot.y / (XM_PI / 2.0f));
-    }
-    else if (m_rot.y >= (XM_PI / 2.0f) && m_rot.y < ((3.0f*XM_PI) / 2.0f))
-    {
-        m_dir.x = ((XM_PI - m_rot.y) / (XM_PI / 2.0f));
-    }
-    else if (m_rot.y >= ((3.0f*XM_PI) / 2.0f) && m_rot.y < (2 * XM_PI))
-    {
-        m_dir.x = ((m_rot.y - 2 * XM_PI) / (XM_PI / 2.0f));
-    }
-
-    if (m_rot.y >= 0.0f && m_rot.y < XM_PI)
-    {
-        m_dir.z = (((XM_PI / 2.0f) - m_rot.y) / (XM_PI / 2.0f));
-    }
-    else if (m_rot.y >= XM_PI && m_rot.y < (2 * XM_PI))
-    {
-        m_dir.z = ((m_rot.y - ((3.0f*XM_PI) / 2.0f)) / (XM_PI / 2.0f));
-    }
-    XMVECTOR normalizedVector;
-    normalizedVector = XMVector3Normalize(XMLoadFloat3(&m_dir));
-    XMStoreFloat3(&m_dir, normalizedVector);
+        m_rot.z = 2 * XM_PI + m_rot.z;
 }

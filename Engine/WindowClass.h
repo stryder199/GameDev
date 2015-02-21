@@ -11,8 +11,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace std;
-
 class WindowClass{
 
 public:
@@ -34,7 +32,7 @@ private:
     WindowClass& operator=(const WindowClass&) {};
 
     static WindowClass* m_pInstance;
-    static mutex instanceMutex;
+    static std::mutex instanceMutex;
 
     HINSTANCE m_hInstance;
     HWND m_hWnd;

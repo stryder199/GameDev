@@ -6,9 +6,9 @@
 
 ProgramRootClass::ProgramRootClass()
 {
-    m_Events = 0;
-    m_Graphics = 0;
-    m_Sounds = 0;
+    m_Events = nullptr;
+    m_Graphics = nullptr;
+    m_Sounds = nullptr;
 }
 
 ProgramRootClass::~ProgramRootClass()

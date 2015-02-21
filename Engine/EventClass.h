@@ -23,8 +23,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace std;
-
 class EventClass{
 
 public:

@@ -2,7 +2,6 @@
 
 //////////////
 // INCLUDES //
-#include <d3d11.h>
 #include <DirectXMath.h>
 
 ///////////////////////
@@ -13,8 +12,6 @@
 /////////////////
 // FORWARD DEC //
 
-using namespace DirectX;
-
 class ShaderControllerClass{
 
 public:
@@ -24,13 +21,13 @@ public:
     void Initialize();
     void Shutdown();
 
-    void Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor);
+    void Render(int indexCount, const DirectX::XMFLOAT4X4& worldMatrix, TextureClass* texture, DirectX::XMFLOAT3 lightDirection, DirectX::XMFLOAT4 ambientColor, DirectX::XMFLOAT4 diffuseColor);
 
-    void Render(int indexCount, const XMFLOAT4X4& worldMatrix, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 color);
+    void Render(int indexCount, const DirectX::XMFLOAT4X4& worldMatrix, DirectX::XMFLOAT3 lightDirection, DirectX::XMFLOAT4 ambientColor, DirectX::XMFLOAT4 diffuseColor, DirectX::XMFLOAT4 color);
 
-    void Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture, XMFLOAT4 color);
+    void Render(int indexCount, const DirectX::XMFLOAT4X4& worldMatrix, TextureClass* texture, DirectX::XMFLOAT4 color);
 
-    void Render(int indexCount, const XMFLOAT4X4& worldMatrix, TextureClass* texture);
+    void Render(int indexCount, const DirectX::XMFLOAT4X4& worldMatrix, TextureClass* texture);
 
     void Set3DMaterialShaders();
     void Set3DTextureShaders();

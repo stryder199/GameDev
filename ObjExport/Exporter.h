@@ -34,7 +34,7 @@ public:
         float Kd_r, Kd_g, Kd_b;
         float Ks_r, Ks_g, Ks_b;
         float Ni, d, illum;
-        std::string map_Kd;
+        std::string std::map_Kd;
     }ColorType;
 
 public:

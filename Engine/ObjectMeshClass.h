@@ -11,23 +11,21 @@
 // FORWARD DEC //
 class MeshDataClass;
 
-using namespace std;
-
 class ObjectMeshClass
 {
 public:
     ObjectMeshClass();
     ~ObjectMeshClass();
 
-    void Initialize(string name);
+    void Initialize(std::string name);
     void Shutdown();
 
     void addMesh(MeshDataClass* newMesh);
-    string getName();
+    std::string getName();
 
-    vector<MeshDataClass*>* getAllMeshData();
+    std::vector<MeshDataClass*>* getAllMeshData();
 private:
-    vector<MeshDataClass*> m_allMeshData;
-    string m_name;
+    std::vector<MeshDataClass*> m_allMeshData;
+    std::string m_name;
 };
 
