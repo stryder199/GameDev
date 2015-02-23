@@ -26,22 +26,6 @@ void FontClass::Initialize(string fontFilename, string textureFilename)
     m_Texture->Initialize(WindowsHelpers::ToLWideStr(textureFilename));
 }
 
-void FontClass::Shutdown()
-{
-    // Release the font texture.
-    if (m_Texture)
-    {
-        m_Texture->Shutdown();
-        delete m_Texture;
-        m_Texture = 0;
-    }
-
-    // Release the font data.
-    ReleaseFontData();
-
-    return;
-}
-
 void FontClass::LoadFontData(string filename)
 {
     ifstream fin;

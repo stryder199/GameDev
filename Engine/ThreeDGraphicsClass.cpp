@@ -5,6 +5,7 @@
 #include "StarClass.h"
 #include "PlanetClass.h"
 #include "MeshControllerClass.h"
+#include "ShipControllerClass.h"
 #include "WindowClass.h"
 #include "EventClass.h"
 #include "ShipClass.h"
@@ -16,7 +17,6 @@ using namespace DirectX;
 
 ThreeDGraphicsClass::ThreeDGraphicsClass()
 {
-    m_player = nullptr;
 }
 
 ThreeDGraphicsClass::~ThreeDGraphicsClass()
@@ -25,18 +25,7 @@ ThreeDGraphicsClass::~ThreeDGraphicsClass()
 
 void ThreeDGraphicsClass::Initialize()
 {
-    m_allModels = vector<ModelClass*>();
-}
-
-void ThreeDGraphicsClass::Shutdown()
-{
-    modelMutex.lock();
-    vector<ModelClass*>::iterator model;
-    for (model = m_allModels.begin(); model != m_allModels.end(); ++model)
-    {
-        (*model)->Shutdown();
-    }
-    modelMutex.unlock();
+    m_allModels = vector<shared_ptr<ModelClass>>();
 }
 
 void ThreeDGraphicsClass::PreProcessing()
@@ -44,53 +33,21 @@ void ThreeDGraphicsClass::PreProcessing()
     ConstructFrustum();
 
     modelMutex.lock();
-    vector<ModelClass*>::iterator model;
-    vector<ShipClass*> ships = vector<ShipClass*>();
-    for (ModelClass* &model : m_allModels)
+    for (shared_ptr<ModelClass> &model : m_allModels)
     {
         model->ModelPreProcessing();
-
-        if (ShipClass* ship = dynamic_cast<ShipClass*>(model))
-        {
-            ships.push_back(ship);
-        }
     }
     modelMutex.unlock();
 
-    // Make sure each ship has a target
-    for (ShipClass* &ship : ships)
-    {
-        // If the ship doesn't have a target
-        if (ship->GetTargetShip() == nullptr && ship != m_player)
-        {
-            float currentDistance = 0.0;
-            // Search for the closest ship
-            for (ShipClass* &targetShip : ships)
-            {
-                // The ship cant target itself
-                if (targetShip != ship)
-                {
-                    float newDistance = VectorHelpers::Distance(ship->getPosition(), targetShip->getPosition());
-                    // If we don't have a ship already
-                    // Or see if this ship is closer than the currentTarget
-                    if (ship->GetTargetShip() == nullptr || newDistance > currentDistance)
-                    {
-                        ship->SetNewTarget(targetShip);
-                        currentDistance = newDistance;
-                    }
-                }
-            }
-        }
-    }
-    
+    ShipControllerClass::GetInstance()->PreProcessing();
 }
 
 void ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 {
-    CameraClass::getInstance()->Render(m_player);
+    CameraClass::getInstance()->Render(ShipControllerClass::GetInstance()->GetPlayer());
 
     modelMutex.lock();
-    for (ModelClass* &model : m_allModels)
+    for (shared_ptr<ModelClass> &model : m_allModels)
     {
         if (CheckSphereAgainstFrustum(model->getPosition(), model->getBasicCollisionCircleRadius()))
         {
@@ -102,32 +59,36 @@ void ThreeDGraphicsClass::RenderAll(ShaderControllerClass* shader)
 
 void ThreeDGraphicsClass::AddPlayer(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
-    m_player = new ShipClass();
-    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+    shared_ptr<ShipClass> player(new ShipClass());
+    shared_ptr<MeshClass> mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
-    m_player->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
+    player->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
 
     modelMutex.lock();
-    m_allModels.push_back(m_player);
+    m_allModels.push_back(player);
     modelMutex.unlock();
+
+    ShipControllerClass::GetInstance()->AddPlayer(player);
 }
 
 void ThreeDGraphicsClass::AddShip(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
-    ShipClass *ship = new ShipClass();
-    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+    shared_ptr<ShipClass> ship(new ShipClass());
+    shared_ptr<MeshClass> mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
     ship->Initialize(mesh, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
 
     modelMutex.lock();
     m_allModels.push_back(ship);
     modelMutex.unlock();
+
+    ShipControllerClass::GetInstance()->AddShip(ship);
 }
 
 void ThreeDGraphicsClass::AddStar(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
-    StarClass *star = new StarClass();
-    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+    shared_ptr<StarClass> star(new StarClass());
+    shared_ptr<MeshClass> mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
     star->Initialize(mesh, pos, scale, rotVel);
 
@@ -138,8 +99,8 @@ void ThreeDGraphicsClass::AddStar(string meshname, XMFLOAT3 pos, XMFLOAT3 scale,
 
 void ThreeDGraphicsClass::AddPlanet(string meshname, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
-    PlanetClass *planet = new PlanetClass();
-    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+    shared_ptr<PlanetClass> planet(new PlanetClass());
+    shared_ptr<MeshClass> mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
     planet->Initialize(mesh, pos, scale, rotVel);
 
@@ -155,37 +116,37 @@ void ThreeDGraphicsClass::HandleEvents(EventClass* events)
         throw GenericException("Events cannot be null");
     }
 
-    if (m_player != nullptr)
+    if (ShipControllerClass::GetInstance()->GetPlayer() != nullptr)
     {
         if (events->IsWPressed() == true)
         {
-            m_player->SetEnginePower(CommonEnums::EnginePower::Forward);
+            ShipControllerClass::GetInstance()->GetPlayer()->SetEnginePower(CommonEnums::EnginePower::Forward);
         }
         else if (events->IsSPressed() == true)
         {
-            m_player->SetEnginePower(CommonEnums::EnginePower::Reverse);
+            ShipControllerClass::GetInstance()->GetPlayer()->SetEnginePower(CommonEnums::EnginePower::Reverse);
         }
         else
         {
-            m_player->SetEnginePower(CommonEnums::EnginePower::Stop);
+            ShipControllerClass::GetInstance()->GetPlayer()->SetEnginePower(CommonEnums::EnginePower::Stop);
         }
 
         if (events->IsDPressed() == true)
         {
-            m_player->GoRight(true);
+            ShipControllerClass::GetInstance()->GetPlayer()->GoRight(true);
         }
         else if (events->IsAPressed() == true)
         {
-            m_player->GoLeft(true);
+            ShipControllerClass::GetInstance()->GetPlayer()->GoLeft(true);
         }
         else
         {
-            m_player->Stop();
+            ShipControllerClass::GetInstance()->GetPlayer()->Stop();
         }
 
         if (events->IsSpacePressed())
         {
-            m_player->StartWeaponFiring();
+            ShipControllerClass::GetInstance()->GetPlayer()->StartWeaponFiring();
         }
     }
 }

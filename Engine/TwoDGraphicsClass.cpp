@@ -46,7 +46,6 @@ void TwoDGraphicsClass::Shutdown()
     vector<BitmapClass*>::iterator bitmap;
     for (bitmap = m_allBitmaps.begin(); bitmap != m_allBitmaps.end(); ++bitmap)
     {
-        (*bitmap)->Shutdown();
         delete (*bitmap);
         (*bitmap) = 0;
     }
@@ -54,7 +53,6 @@ void TwoDGraphicsClass::Shutdown()
     map<string, TextClass*>::iterator text;
     for (text = m_allText.begin(); text != m_allText.end(); ++text)
     {
-        (*text).second->Shutdown();
         delete (*text).second;
         (*text).second = 0;
     }
@@ -62,7 +60,6 @@ void TwoDGraphicsClass::Shutdown()
     map<string, FontClass*>::iterator font;
     for (font = m_allFont.begin(); font != m_allFont.end(); ++font)
     {
-        (*font).second->Shutdown();
         delete (*font).second;
         (*font).second = 0;
     }
@@ -181,7 +178,7 @@ void TwoDGraphicsClass::AddText(string name, string initText, string fontname, X
 void TwoDGraphicsClass::AddBitmap(string meshname, XMFLOAT2 pos, XMFLOAT2 scale)
 {
     BitmapClass *bitmap = new BitmapClass();
-    MeshClass *mesh = MeshControllerClass::getInstance()->getMesh(meshname);
+    shared_ptr<MeshClass> mesh = MeshControllerClass::getInstance()->getMesh(meshname);
 
     bitmap->Initialize(mesh, m_DefaultLightSource, pos, scale);
     bitmapMutex.lock();

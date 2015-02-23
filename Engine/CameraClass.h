@@ -4,6 +4,7 @@
 // INCLUDES //
 #include <DirectXMath.h>
 #include <mutex>
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -20,7 +21,7 @@ public:
     void Initialize();
     void Shutdown();
     
-    void Render(ShipClass* player);
+    void Render(std::shared_ptr<ShipClass> player);
 
     DirectX::XMFLOAT4X4 GetViewMatrix();
     DirectX::XMFLOAT3 getPosition();
@@ -28,9 +29,6 @@ public:
     DirectX::XMFLOAT3 getScale();
     DirectX::XMFLOAT3 getPointPosition();
     DirectX::XMFLOAT3 getDirection();
-
-    void ConstrainRotation();
-    void CalculateDirection();
 private:
     CameraClass();
     CameraClass(const CameraClass&) {};

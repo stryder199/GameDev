@@ -2,6 +2,7 @@
 
 //////////////
 // INCLUDES //
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -17,8 +18,7 @@ public:
     PlanetClass();
     ~PlanetClass();
 
-    void Initialize(MeshClass* mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
-    void Shutdown();
+    void Initialize(std::shared_ptr<MeshClass> mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
 
     void Render(ShaderControllerClass* shader);
     virtual void PreProcessing();

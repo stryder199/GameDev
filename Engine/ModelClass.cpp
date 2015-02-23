@@ -7,6 +7,7 @@
 #include "LightClass.h"
 #include "ShaderControllerClass.h"
 #include "GenericException.h"
+#include "VectorHelpers.h"
 
 using namespace std;
 using namespace DirectX;
@@ -20,6 +21,7 @@ ModelClass::ModelClass()
     m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
     m_point_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
     m_dir = XMFLOAT3(0.0f, 0.0f, 1.0f);
+    m_dirVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
     m_vel = XMFLOAT3(0.0f, 0.0f, 0.0f);
     m_rotVel = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
@@ -116,7 +118,6 @@ void ModelClass::CalculateWorldMatrix()
     XMStoreFloat3(&m_pos, XMVectorAdd(XMLoadFloat3(&m_pos), XMLoadFloat3(&m_vel)));
     XMStoreFloat3(&m_rot, XMVectorAdd(XMLoadFloat3(&m_rot), XMLoadFloat3(&m_rotVel)));
     
-
     XMMATRIX worldMatrix = XMMatrixIdentity();
 
     // Move the model to the location it should be rendered at.
@@ -126,7 +127,6 @@ void ModelClass::CalculateWorldMatrix()
     XMMATRIX rotXMatrix = XMMatrixRotationX(m_rot.x);
     XMMATRIX rotYMatrix = XMMatrixRotationY(m_rot.y);
     XMMATRIX rotZMatrix = XMMatrixRotationZ(m_rot.z);
-
 
     worldMatrix *= scalingMatrix;
     worldMatrix *= pointTranslationMatrix;
@@ -140,9 +140,19 @@ void ModelClass::CalculateWorldMatrix()
 
 void ModelClass::ModelPreProcessing()
 {
+    VectorHelpers::CalculateDirection(&m_rot, &m_dir);
+    XMFLOAT3 prevPosition = m_pos;
     PreProcessing();
-    ConstrainRotation();
+    VectorHelpers::ConstrainRotation(&m_rot);
     CalculateWorldMatrix();
+    if (!VectorHelpers::Equal(prevPosition, m_pos))
+    {
+        VectorHelpers::CalculateVelocityDirection(&prevPosition, &m_pos, &m_dirVel);
+    }
+    else
+    {
+        VectorHelpers::ZeroVector(&m_dirVel);
+    }
 }
 
 XMFLOAT3 ModelClass::getPosition()
@@ -174,40 +184,4 @@ float ModelClass::getBasicCollisionCircleRadius()
 {
     // All models are normalized to be in a 1 by 1 box, thus the scale is the radius of the basic circle
     return m_scale.x;
-}
-
-bool sphereSphereCollision(XMFLOAT3 p1, float r1, XMFLOAT3 p2, float r2)
-{
-    XMVECTOR distance = XMVectorSubtract(XMLoadFloat3(&p1), XMLoadFloat3(&p2));
-    XMVECTOR distanceLengthVec = XMVector3Length(distance);
-    float distanceLength = 0.0f;
-    XMStoreFloat(&distanceLength, distanceLengthVec);
-
-    float sumradius = r1 + r2;
-
-    // If the distance between 2 spheres is less then the sum of the radius's then we have a collision
-    if (distanceLength < sumradius)
-    {
-        return false;
-    }
-
-    return true;
-}
-
-void ModelClass::ConstrainRotation()
-{
-    if (m_rot.x >= 2 * XM_PI)
-        m_rot.x = m_rot.x - 2 * XM_PI;
-    else if (m_rot.x < 0.0f)
-        m_rot.x = 2 * XM_PI + m_rot.x;
-
-    if (m_rot.y >= 2 * XM_PI)
-        m_rot.y = m_rot.y - 2 * XM_PI;
-    else if (m_rot.y < 0.0f)
-        m_rot.y = 2 * XM_PI + m_rot.y;
-
-    if (m_rot.z >= 2 * XM_PI)
-        m_rot.z = m_rot.z - 2 * XM_PI;
-    else if (m_rot.z < 0.0f)
-        m_rot.z = 2 * XM_PI + m_rot.z;
 }

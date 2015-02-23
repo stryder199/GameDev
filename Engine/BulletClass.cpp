@@ -3,12 +3,12 @@
 #include "CameraClass.h"
 #include "Timer.h"
 
+using namespace std;
 using namespace DirectX;
 
 BulletClass::BulletClass()
     : ModelClass()
 {
-    m_life = nullptr;
 }
 
 
@@ -16,7 +16,7 @@ BulletClass::~BulletClass()
 {
 }
 
-void BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir, XMFLOAT3 scale)
+void BulletClass::Initialize(shared_ptr<MeshClass> objMesh, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scale, int damage)
 {
     m_lightSource = new LightClass();
     m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -25,20 +25,13 @@ void BulletClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 dir, XMF
 
     m_mesh = objMesh;
     m_pos = pos;
-    m_dir = dir;
+    m_rot = rot;
     m_scale = scale;
 
-    m_life = new Timer();
-    m_life->start();
-}
-
-void BulletClass::Shutdown()
-{
-    if (!m_life)
-    {
-        delete m_life;
-        m_life = 0;
-    }
+    m_life = Timer();
+    m_life.start();
+    
+    m_damage = damage;
 }
 
 void BulletClass::Render(ShaderControllerClass* shader)
@@ -48,14 +41,19 @@ void BulletClass::Render(ShaderControllerClass* shader)
 
 void BulletClass::PreProcessing()
 {
-    float bulletSpeed = 0.003f;
+    float bulletSpeed = 0.03f;
 
-    m_vel.x = m_dir.x * bulletSpeed;
-    m_vel.y = m_dir.y * bulletSpeed;
-    m_vel.z = m_dir.z * bulletSpeed;
+    m_vel.x = getDirection().x * bulletSpeed;
+    m_vel.y = getDirection().y * bulletSpeed;
+    m_vel.z = getDirection().z * bulletSpeed;
 }
 
 int BulletClass::GetTimeAlive()
 {
-    return m_life->get_ticks();
+    return m_life.get_ticks();
+}
+
+int BulletClass::GetDamage()
+{
+    return m_damage;
 }

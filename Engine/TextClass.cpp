@@ -28,17 +28,6 @@ void TextClass::Initialize(string initText, FontClass* font, XMFLOAT2 pos, XMFLO
     BuildTextMesh(initText.c_str());
 }
 
-void TextClass::Shutdown()
-{
-    if (m_mesh)
-    {
-        m_mesh->Shutdown();
-        delete m_mesh;
-        m_mesh = 0;
-    }
-    return;
-}
-
 void TextClass::Render(ShaderControllerClass* shader)
 {
     RenderBuffers(shader);
@@ -75,11 +64,10 @@ void TextClass::BuildTextMesh(const char* sentence)
     if (m_mesh)
     {
         m_mesh->Shutdown();
-        delete m_mesh;
         m_mesh = 0;
     }
 
-    m_mesh = new MeshClass();
+    m_mesh = shared_ptr<MeshClass>(new MeshClass());
 
     textObject->Initialize("Text");
     meshData->Initialize(m_font->GetTexture());

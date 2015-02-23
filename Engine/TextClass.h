@@ -20,7 +20,6 @@ public:
     ~TextClass();
 
     void Initialize(std::string initText, FontClass* font, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale, DirectX::XMFLOAT4 color);
-    void Shutdown();
 
     void UpdateText(std::string newText);
     void Render(ShaderControllerClass* shader);

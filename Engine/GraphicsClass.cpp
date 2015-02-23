@@ -60,7 +60,6 @@ void GraphicsClass::Shutdown()
 
     if (m_3DGraphics)
     {
-        m_3DGraphics->Shutdown();
         delete m_3DGraphics;
         m_3DGraphics = 0;
     }

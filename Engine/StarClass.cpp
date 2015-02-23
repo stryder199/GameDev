@@ -13,7 +13,7 @@ StarClass::StarClass()
 StarClass::~StarClass(){
 }
 
-void StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
+void StarClass::Initialize(shared_ptr<MeshClass> objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
     m_mesh = objMesh;
     m_pos = pos;
@@ -26,17 +26,6 @@ void StarClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMF
     m_lightSource->SetAmbientColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_lightSource->SetDiffuseColor(0.0f, 0.0f, 0.0f, 1.0f);
     m_lightSource->SetDirection(0.0f, 0.0f, -1.0f);
-}
-
-void StarClass::Shutdown()
-{
-    if (m_lightSource)
-    {
-        delete m_lightSource;
-        m_lightSource = 0;
-    }
-
-    return;
 }
 
 void StarClass::Render(ShaderControllerClass* shader)

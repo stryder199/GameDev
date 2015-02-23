@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <mutex>
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -22,7 +23,6 @@ public:
     ~ThreeDGraphicsClass();
 
     void Initialize();
-    void Shutdown();
 
     void PreProcessing();
     void RenderAll(ShaderControllerClass* shader);
@@ -37,7 +37,6 @@ public:
     void HandleEvents(EventClass* events);
 private:
     std::mutex modelMutex;
-    std::vector<ModelClass*> m_allModels;
+    std::vector<std::shared_ptr<ModelClass>> m_allModels;
     DirectX::XMFLOAT4 m_fulstrumPlanes[6];
-    ShipClass* m_player;
 };

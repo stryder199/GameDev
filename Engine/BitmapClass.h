@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <DirectXMath.h>
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -18,8 +19,7 @@ public:
     BitmapClass();
     ~BitmapClass();
 
-    void Initialize(MeshClass* mesh, LightClass *lightSource, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale);
-    void Shutdown();
+    void Initialize(std::shared_ptr<MeshClass> mesh, LightClass *lightSource, DirectX::XMFLOAT2 pos, DirectX::XMFLOAT2 scale);
 
     void Render(ShaderControllerClass* shader);
     virtual void PreProcessing();

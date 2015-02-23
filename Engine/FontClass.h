@@ -25,7 +25,6 @@ public:
     ~FontClass();
 
     void Initialize(std::string fontPropFilename, std::string textureFilename);
-    void Shutdown();
 
     TextureClass* GetTexture();
     FontType* GetFont();

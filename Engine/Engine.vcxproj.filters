@@ -106,6 +106,9 @@
     <ClCompile Include="MeshControllerClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShipControllerClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\ProgramRootClass.h">
@@ -192,6 +195,9 @@
     <ClInclude Include="GraphicsClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShipControllerClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shaders\2D-PS.hlsl">
@@ -233,5 +239,10 @@
       <Filter>Config Files</Filter>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Level1.xml">
+      <Filter>Config Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

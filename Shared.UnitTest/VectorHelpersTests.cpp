@@ -4,6 +4,7 @@
 #include "DirectXMath.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace DirectX;
 
 namespace SharedUnitTest
 {
@@ -91,5 +92,20 @@ namespace SharedUnitTest
             Assert::IsFalse(VectorHelpers::IsToRight(playerPos, playerDir, targetPos));
         }
 
+        TEST_METHOD(NotCollided_Sphere)
+        {
+            XMFLOAT3 pos = XMFLOAT3(2.5f, 0.0f, 0.0f);
+            XMFLOAT3 pos2 = XMFLOAT3(0.0f, 0.0f, 0.0f);
+            float r = 1.0f;
+            Assert::IsFalse(VectorHelpers::SphereSphereCollision(pos, r, pos2, r));
+        }
+
+        TEST_METHOD(Collided_Sphere)
+        {
+            XMFLOAT3 pos = XMFLOAT3(1.5f, 0.0f, 0.0f);
+            XMFLOAT3 pos2 = XMFLOAT3(0.0f, 0.0f, 0.0f);
+            float r = 1.0f;
+            Assert::IsTrue(VectorHelpers::SphereSphereCollision(pos, r, pos2, r));
+        }
     };
 }

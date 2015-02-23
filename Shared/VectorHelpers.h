@@ -3,121 +3,21 @@
 class VectorHelpers
 {
 public:
-    static bool IsToLeft(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target)
-    {
-        DirectX::XMVECTOR sourceV = XMLoadFloat3(&source);
-        DirectX::XMVECTOR targetV = XMLoadFloat3(&target);
-        DirectX::XMVECTOR sourceDirectionV = XMLoadFloat3(&sourceDirection);
-
-        // Move the source to the origin
-        // Which will reorient the target.
-        targetV = DirectX::XMVectorSubtract(targetV, sourceV);
-
-        // Normalize
-        targetV = DirectX::XMPlaneNormalize(targetV);
-        sourceDirectionV = DirectX::XMPlaneNormalize(sourceDirectionV);
-
-        DirectX::XMMATRIX yRot = DirectX::XMMatrixRotationY(-1 * DirectX::XM_PIDIV2);
-        sourceDirectionV = XMVector4Transform(sourceDirectionV, yRot);
-
-        // Compare the Direction of the source to the direction of the target relative to the source
-        float result = 0.0f;
-        DirectX::XMStoreFloat(&result, DirectX::XMPlaneDotCoord(targetV, sourceDirectionV));
-
-        if (result < 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    static bool IsToRight(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target)
-    {
-        DirectX::XMVECTOR sourceV = XMLoadFloat3(&source);
-        DirectX::XMVECTOR targetV = XMLoadFloat3(&target);
-        DirectX::XMVECTOR sourceDirectionV = XMLoadFloat3(&sourceDirection);
-
-        // Move the source to the origin
-        // Which will reorient the target.
-        targetV = DirectX::XMVectorSubtract(targetV, sourceV);
-
-        // Normalize
-        targetV = DirectX::XMPlaneNormalize(targetV);
-        sourceDirectionV = DirectX::XMPlaneNormalize(sourceDirectionV);
-
-        DirectX::XMMATRIX yRot = DirectX::XMMatrixRotationY(-1 * DirectX::XM_PIDIV2);
-        sourceDirectionV = XMVector4Transform(sourceDirectionV, yRot);
-
-        // Compare the Direction of the source to the direction of the target relative to the source
-        float result = 0.0f;
-        DirectX::XMStoreFloat(&result, DirectX::XMPlaneDotCoord(targetV, sourceDirectionV));
-
-        if (result >= 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    static bool IsBehind(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target)
-    {
-        DirectX::XMVECTOR sourceV = XMLoadFloat3(&source);
-        DirectX::XMVECTOR targetV = XMLoadFloat3(&target);
-        DirectX::XMVECTOR sourceDirectionV = XMLoadFloat3(&sourceDirection);
-
-        // Move the source to the origin
-        // Which will reorient the target.
-        targetV = DirectX::XMVectorSubtract(targetV, sourceV);
-
-        // Normalize
-        targetV = DirectX::XMPlaneNormalize(targetV);
-        sourceDirectionV = DirectX::XMPlaneNormalize(sourceDirectionV);
-
-        // Compare the Direction of the source to the direction of the target relative to the source
-        float result = 0.0f;
-        DirectX::XMStoreFloat(&result, DirectX::XMPlaneDotCoord(targetV, sourceDirectionV));
-
-        if (result < 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    static bool IsInFront(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target)
-    {
-        DirectX::XMVECTOR sourceV = XMLoadFloat3(&source);
-        DirectX::XMVECTOR targetV = XMLoadFloat3(&target);
-        DirectX::XMVECTOR sourceDirectionV = XMLoadFloat3(&sourceDirection);
-
-        // Move the source to the origin
-        // Which will reorient the target.
-        targetV = DirectX::XMVectorSubtract(targetV, sourceV);
-
-        // Normalize
-        targetV = DirectX::XMPlaneNormalize(targetV);
-        sourceDirectionV = DirectX::XMPlaneNormalize(sourceDirectionV);
-
-        // Compare the Direction of the source to the direction of the target relative to the source
-        float result = 0.0f;
-        DirectX::XMStoreFloat(&result, DirectX::XMPlaneDotCoord(targetV, sourceDirectionV));
-
-        if (result >= 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    static float Distance(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
-    {
-        DirectX::XMVECTOR diff = DirectX::XMVectorSubtract(XMLoadFloat3(&b), XMLoadFloat3(&a));        
-        float dot = 0.0f;
-        DirectX::XMStoreFloat(&dot, DirectX::XMPlaneDotCoord(diff, diff));
-        return sqrtf(dot);
-    }
+    static bool IsToLeft(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target);
+    static bool IsToRight(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target);
+    static bool IsBehind(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target);
+    static bool IsInFront(DirectX::XMFLOAT3 source, DirectX::XMFLOAT3 sourceDirection, DirectX::XMFLOAT3 target);
+    static float Distance(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+    static DirectX::XMFLOAT3 Normalize(DirectX::XMFLOAT3 a);
+    static void Normalize(DirectX::XMFLOAT3* a);
+    static void CalculateDirection(const DirectX::XMFLOAT3* rot, DirectX::XMFLOAT3* dir);
+    static void CalculateVelocityDirection(const DirectX::XMFLOAT3* oldPosition, const DirectX::XMFLOAT3* newPosition, DirectX::XMFLOAT3* dirVel);
+    static void ConstrainRotation(DirectX::XMFLOAT3* rot);
+    static bool SphereSphereCollision(DirectX::XMFLOAT3 p1, float r1, DirectX::XMFLOAT3 p2, float r2);
+    static void ZeroVector(DirectX::XMFLOAT2* a);
+    static void ZeroVector(DirectX::XMFLOAT3* a);
+    static void ZeroVector(DirectX::XMFLOAT4* a);
+    static bool Equal(DirectX::XMFLOAT2 a, DirectX::XMFLOAT2 b);
+    static bool Equal(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+    static bool Equal(DirectX::XMFLOAT4 a, DirectX::XMFLOAT4 b);
 };

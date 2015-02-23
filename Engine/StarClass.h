@@ -2,6 +2,7 @@
 
 //////////////
 // INCLUDES //
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -17,8 +18,7 @@ public:
     StarClass();
     ~StarClass();
     
-    void Initialize(MeshClass* objMesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
-    void Shutdown() override;
+    void Initialize(std::shared_ptr<MeshClass> objMesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 rotVel);
 
     void Render(ShaderControllerClass* shader) override;
     virtual void PreProcessing() override;

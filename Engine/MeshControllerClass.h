@@ -4,6 +4,7 @@
 // INCLUDES //
 #include <map>
 #include <mutex>
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -23,7 +24,7 @@ public:
     static MeshControllerClass* getInstance();
 
     void addMesh(std::string filename, std::string name, MeshClass::MeshType type);
-    MeshClass* getMesh(std::string name);
+    std::shared_ptr<MeshClass> getMesh(std::string name);
 private:
     MeshControllerClass();
     MeshControllerClass(const MeshControllerClass&) {};
@@ -34,6 +35,6 @@ private:
 
     // name, mesh
     std::mutex meshMutex;
-    std::map<std::string, MeshClass*> m_allMeshs;
+    std::map<std::string, std::shared_ptr<MeshClass>> m_allMeshs;
 };
 

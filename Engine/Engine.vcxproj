@@ -155,6 +155,7 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <ClCompile Include="PlanetClass.cpp" />
     <ClCompile Include="ShaderControllerClass.cpp" />
     <ClCompile Include="ShipClass.cpp" />
+    <ClCompile Include="ShipControllerClass.cpp" />
     <ClCompile Include="TextClass.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexShaderClass.cpp" />
@@ -168,6 +169,7 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
   <ItemGroup>
     <ClInclude Include=".\ProgramRootClass.h" />
     <ClInclude Include=".\TwoDGraphicsClass.h" />
+    <ClInclude Include="ShipControllerClass.h" />
     <ClInclude Include="ThreeDGraphicsClass.h" />
     <ClInclude Include="BitmapClass.h" />
     <ClInclude Include="BulletClass.h" />
@@ -232,6 +234,9 @@ xcopy /E /Q /Y $(ProjectDir)config $(TargetDir)config\</Command>
     <None Include="config\level1.loader" />
     <None Include="config\ui.loader" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Level1.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

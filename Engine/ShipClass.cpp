@@ -31,7 +31,7 @@ ShipClass::~ShipClass()
 {
 }
 
-void ShipClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
+void ShipClass::Initialize(shared_ptr<MeshClass> objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos)
 {
     m_mesh = objMesh;
     m_pos = pos;
@@ -62,19 +62,10 @@ void ShipClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, int
     m_weaponPulseCount = 0;
 }
 
-void ShipClass::Shutdown()
-{
-    if (m_lightSource)
-    {
-        delete m_lightSource;
-        m_lightSource = 0;
-    }
-}
-
 void ShipClass::SpawnBullet(XMFLOAT3 spawnPos)
 {
     BulletClass* bullet = new BulletClass();
-    bullet->Initialize(m_bulletMesh, spawnPos, m_dir, XMFLOAT3(0.003f, 0.003f, 0.003f));
+    bullet->Initialize(m_bulletMesh, spawnPos, m_rot, XMFLOAT3(0.003f, 0.003f, 0.003f), 15);
     m_allBullets.push_back(bullet);
 }
 
@@ -114,7 +105,7 @@ void ShipClass::FlyTowardsTarget()
     if (m_targetShip != nullptr)
     {
         SetEnginePower(CommonEnums::EnginePower::Forward);
-        if (VectorHelpers::IsToLeft(m_pos, m_dir, m_targetShip->getPosition()))
+        if (VectorHelpers::IsToLeft(m_pos, getDirection(), m_targetShip->getPosition()))
         {
             GoLeft(false);
         }
@@ -122,6 +113,17 @@ void ShipClass::FlyTowardsTarget()
         else
         {
             GoRight(false);
+        }
+    }
+}
+
+void ShipClass::ShootTarget()
+{
+    if (m_targetShip != nullptr)
+    {
+        if (VectorHelpers::IsInFront(m_pos, getDirection(), m_targetShip->getPosition()))
+        {
+            FireWeapon();
         }
     }
 }
@@ -191,17 +193,12 @@ void ShipClass::PreProcessing()
             FireWeapon();
         }
     }
-    
-    m_dir.x += m_rotVel.y;
-    m_dir.y += m_rotVel.z;
-    m_dir.z += m_rotVel.y;
-    XMStoreFloat3(&m_dir, XMPlaneNormalize(XMLoadFloat3(&m_dir)));
 
     if (m_enginePower == CommonEnums::EnginePower::Forward || m_enginePower == CommonEnums::EnginePower::Reverse)
     {
-        m_vel.x = m_dir.x * maxThrust;
-        m_vel.y = m_dir.y * maxThrust;
-        m_vel.z = m_dir.z * maxThrust;
+        m_vel.x = getDirection().x * maxThrust;
+        m_vel.y = getDirection().y * maxThrust;
+        m_vel.z = getDirection().z * maxThrust;
 
         if (m_enginePower == CommonEnums::EnginePower::Reverse)
         {
@@ -235,7 +232,6 @@ void ShipClass::PreProcessing()
     {
         BulletClass *deadBullet = m_allBullets[(*deadBulletIndex)];
         m_allBullets.erase(m_allBullets.begin() + (*deadBulletIndex));
-        deadBullet->Shutdown();
         delete deadBullet;
     }
 
@@ -287,12 +283,31 @@ int ShipClass::GetEnergy()
     return m_energy;
 }
 
-ShipClass* ShipClass::GetTargetShip()
+shared_ptr<ShipClass> ShipClass::GetTargetShip()
 {
     return m_targetShip;
 }
 
-void ShipClass::SetNewTarget(ShipClass* target)
+void ShipClass::SetNewTarget(shared_ptr<ShipClass> target)
 {
     m_targetShip = target;
+}
+
+vector<BulletClass*>* ShipClass::GetBullets()
+{
+    return &m_allBullets;
+}
+
+void ShipClass::Hit(int damage)
+{
+    m_health -= damage;
+}
+
+bool ShipClass::IsDead()
+{
+    if (m_health <= 0)
+    {
+        return true;
+    }
+    return false;
 }

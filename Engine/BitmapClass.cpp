@@ -4,6 +4,7 @@
 #include "BitmapClass.h"
 #include "CameraClass.h"
 
+using namespace std;
 using namespace DirectX;
 
 BitmapClass::BitmapClass()
@@ -15,17 +16,12 @@ BitmapClass::~BitmapClass()
 {
 }
 
-void BitmapClass::Initialize(MeshClass* mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale)
+void BitmapClass::Initialize(shared_ptr<MeshClass> mesh, LightClass *lightSource, XMFLOAT2 pos, XMFLOAT2 scale)
 {
     m_mesh = mesh;
     m_lightSource = lightSource;
     m_screenPos = pos;
     m_scale = XMFLOAT3(scale.x, scale.y, 1.0f);
-}
-
-void BitmapClass::Shutdown()
-{
-    return;
 }
 
 void BitmapClass::Render(ShaderControllerClass *shader)

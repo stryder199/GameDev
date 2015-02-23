@@ -15,7 +15,7 @@ PlanetClass::~PlanetClass()
 {
 }
 
-void PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
+void PlanetClass::Initialize(shared_ptr<MeshClass> objMesh, XMFLOAT3 pos, XMFLOAT3 scale, XMFLOAT3 rotVel)
 {
     m_mesh = objMesh;
     m_pos = pos;
@@ -28,17 +28,6 @@ void PlanetClass::Initialize(MeshClass* objMesh, XMFLOAT3 pos, XMFLOAT3 scale, X
     m_lightSource->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
     m_lightSource->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_lightSource->SetDirection(0.0f, 0.0f, 1.0f);
-}
-
-void PlanetClass::Shutdown()
-{
-    if (m_lightSource)
-    {
-        delete m_lightSource;
-        m_lightSource = 0;
-    }
-
-    return;
 }
 
 void PlanetClass::Render(ShaderControllerClass* shader)

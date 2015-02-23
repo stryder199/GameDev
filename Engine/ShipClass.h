@@ -3,6 +3,7 @@
 //////////////
 // INCLUDES //
 #include <vector>
+#include <memory>
 
 ///////////////////////
 // MY CLASS INCLUDES //
@@ -21,8 +22,7 @@ public:
     ShipClass();
     ~ShipClass();
 
-    void Initialize(MeshClass* mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
-    void Shutdown();
+    void Initialize(std::shared_ptr<MeshClass> mesh, DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale, int totalHealth, int totalShields, int totalEnergy, int energyCost, int torpedos);
 
     void Render(ShaderControllerClass* shader);
     virtual void PreProcessing();
@@ -30,7 +30,8 @@ public:
     void SpawnBullet(DirectX::XMFLOAT3 spawnPos);
     void FireWeapon();
     void StartWeaponFiring();
-    void FlyTowardsTarget();
+
+    void Hit(int damage);
 
     CommonEnums::EnginePower GetEnginePower();
     int GetTotalHealth();
@@ -40,22 +41,29 @@ public:
     int GetTorpedos();
     int GetTotalEnergy();
     int GetEnergy();
-    ShipClass *GetTargetShip();
+    std::shared_ptr<ShipClass> GetTargetShip();
+    std::vector<BulletClass*>* GetBullets();
+
+    bool IsDead();
     
-    void SetNewTarget(ShipClass* target);
+    void SetNewTarget(std::shared_ptr<ShipClass> target);
 
     void GoRight(bool);
     void GoLeft(bool);
     void Stop();
 
     void SetEnginePower(CommonEnums::EnginePower x);
+
 private:
+    void ShootTarget();
+    void FlyTowardsTarget();
+
     bool m_isWeaponFiring;
     Timer m_weaponReloadTimer, m_weaponPulseTimer;
     int m_weaponPulseCount, m_weaponPulseMaxCount;
     std::vector<BulletClass*> m_allBullets;
-    MeshClass *m_bulletMesh;
-    ShipClass *m_targetShip;
+    std::shared_ptr<MeshClass> m_bulletMesh;
+    std::shared_ptr<ShipClass> m_targetShip;
     CommonEnums::EnginePower m_enginePower;
     int m_totalHealth, m_health;
     int m_totalShields, m_shields;
