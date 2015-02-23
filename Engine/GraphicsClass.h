@@ -32,8 +32,9 @@ public:
     void Render();
 
     void LoadGameData();
-    void LoadMeshData(std::string filename);
-    void LoadObjectData(std::string filename);
+    void LoadMeshData(rapidxml::xml_node<> meshNode);
+    void LoadShipData(rapidxml::xml_node<> shipNode);
+    void LoadObjectData(rapidxml::xml_node<> modelNode);
     void GenerateStars(int starCount);
     void HandleEvents(EventClass* events);
 private:
