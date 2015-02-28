@@ -3,12 +3,13 @@
 //////////////
 // INCLUDES //
 #include <future>
+#include <map>
+#include <DirectXMath.h>
+#include <rapidxml\rapidxml.hpp>
 
 ///////////////////////
 // MY CLASS INCLUDES //
 #include "Timer.h"
-
-#define Async
 
 /////////////////
 // FORWARD DEC //
@@ -17,7 +18,21 @@ class TwoDGraphicsClass;
 class ThreeDGraphicsClass;
 class EventClass;
 
-using namespace std;
+struct ShipData
+{
+public:
+    ShipData()
+    {
+    }
+    std::string ShipName;
+    std::string MeshName;
+    DirectX::XMFLOAT3 Scale;
+    int TotalHealth;
+    int TotalShields;
+    int TotalEnergy;
+    int EnergyCost;
+    int NumberOfTorpedos;
+};
 
 class GraphicsClass{
 
@@ -31,12 +46,17 @@ public:
     void PreProcessing();
     void Render();
 
-    void LoadGameData();
-    void LoadMeshData(rapidxml::xml_node<> meshNode);
-    void LoadShipData(rapidxml::xml_node<> shipNode);
-    void LoadObjectData(rapidxml::xml_node<> modelNode);
-    void GenerateStars(int starCount);
+    void LoadData();
     void HandleEvents(EventClass* events);
+
+private:
+    void LoadGameData(std::string filename);
+    void LoadMeshData(rapidxml::xml_node<> *meshNode);
+    std::map<std::string, ShipData>* LoadShipData(rapidxml::xml_node<> *shipNode);
+    void LoadObjectData(rapidxml::xml_node<> *modelNode, std::map<std::string, ShipData>* shipData);
+    void LoadBackgroundStars(int starCount);
+    void LoadFontData(rapidxml::xml_node<> *meshNode);
+
 private:
     ShaderControllerClass* m_Shader;
     TwoDGraphicsClass* m_2DGraphics;

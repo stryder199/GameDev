@@ -117,96 +117,93 @@ void GraphicsClass::Render()
     m_fpsCount++;
 }
 
-void GraphicsClass::LoadGameData()
+void GraphicsClass::LoadGameData(string filename)
 {
+    char* cfilename = new char[filename.size() + 1];
+    strcpy_s(cfilename, sizeof(char)*(filename.size() + 1), filename.c_str());
+
     xml_document<> doc;
-    doc.parse<0>("config/level.xml");
+    doc.parse<0>(cfilename);
 
     xml_node<>* root = doc.first_node();
-    map<string, xml_node<>*>* siblingNodes = XmlHelpers::GetNodeList(root);
+    map<string, xml_node<>*>* siblingNodes = XmlHelpers::GetNodeNameMap(root);
 
-    xml_node<> *meshRoot = siblingNodes["Meshs"];
-    xml_node<> *shipRoot = siblingNodes["Ships"];
-    xml_node<> *modelRoot = siblingNodes["Models"];
+    xml_node<> *meshRoot = (*siblingNodes)["Meshs"];
+    xml_node<> *shipRoot = (*siblingNodes)["Ships"];
+    xml_node<> *modelRoot = (*siblingNodes)["Models"];
+    xml_node<> *fontRoot = (*siblingNodes)["Fonts"];
 
     if (meshRoot == nullptr || shipRoot == nullptr || modelRoot == nullptr)
     {
         throw GenericException("Root xml node missing");
     }
 
-#if defined Threaded
-    auto levelMeshLoader = thread(&GraphicsClass::LoadMeshData, this, meshroot);
-    auto uiMeshLoader = thread(&GraphicsClass::LoadMeshData, this, "config/ui.loader");
+    auto meshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, meshRoot);
+    auto fontLoader = async(launch::async, &GraphicsClass::LoadFontData, this, fontRoot);
+    meshLoader.get();
+    fontLoader.get();
 
-    levelMeshLoader.join();
-    uiMeshLoader.join();
+    auto shipLoader = async(launch::async, &GraphicsClass::LoadShipData, this, shipRoot);
+    map<string, ShipData>* shipData = shipLoader.get();
 
-    auto levelLoader = thread(&GraphicsClass::LoadObjectData, this, modelRoot);
-    auto uiLoader = thread(&GraphicsClass::LoadObjectData, this, "config/ui.loader");
-    auto starLoader = thread(&GraphicsClass::GenerateStars, this, 1000);
-
-    levelLoader.join();
-    uiLoader.join();
-    starLoader.join();
-#elif defined Async
-    auto levelMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, meshRoot);
-    auto uiMeshLoader = async(launch::async, &GraphicsClass::LoadMeshData, this, "config/ui.loader");
-
-    levelMeshLoader.get();
-    uiMeshLoader.get();
-
-    auto levelLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, modelRoot);
-    auto uiLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, "config/ui.loader");
-    auto starLoader = async(launch::async, &GraphicsClass::GenerateStars, this, 1000);
-
-    levelLoader.get();
-    uiLoader.get();
-    starLoader.get();
-#else
-    LoadMeshData("config/level1.loader");
-    LoadMeshData("config/ui.loader");
-    LoadObjectData("config/level1.loader");
-    LoadObjectData("config/ui.loader");
-    GenerateStars(1000);
-#endif
+    auto objectLoader = async(launch::async, &GraphicsClass::LoadObjectData, this, modelRoot, shipData);
+    objectLoader.get();
 }
 
-void GraphicsClass::LoadFontData(xml_node<>* meshNode)
+void GraphicsClass::LoadData()
 {
-            else if (sinput.compare("font") == 0)
-            {
-                string name, datafilename, texfilename;
-                fin >> name >> datafilename >> texfilename;
-#if defined Threaded
-                m_allLoaders.push_back(thread(&TwoDGraphicsClass::AddFont, m_2DGraphics, name, datafilename, texfilename));
-#elif defined Async
-                m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddFont, m_2DGraphics, name, datafilename, texfilename));
-#else
-                m_2DGraphics->AddFont(name, datafilename, texfilename);
-#endif
+    vector<string> files = { "config/Level1.xml", "config/UI.xml" };
 
-            }
+    for (string &file : files)
+    {
+        async(launch::async, &GraphicsClass::LoadGameData, this, file);
+    }
+}
+
+void GraphicsClass::LoadFontData(xml_node<>* fontNode)
+{
+    if (fontNode == nullptr)
+    {
+        return;
+    }
+
+    vector<future<void>> m_allLoaders = vector<future<void>>();
+    vector<xml_node<>*>* allFontNodes = XmlHelpers::GetNodeVector(fontNode);
+
+    for (xml_node<>* &font : *allFontNodes)
+    {
+        map<string, xml_node<>*>* fontNodes = XmlHelpers::GetNodeNameMap(font);
+        string name = (*fontNodes)["Name"]->value();
+        string datafilename = (*fontNodes)["DataFilePath"]->value();
+        string texfilename = (*fontNodes)["TextureFilePath"]->value();
+        m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddFont, m_2DGraphics, name, datafilename, texfilename));
+    }
+
+    // Wait for all threads to finish
+    for (vector<future<void>>::iterator meshLoader = m_allLoaders.begin(); meshLoader != m_allLoaders.end(); ++meshLoader)
+    {
+        (*meshLoader).get();
+    }
 }
 
 void GraphicsClass::LoadMeshData(xml_node<>* meshNode)
 {
+    if (meshNode == nullptr)
+    {
+        return;
+    }
+
     MeshControllerClass *meshController = MeshControllerClass::getInstance();
-    string sinput;
-#if defined Threaded
-    vector<thread> m_allLoaders = vector<thread>();
-#elif defined Async
     vector<future<void>> m_allLoaders = vector<future<void>>();
-#else
-#endif
 
     vector<xml_node<>*>* allMeshNodes = XmlHelpers::GetNodeVector(meshNode);
 
     for (xml_node<>* &mesh : *allMeshNodes)
     {
         map<string, xml_node<>*>* meshNodes = XmlHelpers::GetNodeNameMap(mesh);
-        string name = meshNodes["Name"]->value;
-        string filename = meshNodes["Path"]->value;
-        string type = meshNodes["Type"]->value;
+        string name = (*meshNodes)["Name"]->value();
+        string filename = (*meshNodes)["Path"]->value();
+        string type = (*meshNodes)["Type"]->value();
         MeshClass::MeshType realType;
         
         if (type.compare("THREED") == 0)
@@ -221,159 +218,149 @@ void GraphicsClass::LoadMeshData(xml_node<>* meshNode)
         {
             throw GenericException("Unknown mesh type.");
         }
-#if defined Threaded
-        m_allLoaders.push_back(thread(&MeshControllerClass::addMesh, meshController, filename, name, realType));
-#elif defined Async
         m_allLoaders.push_back(async(launch::async, &MeshControllerClass::addMesh, meshController, filename, name, realType));
-#else
-        meshController->addMesh(filename, name, realType);
-#endif
-
     }
 
-           
-
-#if defined Threaded
-    // Wait for all threads to finish
-    for (vector<thread>::iterator meshLoader = m_allLoaders.begin(); meshLoader != m_allLoaders.end(); ++meshLoader)
-    {
-        (*meshLoader).join();
-    }
-#elif defined Async
     // Wait for all threads to finish
     for (vector<future<void>>::iterator meshLoader = m_allLoaders.begin(); meshLoader != m_allLoaders.end(); ++meshLoader)
     {
         (*meshLoader).get();
     }
-#else
-#endif
-
 }
 
-void GraphicsClass::LoadObjectData(xml_node<>* modelsNode)
+map<string, ShipData>* GraphicsClass::LoadShipData(xml_node<>* modelsNode)
 {
     string sinput;
-#if defined Threaded
-    vector<thread> m_allLoaders = vector<thread>();
-#elif defined Async
+    vector<xml_node<>*>* allModelNodes = XmlHelpers::GetNodeVector(modelsNode);
+    map<string, ShipData>* allShipData = new map<string, ShipData>();
+
+    for (xml_node<>* &model : *allModelNodes)
+    {
+        map<string, xml_node<>*>* modelNodes = XmlHelpers::GetNodeNameMap(model);
+        
+        ShipData data = ShipData();
+        data.ShipName = (*modelNodes)["ShipName"]->value();
+        data.MeshName = (*modelNodes)["MeshName"]->value();
+        data.Scale = XmlHelpers::GetNodeVector3((*modelNodes)["Scale"]);
+        data.TotalHealth = atoi((*modelNodes)["TotalHealth"]->value());
+        data.TotalShields = atoi((*modelNodes)["TotalShields"]->value());
+        data.TotalEnergy = atoi((*modelNodes)["TotalEnergy"]->value());
+        data.EnergyCost = atoi((*modelNodes)["EnergyCost"]->value());
+        data.NumberOfTorpedos = atoi((*modelNodes)["NumberOfTorpedos"]->value());
+
+        (*allShipData)[data.ShipName] = data;
+    }
+
+    return allShipData;
+}
+
+void GraphicsClass::LoadObjectData(xml_node<>* modelsNode, map<string, ShipData>* shipData)
+{
+    string sinput;
     vector<future<void>> m_allLoaders = vector<future<void>>();
-#else
-#endif
 
     vector<xml_node<>*>* allModelNodes = XmlHelpers::GetNodeVector(modelsNode);
 
     for (xml_node<>* &model : *allModelNodes)
     {
         map<string, xml_node<>*>* modelNodes = XmlHelpers::GetNodeNameMap(model);
-        switch (model->name)
+        if (model->name() == "Player")
         {
-        case "Player":
-            string shipName = modelNodes["ShipName"]->value;
-            string team = modelNodes["Team"]->value;
-            XMFLOAT3 pos = XmlHelpers::GetNodeVector3(modelNodes["SpawnPosition"]);
-            XMFLOAT3 rot = XmlHelpers::GetNodeVector3(modelNodes["SpawnRotation"]);
+            string shipName = (*modelNodes)["ShipName"]->value();
+            ShipData data = (*shipData)[shipName];
+            string team = (*modelNodes)["Team"]->value();
+            XMFLOAT3 pos = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnPosition"]);
+            XMFLOAT3 rot = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnRotation"]);
 
-#if defined Threaded
-            m_allLoaders.push_back(thread(&ThreeDGraphicsClass::AddPlayer, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddPlayer, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
-#else
-            m_3DGraphics->AddPlayer(meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
-#endif
-            break;
-        case "Ship":
-            string shipName = modelNodes["ShipName"]->value;
-            string team = modelNodes["Team"]->value;
-            int numberOfShips = modelNodes["NumberOfShips"]->value;
-            XMFLOAT3 pos = XmlHelpers::GetNodeVector3(modelNodes["SpawnPosition"]);
-            XMFLOAT3 rot = XmlHelpers::GetNodeVector3(modelNodes["SpawnRotation"]);
-
-#if defined Threaded
-            m_allLoaders.push_back(thread(&ThreeDGraphicsClass::AddShip, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddShip, m_3DGraphics, meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos));
-#else
-            m_3DGraphics->AddShip(meshName, pos, scale, totalHealth, totalShields, totalEnergy, energyCost, torpedos);
-#endif
-            break;
-        case "Planet":
-            string meshName = modelNodes["MeshName"]->value;
-            XMFLOAT3 pos = XmlHelpers::GetNodeVector3(modelNodes["SpawnPosition"]);
-            XMFLOAT3 scale = XmlHelpers::GetNodeVector3(modelNodes["Scale"]);
-            XMFLOAT3 rotVel = XmlHelpers::GetNodeVector3(modelNodes["RotationVelocity"]);
-
-#if defined Threaded
-            m_allLoaders.push_back(thread(&ThreeDGraphicsClass::AddPlanet, m_3DGraphics, meshName, pos, scale, rotVel));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddPlanet, m_3DGraphics, meshName, pos, scale, rotVel));
-#else
-            m_3DGraphics->AddPlanet(meshName, pos, scale, rotVel);
-#endif  
-            break;
-        case "Star":
-            string meshName = modelNodes["MeshName"]->value;
-            XMFLOAT3 pos = XmlHelpers::GetNodeVector3(modelNodes["SpawnPosition"]);
-            XMFLOAT3 scale = XmlHelpers::GetNodeVector3(modelNodes["Scale"]);
-            XMFLOAT3 rotVel = XmlHelpers::GetNodeVector3(modelNodes["RotationVelocity"]);
-
-#if defined Threaded
-            m_allLoaders.push_back(thread(&ThreeDGraphicsClass::AddStar, m_3DGraphics, meshName, pos, scale, rotVel));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddStar, m_3DGraphics, meshName, pos, scale, rotVel));
-#else
-            m_3DGraphics->AddStar(meshName, pos, scale, rotVel);
-#endif
-            break;
-        case "Text":
-            string name = modelNodes["Name"]->value;
-            string initText = modelNodes["InitText"]->value;
-            string fontName = modelNodes["FontName"]->value;
-            XMFLOAT2 pos = XmlHelpers::GetNodeVector2(modelNodes["SpawnPosition"]);
-            XMFLOAT2 scale = XmlHelpers::GetNodeVector2(modelNodes["Scale"]);
-            XMFLOAT4 color = XmlHelpers::GetNodeVector4(modelNodes["RotationVelocity"]);
-
-#if defined Threaded
-            m_allLoaders.push_back(thread(&TwoDGraphicsClass::AddText, m_2DGraphics, name, initText, fontname, pos, scale, color));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddText, m_2DGraphics, name, initText, fontname, pos, scale, color));
-#else
-            m_2DGraphics->AddText(name, initText, fontname, pos, scale, color);
-#endif 
-            break;
-        case "Bitmap":
-            string meshName = modelNodes["MeshName"]->value;
-            XMFLOAT2 pos = XmlHelpers::GetNodeVector2(modelNodes["SpawnPosition"]);
-            XMFLOAT2 scale = XmlHelpers::GetNodeVector2(modelNodes["Scale"]);
-
-#if defined Threaded
-            m_allLoaders.push_back(thread(&TwoDGraphicsClass::AddBitmap, m_2DGraphics, meshName, pos, scale));
-#elif defined Async
-            m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddBitmap, m_2DGraphics, meshName, pos, scale));
-#else
-            m_2DGraphics->AddBitmap(meshName, pos, scale);
-#endif 
-            break;
+            m_allLoaders.push_back(
+                async(
+                launch::async, 
+                &ThreeDGraphicsClass::AddPlayer, 
+                m_3DGraphics, 
+                data.MeshName, 
+                pos, 
+                data.Scale, 
+                data.TotalHealth, 
+                data.TotalShields, 
+                data.TotalEnergy, 
+                data.EnergyCost, 
+                data.NumberOfTorpedos));
         }
-        
+        else if (model->name() == "Ship")
+        {
+            string shipName = (*modelNodes)["ShipName"]->value();
+            ShipData data = (*shipData)[shipName];
+            string team = (*modelNodes)["Team"]->value();
+            int numberOfShips = atoi((*modelNodes)["NumberOfShips"]->value());
+            XMFLOAT3 pos = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnPosition"]);
+            XMFLOAT3 rot = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnRotation"]);
+
+            m_allLoaders.push_back(
+                async(
+                launch::async, 
+                &ThreeDGraphicsClass::AddShip, 
+                m_3DGraphics,
+                data.MeshName,
+                pos,
+                data.Scale,
+                data.TotalHealth,
+                data.TotalShields,
+                data.TotalEnergy,
+                data.EnergyCost,
+                data.NumberOfTorpedos));
+        }
+        else if (model->name() == "Planet")
+        {
+            string meshName = (*modelNodes)["MeshName"]->value();
+            XMFLOAT3 pos = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnPosition"]);
+            XMFLOAT3 scale = XmlHelpers::GetNodeVector3((*modelNodes)["Scale"]);
+            XMFLOAT3 rotVel = XmlHelpers::GetNodeVector3((*modelNodes)["RotationVelocity"]);
+
+            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddPlanet, m_3DGraphics, meshName, pos, scale, rotVel));
+        }
+        else if (model->name() == "Star")
+        {
+            string meshName = (*modelNodes)["MeshName"]->value();
+            XMFLOAT3 pos = XmlHelpers::GetNodeVector3((*modelNodes)["SpawnPosition"]);
+            XMFLOAT3 scale = XmlHelpers::GetNodeVector3((*modelNodes)["Scale"]);
+            XMFLOAT3 rotVel = XmlHelpers::GetNodeVector3((*modelNodes)["RotationVelocity"]);
+
+            m_allLoaders.push_back(async(launch::async, &ThreeDGraphicsClass::AddStar, m_3DGraphics, meshName, pos, scale, rotVel));
+        }
+        else if (model->name() == "Text")
+        {
+            string name = (*modelNodes)["Name"]->value();
+            string initText = (*modelNodes)["StartingText"]->value();
+            string fontName = (*modelNodes)["FontName"]->value();
+            XMFLOAT2 pos = XmlHelpers::GetNodeVector2((*modelNodes)["Position"]);
+            XMFLOAT2 scale = XmlHelpers::GetNodeVector2((*modelNodes)["Scale"]);
+            XMFLOAT4 color = XmlHelpers::GetNodeVector4((*modelNodes)["Color"]);
+
+            m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddText, m_2DGraphics, name, initText, fontName, pos, scale, color));
+        }
+        else if (model->name() == "Bitmap")
+        {
+            string meshName = (*modelNodes)["MeshName"]->value();
+            XMFLOAT2 pos = XmlHelpers::GetNodeVector2((*modelNodes)["Position"]);
+            XMFLOAT2 scale = XmlHelpers::GetNodeVector2((*modelNodes)["Scale"]);
+
+            m_allLoaders.push_back(async(launch::async, &TwoDGraphicsClass::AddBitmap, m_2DGraphics, meshName, pos, scale));
+        }
+        else if (model->name() == "BackgroundStars")
+        {
+            int numberOfStars = atoi((*modelNodes)["Count"]->value());
+            LoadBackgroundStars(numberOfStars);
+        }        
     }
 
-#if defined Threaded
-    // Wait for all threads to finish
-    for (vector<thread>::iterator loader = m_allLoaders.begin(); loader != m_allLoaders.end(); ++loader)
-    {
-        (*loader).join();
-    }
-#elif defined Async
     // Wait for all threads to finish
     for (vector<future<void>>::iterator loader = m_allLoaders.begin(); loader != m_allLoaders.end(); ++loader)
     {
         (*loader).get();
     }
-#else
-#endif
 }
 
-void GraphicsClass::GenerateStars(int starCount)
+void GraphicsClass::LoadBackgroundStars(int starCount)
 {
     float MAX_DISTANCE = 200.0f;
 

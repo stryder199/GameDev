@@ -244,5 +244,8 @@
     <Xml Include="Level1.xml">
       <Filter>Config Files</Filter>
     </Xml>
+    <Xml Include="UI.xml">
+      <Filter>Config Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

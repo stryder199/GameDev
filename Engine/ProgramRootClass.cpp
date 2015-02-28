@@ -4,6 +4,8 @@
 #include "SoundClass.h"
 #include "WindowClass.h"
 
+using namespace std;
+
 ProgramRootClass::ProgramRootClass()
 {
     m_Events = nullptr;
@@ -21,14 +23,7 @@ void ProgramRootClass::Go()
     bool done;
     bool gameLoaderWaiterDone = false;
 
-#if defined Threaded
-    thread(&GraphicsClass::LoadGameData, m_Graphics);
-#elif defined Async
-    async(launch::async, &GraphicsClass::LoadGameData, m_Graphics);
-#else
-    m_Graphics->LoadGameData();
-#endif
-    
+    async(launch::async, &GraphicsClass::LoadData, m_Graphics);
 
     // Initialize the message structure.
     SecureZeroMemory(&msg, sizeof(MSG));
